@@ -1,59 +1,40 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    `maven-publish`
-    id("com.ncorti.ktfmt.gradle")
 }
 
 repositories {
     mavenCentral()
-    maven(url = "https://jitpack.io") {
+    maven("https://maven.tryformation.com/releases") {
         content {
+            includeGroup("com.jillesvangurp")
             includeGroup("com.github.jillesvangurp")
+            includeGroup("com.tryformation")
+            includeGroup("com.tryformation.fritz2")
         }
     }
-}
-
-ktfmt {
-    // KotlinLang style - 4 space indentation - From kotlinlang.org/docs/coding-conventions.html
-    kotlinLangStyle()
 }
 
 kotlin {
-    jvm {
-        // should work for android as well
-    }
     js(IR) {
-        nodejs {
+        browser {
             testTask {
-                useMocha {
-                    // javascript is a lot slower than Java, we hit the default timeout of 2000
-                    timeout = "60s"
-                }
+                useMocha()
             }
         }
-    }
-    linuxX64()
-    linuxArm64()
-    mingwX64()
-    macosX64()
-    macosArm64()
-    iosArm64()
-    iosX64()
-    // blocked on kotest assertions wasm release
-//    @OptIn(ExperimentalWasmDsl::class)
-//    wasmJs()
+    }.binaries.executable()
 
     sourceSets {
 
         commonMain {
             dependencies {
                 implementation(kotlin("stdlib-common"))
+                implementation("dev.fritz2:core:_")
+                implementation("dev.fritz2:headless:_")
+                implementation("org.jetbrains:markdown:_")
+                implementation(KotlinX.serialization.json)
+                implementation(Koin.core)
+
             }
         }
 
@@ -65,25 +46,23 @@ kotlin {
             }
         }
 
-        jvmMain  {
-            dependencies {
-                implementation(kotlin("stdlib-jdk8"))
-            }
-        }
-        jvmTest {
-            dependencies {
-                implementation(kotlin("test-junit5", "_"))
-                implementation(Testing.junit.jupiter.api)
-                implementation(Testing.junit.jupiter.engine)
-
-                implementation("com.github.jillesvangurp:kotlin4example:_")
-                implementation("ch.qos.logback:logback-classic:_")
-            }
-        }
 
         jsMain  {
             dependencies {
                 implementation(kotlin("stdlib-js"))
+                implementation(npm("tailwindcss", "_"))
+                implementation(npm("@tailwindcss/forms", "_"))
+
+                // fluent-js
+                implementation("com.tryformation:fluent-kotlin:_")
+
+                // webpack
+                implementation(devNpm("postcss", "_"))
+                implementation(devNpm("postcss-loader", "_"))
+                implementation(devNpm("autoprefixer", "_"))
+                implementation(devNpm("css-loader", "_"))
+                implementation(devNpm("style-loader", "_"))
+                implementation(devNpm("cssnano", "_"))
             }
         }
 
@@ -94,82 +73,14 @@ kotlin {
         }
 
         all {
-            languageSettings.optIn("kotlin.RequiresOptIn")
-        }
-    }
-}
-
-tasks.withType<KotlinJvmCompile> {
-    jvmTargetValidationMode.set(JvmTargetValidationMode.WARNING)
-
-    kotlinOptions {
-        // this is the minimum LTS version we support, 8 is no longer supported
-        jvmTarget = "11"
-        languageVersion = "1.9"
-    }
-}
-
-publishing {
-    repositories {
-        maven {
-            // GOOGLE_APPLICATION_CREDENTIALS env var must be set for this to work
-            // public repository is at https://maven.tryformation.com/releases
-            url = uri("gcs://mvn-public-tryformation/releases")
-            name = "FormationPublic"
-        }
-    }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-    // run tests in parallel
-    systemProperties["junit.jupiter.execution.parallel.enabled"] = "true"
-    // executes test classes concurrently
-    systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
-    // executes tests inside a class concurrently
-    systemProperties["junit.jupiter.execution.parallel.mode.classes.default"] = "concurrent"
-    systemProperties["junit.jupiter.execution.parallel.config.strategy"] = "dynamic"
-    // random order of test class execution
-    systemProperties["junit.jupiter.testclass.order.default"] = "org.junit.jupiter.api.ClassOrderer\$Random"
-
-    testLogging.exceptionFormat = TestExceptionFormat.FULL
-    testLogging.events = setOf(
-        TestLogEvent.FAILED,
-        TestLogEvent.PASSED,
-        TestLogEvent.SKIPPED,
-        TestLogEvent.STANDARD_ERROR,
-        TestLogEvent.STANDARD_OUT
-    )
-    addTestListener(object : TestListener {
-        val failures = mutableListOf<String>()
-        override fun beforeSuite(desc: TestDescriptor) {
-        }
-
-        override fun afterSuite(desc: TestDescriptor, result: TestResult) {
-        }
-
-        override fun beforeTest(desc: TestDescriptor) {
-        }
-
-        override fun afterTest(desc: TestDescriptor, result: TestResult) {
-            if (result.resultType == TestResult.ResultType.FAILURE) {
-                val report =
-                    """
-                    TESTFAILURE ${desc.className} - ${desc.name}
-                    ${
-                        result.exception?.let { e ->
-                            """
-                            ${e::class.simpleName} ${e.message}
-                        """.trimIndent()
-                        }
-                    }
-                    -----------------
-                    """.trimIndent()
-                failures.add(report)
+            languageSettings.apply {
+                optIn("kotlin.ExperimentalStdlibApi")
+                optIn("kotlin.RequiresOptIn")
             }
         }
-    })
+    }
 }
+
 
 
 

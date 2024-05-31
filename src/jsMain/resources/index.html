@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>Fluent AI</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Rankquest Studio allows you to benchmark search relevance metrics for your search APIs. Start optimizing your search experience today!" />
+    <meta property="og:title" content="Rankquest Studio" />
+    <meta property="og:description" content="Rankquest Studio allows you to benchmark search relevance metrics for your search APIs. Start optimizing your search experience today!" />
+    <meta property="og:image" content="https://rankquest.jillesvangurp.com/rankquest-screenshot.png" />
+    <meta property="og:url" content="https://rankquest.jillesvangurp.com" />
+    <meta property="og:type" content="website" />
+</head>
+<body>
+<div id="target"></div>
+<script>
+    // redefine window.console to shut up the ktor client trace logging
+    window.console = (function (origConsole) {
+
+    if (!window.console || !origConsole) {
+        origConsole = {};
+    }
+
+    // 0=OFF,1=ERROR,2=WARN,3=INFO,4=DEBUG
+    var logLevel = 3;
+
+    return {
+        dir: function () {
+            origConsole.dir.apply(origConsole, arguments);
+        },
+        debug: function () {
+            logLevel == 1 && origConsole.debug && origConsole.debug.apply(origConsole, arguments);
+        },
+        info: function () {
+            logLevel >= 1 && logLevel <= 2 && origConsole.info && origConsole.info.apply(origConsole, arguments);
+        },
+        log: function () {
+            logLevel >= 1 && logLevel <= 2 && origConsole.log && origConsole.log.apply(origConsole, arguments);
+        },
+        warn: function () {
+            logLevel >= 1 && logLevel <= 3 && origConsole.warn && origConsole.warn.apply(origConsole, arguments);
+        },
+        error: function () {
+            logLevel >= 1 && logLevel <= 4 && origConsole.error && origConsole.error.apply(origConsole, arguments);
+        },
+        level: function(lvl) {
+            logLevel = lvl
+        },
+        logLevel: logLevel
+    };
+
+}(window.console));
+
+// so we can define a kotlin external function for this
+var setLogLevel = function (lvl) {
+    console.level(lvl);
+}
+</script>
+<script src="fluent-ai.js"></script>
+</body>
+</html>

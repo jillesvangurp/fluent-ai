@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+@layer base {
+  h1 {
+    @apply text-3xl mb-6 clear-both;
+  }
+  h2 {
+    @apply text-xl mt-2 mb-4 clear-both;
+  }
+  h3 {
+    @apply text-lg mt-2 mb-2;
+  }
+  p {
+    @apply mb-2;
+  }
+  a {
+    @apply text-blueBright-600 hover:text-blueBright-400 underline cursor-pointer;
+  }
+}
