@@ -25,7 +25,7 @@ fun RenderContext.fluentBrowser() {
 
                 val keys = files.flatMap { it.keys() }.distinct().sorted()
 
-                div("max-w-96") {
+                div("max-w-96 flex flex-col gap-2") {
                     val searchStore = storeOf("")
                     inputField {
                         value(searchStore)
@@ -40,17 +40,22 @@ fun RenderContext.fluentBrowser() {
                         }
                     }
 
-                    searchStore.data.render {query->
-                        keys.filter { translationId ->
-                            if(query.isBlank()) true
-                            else {
-                                translationId.lowercase().contains(query.lowercase())
-                            }
-                        }.forEach { translationId ->
-                            div {
-                                a {
-                                    +translationId
-                                    clicks.map { translationId } handledBy selectedIdStore.update
+                    div("grow overflow-y-auto") {
+                        
+                        div("max-h-0") {
+                            searchStore.data.render { query ->
+                                keys.filter { translationId ->
+                                    if (query.isBlank()) true
+                                    else {
+                                        translationId.lowercase().contains(query.lowercase())
+                                    }
+                                }.forEach { translationId ->
+                                    div {
+                                        a {
+                                            +translationId
+                                            clicks.map { translationId } handledBy selectedIdStore.update
+                                        }
+                                    }
                                 }
                             }
                         }
