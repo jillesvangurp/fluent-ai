@@ -3,12 +3,13 @@ package fluenteditor
 import ai.TranslationService
 import components.primaryButton
 import components.secondaryButton
+import components.twFullWidthTextArea
+import components.twThreeLineTextareaTextfield
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.disabled
 import dev.fritz2.core.placeholder
 import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.inputField
-import dev.fritz2.headless.components.textArea
 import files.FluentFilesStore
 import icons.SvgIconSource
 import kotlinx.coroutines.flow.filter
@@ -31,7 +32,7 @@ fun RenderContext.fluentBrowser() {
 
                 val keys = files.flatMap { it.keys() }.distinct().sorted()
 
-                div("max-w-96 flex flex-col gap-2") {
+                div("max-w-96 flex flex-col gap-2 p-5") {
                     val searchStore = storeOf("")
                     inputField() {
                         value(searchStore)
@@ -67,7 +68,7 @@ fun RenderContext.fluentBrowser() {
                         }
                     }
                 }
-                div("grow") {
+                div("grow p-5") {
                     selectedIdStore.data.filter { it.isNotBlank() }.render { translationId ->
                         p {
                             +translationId
@@ -81,12 +82,13 @@ fun RenderContext.fluentBrowser() {
                                     +file.name
                                 }
                                 val translationEditor = storeOf(translation)
-                                textArea("w-full") {
-                                    value(translationEditor)
-                                    textareaTextfield("w-full") {
+
+                                twFullWidthTextArea(translationEditor) {
+                                    twThreeLineTextareaTextfield {
 
                                     }
                                 }
+
                                 div("flex flex-row gap-3") {
                                     translationEditor.data.render { t ->
                                         secondaryButton(
@@ -114,6 +116,11 @@ fun RenderContext.fluentBrowser() {
                                                     englishTranslation, file.name
                                                 )
                                                 translationEditor.update(translated ?: ":-(")
+                                                if(translated!=null) {
+                                                    file.put(translationId, translated)
+                                                    fluentFilesStore.addOrReplace(file)
+                                                    translationEditor.update(file[translationId].orEmpty())
+                                                }
                                             }
                                         }
                                         primaryButton(
