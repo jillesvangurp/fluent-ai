@@ -3,6 +3,8 @@ package files
 import com.jillesvangurp.fluentai.FluentFile
 import components.LocalStoringStore
 import dev.fritz2.core.RenderContext
+import dev.fritz2.core.storeOf
+import dev.fritz2.headless.components.textArea
 import kotlinx.serialization.builtins.ListSerializer
 import localization.TL
 import localization.translate
@@ -65,17 +67,39 @@ fun RenderContext.fileLoader() {
 fun RenderContext.listFiles() {
     withKoin {
         val fileContentStore = get<FilesStore>()
-        fileContentStore.data.render { files ->
-            files?.forEach { file ->
-                div {
-                    h2 { +file.name }
-                    pre {
-                        +file.content
-                    }
+        val currentFile = storeOf<FluentFile?>(null)
 
+        div("flex flex-row gap-10 grow") {
+            div("flex flex-col gap-2 w-96") {
+                fileContentStore.data.render { files ->
+                    files?.forEach { file ->
+                        div {
+                            a {
+                                +file.name
+                                clicks handledBy {
+                                    currentFile.update(file)
+                                }
+                            }
+                        }
+                    }?: div {
+                        +"-"
+                    }
                 }
-            }?: div {
-                +"-"
+            }
+            div("w-full grow my-5 p-5 flex flex-col") {
+                currentFile.data.render {file->
+                    p {
+                        +(file?.name ?: "-")
+                    }
+                    if(file !=null) {
+                        val contentStore = storeOf(file.content)
+                        textArea("grow") {
+                            textareaTextfield("w-full h-full") {
+                                value(contentStore)
+                            }
+                        }
+                    }
+                }
             }
         }
     }

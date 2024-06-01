@@ -32,12 +32,12 @@ val routingModule = module {
 fun RenderContext.mainScreen() {
     withKoin {
         val router = get<MapRouter>()
-        div {
+        div("w-screen h-screen bg-gray-100 flex flex-col") {
             router.select("page")
                 .map { (p,pp) ->
                     (p?.let { Page.valueOf(p) } ?: Page.default) to pp
                 }.render {(page, params) ->
-                    div("flex flex-row gap-5") {
+                    div("flex flex-row gap-5 bg-white p-5") {
                         Page.entries.forEach { p ->
                             a {
                                 translate(p)
@@ -47,8 +47,13 @@ fun RenderContext.mainScreen() {
                     }
 
                     when(page) {
-                        Page.Editor -> listFiles()
-                        Page.Files -> fileLoader()
+                        Page.Editor -> div("grow m-5 bg-white") {
+                            +"TODO"
+                        }
+                        Page.Files -> div("flex flex-col grow m-5 bg-white") {
+                            fileLoader()
+                            listFiles()
+                        }
                         Page.Settings -> languageSelector()
                     }
 
