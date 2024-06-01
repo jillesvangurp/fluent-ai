@@ -2,24 +2,36 @@
 
 # Fluent AI
 
-Editor for project fluent localization files.
+Open source editor for [project fluent](https://projectfluent.org/) localization files.
 
-## Status
+## Features
 
-Note. this is very much a work in progress. I'll update the readme when things get usable.
+- drag and drop your ftl files to the browser to load them
+- browse through and see all the translations for each id side by side
+- edit translations in the browser
+- get AI assisted translations
 
-## High level plan
+## Running this yourself
 
-- web app that allows you to edit fluent translations in the form of multiple flt files (one for each language)
-- easily identify missing translation strings for languages
-- edit translation strings
-- automated translations using openai
-- export ftl files back for usage
+- make sure you have a recent jdk installed
+- run `./gradlew jsBrowserDevelopment -t`, that will run a development version of the app. Look at the kotlin-js [documentation](https://kotlinlang.org/docs/js-project-setup.html#run-task) for more things you can do.
 
-## Why
+## TODO
+
+Even though it's usable, this is not a finished project, yet
+
+- [ ] Do some styling with tailwind. Most of this is pretty barebones so far.
+- [ ] Add an exporter to download the files. You can sort of copy paste the file content from the manage files screen currently but that needs work.
+- [ ] Do full AI assisted translations of entire ftl files.
+- [ ] Deploy this somewhere so people don't have to run it themselves.
+- [ ] Look into some kind of electron version of the app with the ability to actually save files.
+
+If this gets a bit of traction, I might look into ways to monetize this. For now it's all free OSS.
+
+## Why?
 
 Localizing applications is a chore and making that easy saves time and money. We have hundreds of translation strings in multiple languages. Editing these files manually is a PITA.
 
-Why a webapp? Because it's easy. I might level it up to something else at some point. But this is a hobby project. If you wish to pay me to do this, I'm open to suggestinos.
+Why a webapp? Because it's easy. I might level it up to something else at some point. But this is a hobby project. If you wish to pay me to do this, I'm open to suggestions.
 
 Why kotlin-js? It's what I use a lot and like. And Kotlin is a good language for this stuff.
