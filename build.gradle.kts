@@ -1,3 +1,7 @@
+import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -48,7 +52,7 @@ kotlin {
         }
 
 
-        jsMain  {
+        jsMain {
             dependencies {
                 implementation(kotlin("stdlib-js"))
                 implementation(npm("tailwindcss", "_"))
@@ -67,13 +71,24 @@ kotlin {
             }
         }
 
-        jsTest  {
+        jsTest {
             dependencies {
                 implementation(kotlin("test-js"))
             }
         }
 
+        targets.all {
+            compilations.all {
+                kotlinOptions.freeCompilerArgs
+            }
+        }
         all {
+            @OptIn(ExperimentalKotlinGradlePluginApi::class)
+            compilerOptions {
+                // FIXME fugly syntax?!
+                freeCompilerArgs.set(freeCompilerArgs.get() + "-Xcontext-receivers")
+
+            }
             languageSettings.apply {
                 optIn("kotlin.ExperimentalStdlibApi")
                 optIn("kotlin.RequiresOptIn")
