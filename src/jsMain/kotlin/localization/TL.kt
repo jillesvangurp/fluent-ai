@@ -9,6 +9,7 @@ object TL {
         Clear,
         Cancel,
         Confirm,
+        Delete,
         ;
 
         override val prefix = "common"
@@ -23,7 +24,9 @@ object TL {
 
     enum class FileLoader : Translatable {
         DragAndDrop,
-        LoadOwnFtls
+        LoadOwnFtls,
+        NewFileFieldLabel,
+        AddNewFile,
         ;
 
         override val prefix = "file-loader"

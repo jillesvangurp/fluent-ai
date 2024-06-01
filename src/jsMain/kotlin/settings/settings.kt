@@ -2,6 +2,7 @@ package settings
 
 import components.LocalStoringStore
 import components.primaryButton
+import components.twInputField
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.disabled
 import dev.fritz2.core.placeholder
@@ -60,21 +61,7 @@ private fun RenderContext.openAiKeyEditor(
             settingsStore.data.render { settings ->
                 val openAiKeyStore = storeOf(settings?.openAIKey.orEmpty())
 
-                inputField("flex flex-col gap-2 p-2") {
-                    label {
-                        translate(TL.Settings.OpenAiKey)
-                    }
-
-                    value(openAiKeyStore)
-
-                    inputs handledBy {
-                        val element = it.target as HTMLInputElement
-                        openAiKeyStore.update(element.value)
-                    }
-                    inputTextfield {
-                        placeholder("XXXXXXXXXXXXXXXX")
-                    }
-                }
+                twInputField(openAiKeyStore,TL.Settings.OpenAiKey, "XXXXXXXXXXXXXXXX")
                 openAiKeyStore.data.render { newKey ->
 
                     primaryButton(
@@ -103,21 +90,8 @@ private fun RenderContext.translationLanguageEditor(
             settingsStore.data.render { settings ->
                 val translationLanugageStore = storeOf(settings?.translationSourceLanguage.orEmpty())
 
-                inputField("flex flex-col gap-2 p-2") {
-                    label {
-                        translate(TL.Settings.TranslationLanguage)
-                    }
+                twInputField(translationLanugageStore,TL.Settings.TranslationLanguage, "en-US")
 
-                    value(translationLanugageStore)
-
-                    inputs handledBy {
-                        val element = it.target as HTMLInputElement
-                        translationLanugageStore.update(element.value)
-                    }
-                    inputTextfield {
-                        placeholder("en-US")
-                    }
-                }
                 translationLanugageStore.data.render { newValue ->
 
                     primaryButton(

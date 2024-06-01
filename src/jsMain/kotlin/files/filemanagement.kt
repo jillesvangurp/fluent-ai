@@ -1,8 +1,11 @@
 package files
 
 import com.jillesvangurp.fluentai.FluentFile
+import components.primaryButton
 import components.secondaryButton
+import components.twInputField
 import dev.fritz2.core.RenderContext
+import dev.fritz2.core.disabled
 import dev.fritz2.core.readOnly
 import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.textArea
@@ -44,6 +47,23 @@ fun RenderContext.fileManager() {
                 ) {
                     clicks handledBy {
                         fluentFilesStore.loadOwnFtls()
+                    }
+                }
+
+                val newFileStore = storeOf("")
+                twInputField(newFileStore,null,"en-PR.ftl")
+                fluentFilesStore.data.render {files ->
+                    newFileStore.data.render { name ->
+                        secondaryButton(
+                            text = TL.FileLoader.AddNewFile,
+                            iconSource = SvgIconSource.Plus
+                        ) {
+                            disabled(name.isBlank() || files.orEmpty().map { it.name }.contains(name))
+
+                            clicks handledBy {
+                                fluentFilesStore.addOrReplace(FluentFile(name, ""))
+                            }
+                        }
                     }
                 }
             }
@@ -104,7 +124,7 @@ fun RenderContext.fileLoader() {
 fun RenderContext.listFiles() {
     withKoin {
         val fileContentStore = get<FluentFilesStore>()
-        val currentFile = storeOf<FluentFile?>(null)
+        val currentFileStore = storeOf<FluentFile?>(null)
 
         div("flex flex-row gap-10 grow") {
             div("flex flex-col gap-2 w-96") {
@@ -114,7 +134,7 @@ fun RenderContext.listFiles() {
                             a {
                                 +file.name
                                 clicks handledBy {
-                                    currentFile.update(file)
+                                    currentFileStore.update(file)
                                 }
                             }
                         }
@@ -124,7 +144,7 @@ fun RenderContext.listFiles() {
                 }
             }
             div("w-full grow my-5 p-5 flex flex-col") {
-                currentFile.data.render {file->
+                currentFileStore.data.render { file->
                     p {
                         +(file?.name ?: "-")
                     }
@@ -140,6 +160,14 @@ fun RenderContext.listFiles() {
                             textareaTextfield("w-full h-full") {
                                 // FIXME we need some confirmation before wiping out any edits
                                 readOnly(true)
+                            }
+                        }
+                        div("flex flex-row gap-2") {
+                            primaryButton(text = TL.Common.Delete, iconSource = SvgIconSource.Delete) {
+                                clicks handledBy {
+                                    fileContentStore.delete(file.name)
+                                    currentFileStore.update(null)
+                                }
                             }
                         }
                     }

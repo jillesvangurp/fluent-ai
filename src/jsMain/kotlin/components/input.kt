@@ -1,12 +1,19 @@
 package components
 
+import com.tryformation.localization.Translatable
 import dev.fritz2.core.HtmlTag
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.ScopeContext
 import dev.fritz2.core.Store
+import dev.fritz2.core.placeholder
+import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.TextArea
+import dev.fritz2.headless.components.inputField
 import dev.fritz2.headless.components.textArea
+import localization.TL
+import localization.translate
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.HTMLTextAreaElement
 
@@ -65,5 +72,27 @@ fun TextArea<HTMLDivElement>.twThreeLineTextareaTextfield(
 ) {
     textareaTextfield("w-full h-32 flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-gray-100", scope=scope) {
         content(this)
+    }
+}
+
+fun RenderContext.twInputField(store: Store<String>, label: Translatable?=null, placeholder: String?=null) {
+    inputField("flex flex-col gap-2 p-2") {
+        label?.let {
+            label {
+                translate(label)
+            }
+        }
+
+        value(store)
+
+        inputs handledBy {
+            val element = it.target as HTMLInputElement
+            store.update(element.value)
+        }
+        inputTextfield {
+            placeholder?.let {
+                placeholder(placeholder)
+            }
+        }
     }
 }
