@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.map
 import localization.languageSelector
 import localization.translate
 import org.koin.dsl.module
+import settings.settingsScreen
 import withKoin
 
 enum class Page(_title: String?=null) : Translatable {
@@ -51,7 +52,7 @@ fun RenderContext.mainScreen() {
                     when(page) {
                         Page.Editor -> fluentBrowser()
                         Page.Files -> fileManager()
-                        Page.Settings -> languageSelector()
+                        Page.Settings -> settingsScreen()
                     }
 
             }

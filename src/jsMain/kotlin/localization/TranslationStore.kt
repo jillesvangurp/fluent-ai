@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.w3c.dom.HTMLElement
+import settings.SettingsStore
 import withKoin
 
 private val translationStore by lazy {
@@ -31,6 +32,7 @@ fun getTranslationString(translatable: Translatable,args: Map<String, Any>? = nu
 
 
 class TranslationStore(
+    val settingsStore: SettingsStore,
     bundleSequence: LocalizedTranslationBundleSequence,
     private val defaultLanguage: String = Locales.EN_US.id
 ) : RootStore<LocalizedTranslationBundleSequence>(bundleSequence, Job()) {
@@ -63,8 +65,13 @@ class TranslationStore(
         }.message
     }
 
+
     val updateLocale = handle<String> { _, newLocale ->
-        provider.loadBundleSequence(listOf(newLocale), defaultLanguage, Companion::fetchFtl)
+        provider.loadBundleSequence(listOf(newLocale), defaultLanguage, Companion::fetchFtl).also {
+            Locales.getByIdOrNull(newLocale)?.let {
+                settingsStore.setLocale(it)
+            }
+        }
     }
 
     private val setLocale = handle<Locales?> { current, locale ->
@@ -92,7 +99,9 @@ class TranslationStore(
             null
         }
 
-        suspend fun load(fallback: String): TranslationStore {
+        suspend fun load(settingsStore: SettingsStore, fallback: String): TranslationStore {
+            settingsStore.awaitLoaded()
+            val preferred = settingsStore.current?.uiLanguage
             val languages =
                 (window.navigator.language.let { listOf(it) } + window.navigator.languages.toList()).distinct()
             console.log("browser languages: ${languages.joinToString(",")}")
@@ -100,7 +109,9 @@ class TranslationStore(
             val best = languages.firstOrNull {
                 Locales.getByIdOrNull(it) != null
             }
-            return TranslationStore(provider.loadBundleSequence(listOfNotNull(best), fallback, Companion::fetchFtl))
+            val initWith = listOfNotNull(preferred?.id, best)
+            console.log(preferred?.id,initWith.joinToString(", "))
+            return TranslationStore(settingsStore,provider.loadBundleSequence(initWith, fallback, Companion::fetchFtl))
         }
     }
 }

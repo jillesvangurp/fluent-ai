@@ -7,6 +7,7 @@ import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.textArea
 import localization.TL
 import localization.translate
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.files.FileReader
@@ -15,7 +16,7 @@ import withKoin
 
 
 val fileLoaderModule = module {
-    single { FluentFilesStore() }
+    singleOf(::FluentFilesStore)
 }
 
 fun RenderContext.fileManager() {

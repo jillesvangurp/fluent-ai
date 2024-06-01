@@ -6,6 +6,7 @@ import org.koin.core.Koin
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import routing.routingModule
+import settings.settingsModule
 
 inline fun <T> withKoin(block: Koin.() -> T): T = with(GlobalContext.get()) {
     block(this)
@@ -15,13 +16,14 @@ suspend fun startAppWithKoin(ui: RenderContext.()->Unit) {
     startKoin {
         modules(
             routingModule,
+            settingsModule,
             fileLoaderModule,
         )
     }
     withKoin {
         // load is a suspend function
         // so we declare this component last
-        declare(TranslationStore.load(fallback = "en-US"))
+        declare(TranslationStore.load(get(), fallback = "en-US"))
     }
 
     render("#target", content=ui)

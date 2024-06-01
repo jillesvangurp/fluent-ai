@@ -16,18 +16,18 @@ open class LocalStoringStore<T>(
 ) :
     RootStore<T?>(initialData, Job()) {
     private var latest: T? = null
-    private var loaded = false
+    private var loaded: T? = null
 
     suspend fun awaitLoaded() {
-        while (!loaded) delay(50.milliseconds)
+        // flows are updating async so we need to poll for the loaded item to appear in the flow after update
+        while (current != loaded) delay(10.milliseconds)
     }
 
-    fun persist() {
-        val toStore = current
-        if(toStore != null) {
-            val value = DEFAULT_JSON.encodeToString(serializer, toStore)
-            window.localStorage.setItem(key, value)
-        }
+    fun persistAndUpdate(value: T) {
+        val serialized = DEFAULT_JSON.encodeToString(serializer, value)
+        console.log(serialized)
+        window.localStorage.setItem(key, serialized)
+        update(value)
     }
 
     init {
@@ -39,8 +39,8 @@ open class LocalStoringStore<T>(
                 }
             }?.let { item ->
                 update(item)
+                loaded = item
             }
-            loaded = true
         } catch (e: Exception) {
             console.log(e)
             console.log(key)

@@ -1,7 +1,9 @@
 package localization
 
 import com.tryformation.localization.Locale
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class Locales(
     override val languageCode: String,
     override val countryCode: String?,
