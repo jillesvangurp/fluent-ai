@@ -16,3 +16,4 @@ pages-files = Manage Fluent Files
 pages-settings = Settings
 
 settings-open-ai-key = Set your OpenAI API Key (needed for translations)
+settings-translation-language = Configure source language for AI translations. Note, the language is matched against your ftl file name with some normalization. Defaults to en-US.

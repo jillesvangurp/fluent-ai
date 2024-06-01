@@ -38,7 +38,8 @@ object TL {
     }
 
     enum class Settings : Translatable {
-        OpenAiKey
+        OpenAiKey,
+        TranslationLanguage,
         ;
 
         override val prefix = "settings"

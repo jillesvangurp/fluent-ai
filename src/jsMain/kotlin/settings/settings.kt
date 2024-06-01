@@ -24,59 +24,112 @@ val settingsModule = module {
 
 @Serializable
 data class Settings(
-    val uiLanguage: Locales?=null,
-    val fallBack: String?=null,
-    val openAIKey: String?=null,
+    val uiLanguage: Locales? = null,
+    val translationSourceLanguage: String? = null,
+    val openAIKey: String? = null,
 )
 
 class SettingsStore : LocalStoringStore<Settings>(Settings(), "settings", Settings.serializer()) {
     fun setLocale(locale: Locales) {
         persistAndUpdate(
             (current ?: Settings()).copy(
-                uiLanguage = locale
-            )
+                uiLanguage = locale,
+            ),
         )
     }
 }
 
 fun RenderContext.settingsScreen() {
+
+    div("grow m-5 bg-white flex flex-col gap-2 p-5") {
+
+        languageSelector()
+
+        openAiKeyEditor()
+
+        translationLanguageEditor()
+    }
+}
+
+private fun RenderContext.openAiKeyEditor(
+) {
     withKoin {
         val settingsStore = get<SettingsStore>()
 
-        div("grow m-5 bg-white flex flex-col") {
-            settingsStore.data.render {settings ->
+        div {
+            settingsStore.data.render { settings ->
+                val openAiKeyStore = storeOf(settings?.openAIKey.orEmpty())
 
-                languageSelector()
+                inputField("flex flex-col gap-2 p-2") {
+                    label {
+                        translate(TL.Settings.OpenAiKey)
+                    }
 
-                div {
-                    val openAiKeyStore = storeOf(settings?.openAIKey.orEmpty())
+                    value(openAiKeyStore)
 
-                    inputField("flex flex-col gap-2 p-2") {
-                        label {
-                            translate(TL.Settings.OpenAiKey)
-                        }
+                    inputs handledBy {
+                        val element = it.target as HTMLInputElement
+                        openAiKeyStore.update(element.value)
+                    }
+                    inputTextfield {
+                        placeholder("XXXXXXXXXXXXXXXX")
+                    }
+                }
+                openAiKeyStore.data.render { newKey ->
 
-                        value(openAiKeyStore)
+                    primaryButton(
+                        text = TL.Common.Confirm,
+                        iconSource = SvgIconSource.Check,
+                    ) {
+                        disabled(newKey == settings?.openAIKey.orEmpty())
 
-                        inputs handledBy {
-                            val element = it.target as HTMLInputElement
-                            openAiKeyStore.update(element.value)
-                        }
-                        inputTextfield {
-                            placeholder("XXXXXXXXXXXXXXXX")
+                        clicks handledBy {
+                            settingsStore.persistAndUpdate(
+                                (settings ?: Settings()).copy(openAIKey = newKey),
+                            )
                         }
                     }
-                    openAiKeyStore.data.render {newKey ->
+                }
+            }
+        }
+    }
+}
+private fun RenderContext.translationLanguageEditor(
+) {
+    withKoin {
+        val settingsStore = get<SettingsStore>()
 
-                        primaryButton(
-                            text = TL.Common.Confirm,
-                            iconSource = SvgIconSource.Check
-                        ) {
-                            disabled(newKey == settings?.openAIKey.orEmpty())
+        div {
+            settingsStore.data.render { settings ->
+                val translationLanugageStore = storeOf(settings?.translationSourceLanguage.orEmpty())
 
-                            clicks handledBy {
-                                settingsStore.persistAndUpdate((settings?: Settings()).copy(openAIKey = newKey))
-                            }
+                inputField("flex flex-col gap-2 p-2") {
+                    label {
+                        translate(TL.Settings.TranslationLanguage)
+                    }
+
+                    value(translationLanugageStore)
+
+                    inputs handledBy {
+                        val element = it.target as HTMLInputElement
+                        translationLanugageStore.update(element.value)
+                    }
+                    inputTextfield {
+                        placeholder("en-US")
+                    }
+                }
+                translationLanugageStore.data.render { newValue ->
+
+                    primaryButton(
+                        text = TL.Common.Confirm,
+                        iconSource = SvgIconSource.Check,
+                    ) {
+                        disabled(newValue == settings?.translationSourceLanguage.orEmpty())
+
+                        clicks handledBy {
+                            settingsStore.persistAndUpdate(
+                                (settings ?: Settings()).copy(translationSourceLanguage = newValue),
+                            )
                         }
                     }
                 }

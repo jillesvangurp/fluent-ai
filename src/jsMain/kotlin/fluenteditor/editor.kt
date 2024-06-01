@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.map
 import localization.TL
 import localization.getTranslationString
 import org.w3c.dom.HTMLInputElement
+import settings.SettingsStore
 import withKoin
 
 fun RenderContext.fluentBrowser() {
@@ -26,6 +27,7 @@ fun RenderContext.fluentBrowser() {
 
         val selectedIdStore = storeOf("")
         val translationService = get<TranslationService>()
+        val settingsStore = get<SettingsStore>()
 
         div("grow m-5 bg-white flex flex-row") {
             fluentFilesStore.data.filterNotNull().render { files ->
@@ -101,19 +103,19 @@ fun RenderContext.fluentBrowser() {
                                                 file[translationId].orEmpty()
                                             } handledBy translationEditor.update
                                         }
-                                        val englishTranslation = files.first {
-                                            it.name.lowercase().contains("en")
+                                        val originalText = files.first {
+                                            it.matches(settingsStore.current?.translationSourceLanguage ?: "en-US")
                                         }[translationId].orEmpty()
                                         secondaryButton(
                                             text = TL.FluentEditor.AiTranslate,
                                             iconSource = SvgIconSource.Check,
                                         ) {
-                                            disabled(englishTranslation.isBlank())
+                                            disabled(originalText.isBlank())
 
                                             clicks handledBy {
                                                 val translated = translationService.translate(
                                                     translationId,
-                                                    englishTranslation, file.name
+                                                    originalText, file.name
                                                 )
                                                 translationEditor.update(translated ?: ":-(")
                                                 if(translated!=null) {
