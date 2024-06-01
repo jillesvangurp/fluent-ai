@@ -27,7 +27,7 @@ class TranslationService(val settingsStore: SettingsStore) {
             )
 
             val ccr = ChatCompletionRequest(
-                model = ModelId("gpt-3.5-turbo"),
+                model = ModelId("gpt-4o"),
                 messages = listOf(
                     ChatMessage(
                         role = ChatRole.System,
