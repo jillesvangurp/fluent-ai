@@ -1,7 +1,7 @@
 package files
 
 import com.jillesvangurp.fluentai.FluentFile
-import components.primaryButton
+import components.downloadButton
 import components.secondaryButton
 import components.twInputField
 import dev.fritz2.core.RenderContext
@@ -163,12 +163,13 @@ fun RenderContext.listFiles() {
                             }
                         }
                         div("flex flex-row gap-2") {
-                            primaryButton(text = TL.Common.Delete, iconSource = SvgIconSource.Delete) {
+                            secondaryButton(text = TL.Common.Delete, iconSource = SvgIconSource.Delete) {
                                 clicks handledBy {
                                     fileContentStore.delete(file.name)
                                     currentFileStore.update(null)
                                 }
                             }
+                            downloadButton(file.content,file.name)
                         }
                     }
                 }

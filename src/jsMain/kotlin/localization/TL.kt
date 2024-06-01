@@ -10,6 +10,8 @@ object TL {
         Cancel,
         Confirm,
         Delete,
+        Download,
+        Downloaded,
         ;
 
         override val prefix = "common"

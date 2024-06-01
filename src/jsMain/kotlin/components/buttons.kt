@@ -4,10 +4,21 @@ import com.tryformation.localization.Translatable
 import dev.fritz2.core.HtmlTag
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.ScopeContext
+import dev.fritz2.core.disabled
+import dev.fritz2.core.download
+import dev.fritz2.core.href
+import dev.fritz2.routing.encodeURIComponent
 import icons.SvgIconSource
 import icons.iconImage
+import kotlin.random.Random
+import kotlin.random.nextULong
+import kotlinx.browser.document
+import kotlinx.serialization.KSerializer
+import localization.TL
 import localization.translate
 import org.w3c.dom.HTMLButtonElement
+import org.w3c.dom.MimeType
+import org.w3c.dom.events.MouseEvent
 
 fun RenderContext.primaryButton(
     id: String? = null,
@@ -68,3 +79,37 @@ fun RenderContext.secondaryButton(
         content.invoke(this)
     }
 )
+
+
+fun RenderContext.downloadButton(
+    downloadContent: String,
+    fileName: String,
+    buttonText: Translatable = TL.Common.Download,
+    mimeType: String = "plain/text"
+) {
+    val downloadLinkId = "link-${Random.nextULong()}"
+        a("hidden", id = downloadLinkId) {
+            +"invisible"
+
+            href("data:${mimeType};charset=utf-8,$downloadContent")
+            download(fileName)
+        }
+    secondaryButton {
+        // invisible link that we simulate a click on
+        div("flex flex-row gap-2 place-items-center") {
+            iconImage(SvgIconSource.Download, baseClass = "h-5 w-5 fill-white place-items-center")
+            span {
+                translate(buttonText)
+            }
+        }
+        disabled(downloadContent.isBlank())
+        clicks handledBy {
+            val e = document.createEvent("MouseEvents") as MouseEvent
+            e.initEvent("click", bubbles = true, cancelable = true)
+            // issue a click on the link to cause the download to happen
+            document.getElementById(downloadLinkId)?.dispatchEvent(e)
+                ?: console.log("could not find link to click")
+            infoBubble(TL.Common.Downloaded)
+        }
+    }
+}
