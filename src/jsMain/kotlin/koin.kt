@@ -1,3 +1,4 @@
+import ai.translationServiceModule
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.render
 import files.fileLoaderModule
@@ -18,6 +19,7 @@ suspend fun startAppWithKoin(ui: RenderContext.()->Unit) {
             routingModule,
             settingsModule,
             fileLoaderModule,
+            translationServiceModule,
         )
     }
     withKoin {

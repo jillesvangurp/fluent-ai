@@ -8,26 +8,40 @@ object TL {
         Save,
         Clear,
         Cancel,
+        Confirm,
         ;
 
         override val prefix = "common"
     }
 
-    enum class LanguageSelector: Translatable {
+    enum class LanguageSelector : Translatable {
         SelectLanguage,
         ;
+
         override val prefix = "language-select"
     }
 
-    enum class FileLoader: Translatable {
+    enum class FileLoader : Translatable {
         DragAndDrop,
-        LoadOwnFtls,
+        LoadOwnFtls
         ;
+
         override val prefix = "file-loader"
     }
 
-    enum class FluentEditor {
+    enum class FluentEditor : Translatable {
+        AiTranslate,
+        ;
 
+        override val prefix = "translation-editor"
+
+    }
+
+    enum class Settings : Translatable {
+        OpenAiKey
+        ;
+
+        override val prefix = "settings"
     }
 
 }

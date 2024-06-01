@@ -1,5 +1,6 @@
 package fluenteditor
 
+import ai.TranslationService
 import components.primaryButton
 import components.secondaryButton
 import dev.fritz2.core.RenderContext
@@ -23,6 +24,7 @@ fun RenderContext.fluentBrowser() {
         val fluentFilesStore = get<FluentFilesStore>()
 
         val selectedIdStore = storeOf("")
+        val translationService = get<TranslationService>()
 
         div("grow m-5 bg-white flex flex-row") {
             fluentFilesStore.data.filterNotNull().render { files ->
@@ -31,7 +33,7 @@ fun RenderContext.fluentBrowser() {
 
                 div("max-w-96 flex flex-col gap-2") {
                     val searchStore = storeOf("")
-                    inputField {
+                    inputField() {
                         value(searchStore)
 
                         inputs handledBy {
@@ -88,8 +90,8 @@ fun RenderContext.fluentBrowser() {
                                 div("flex flex-row gap-3") {
                                     translationEditor.data.render { t ->
                                         secondaryButton(
-                                                text = TL.Common.Cancel,
-                                                iconSource = SvgIconSource.Cross,
+                                            text = TL.Common.Cancel,
+                                            iconSource = SvgIconSource.Cross,
                                         ) {
                                             disabled(t == file[translationId].orEmpty())
 
@@ -97,14 +99,29 @@ fun RenderContext.fluentBrowser() {
                                                 file[translationId].orEmpty()
                                             } handledBy translationEditor.update
                                         }
-                                    }
-                                    translationEditor.data.render { t ->
+                                        val englishTranslation = files.first {
+                                            it.name.lowercase().contains("en")
+                                        }[translationId].orEmpty()
+                                        secondaryButton(
+                                            text = TL.FluentEditor.AiTranslate,
+                                            iconSource = SvgIconSource.Check,
+                                        ) {
+                                            disabled(englishTranslation.isBlank())
+
+                                            clicks handledBy {
+                                                val translated = translationService.translate(
+                                                    translationId,
+                                                    englishTranslation, file.name
+                                                )
+                                                translationEditor.update(translated ?: ":-(")
+                                            }
+                                        }
                                         primaryButton(
-                                                text = TL.Common.Save,
-                                                iconSource = SvgIconSource.Check,
+                                            text = TL.Common.Save,
+                                            iconSource = SvgIconSource.Check,
                                         ) {
                                             val original = file[translationId]
-                                            disabled(t == original.orEmpty() )
+                                            disabled(t == original.orEmpty())
 
                                             clicks handledBy {
                                                 file.put(translationId, t)

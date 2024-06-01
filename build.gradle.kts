@@ -58,6 +58,8 @@ kotlin {
                 implementation(npm("tailwindcss", "_"))
                 implementation(npm("@tailwindcss/forms", "_"))
 
+                implementation("com.aallam.openai:openai-client:_")
+
                 // fluent-js
                 implementation("com.tryformation:fluent-kotlin:_")
 

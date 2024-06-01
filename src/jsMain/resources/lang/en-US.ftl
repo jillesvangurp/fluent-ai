@@ -1,6 +1,8 @@
 -brand = Fluent Translations AI
 
 common-cancel = Cancel
+common-clear = Clear
+common-confirm = OK
 common-filter-placeholder = Filter the list
 common-save = Save
 
@@ -12,3 +14,5 @@ language-select-select-language = Pick a language
 pages-editor = Edit Fluent Definitions
 pages-files = Manage Fluent Files
 pages-settings = Settings
+
+settings-open-ai-key = Set your OpenAI API Key (needed for translations)
