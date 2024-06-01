@@ -34,7 +34,9 @@ class TranslationService(val settingsStore: SettingsStore) {
                         content = """
                             You are a professional UI translator. Provide accurate translations for the texts that you are provided with.
                             
-                            The texts are project fluent format and you are to preserve the variable names and other fluent syntax.
+                            The texts are project fluent format and you are to preserve the variable names and other fluent syntax. 
+                            
+                            But don't include the id = part; we only want the part after the =
                             
                             The target language can be inferred from the locale name in the .ftl file name.
                             
