@@ -1,6 +1,7 @@
 package fluenteditor
 
 import ai.TranslationService
+import com.jillesvangurp.fluentai.groupIdsByLargestPrefix
 import components.primaryButton
 import components.secondaryButton
 import components.twFullWidthTextArea
@@ -58,13 +59,35 @@ fun RenderContext.fluentBrowser() {
                                     else {
                                         translationId.lowercase().contains(query.lowercase())
                                     }
-                                }.forEach { translationId ->
-                                    div {
-                                        a {
-                                            +translationId
-                                            clicks.map { translationId } handledBy selectedIdStore.update
+                                }.also {
+                                    p {
+                                        +"Total ${it.size}"
+                                    }
+                                }.groupIdsByLargestPrefix().forEach { (prefix, ids) ->
+                                    val showIdsStore = storeOf(query.isNotBlank())
+                                    showIdsStore.data.render {show ->
+                                        div {
+                                            a {
+                                                +"${prefix.takeIf { it.isNotBlank() }?:"..other"} (${ids.size})"
+
+                                                clicks handledBy {
+                                                    showIdsStore.update(!showIdsStore.current)
+                                                }
+                                            }
+                                        }
+                                        if(show) {
+                                            ids.forEach { translationId ->
+                                                div("ml-5") {
+                                                    a {
+                                                        +translationId.replace("$prefix-".takeIf { it != "-" }?:"", "")
+                                                        clicks.map { translationId } handledBy selectedIdStore.update
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
+
+
                                 }
                             }
                         }
@@ -104,7 +127,10 @@ fun RenderContext.fluentBrowser() {
                                             } handledBy translationEditor.update
                                         }
                                         val originalText = files.first {
-                                            it.matches(settingsStore.current?.translationSourceLanguage ?: "en-US")
+                                            it.matches(
+                                                settingsStore.current?.translationSourceLanguage
+                                                    ?: "en-US",
+                                            )
                                         }[translationId].orEmpty()
                                         secondaryButton(
                                             text = TL.FluentEditor.AiTranslate,
@@ -115,10 +141,10 @@ fun RenderContext.fluentBrowser() {
                                             clicks handledBy {
                                                 val translated = translationService.translate(
                                                     translationId,
-                                                    originalText, file.name
+                                                    originalText, file.name,
                                                 )
                                                 translationEditor.update(translated ?: ":-(")
-                                                if(translated!=null) {
+                                                if (translated != null) {
                                                     file.put(translationId, translated)
                                                     fluentFilesStore.addOrReplace(file)
                                                     translationEditor.update(file[translationId].orEmpty())

@@ -2,12 +2,11 @@ package com.jillesvangurp.fluentai
 
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.maps.shouldHaveSize
-import kotlin.test.Test
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldEndWith
 import io.kotest.matchers.string.shouldStartWith
+import kotlin.test.Test
 
 class FluentFileTest {
 

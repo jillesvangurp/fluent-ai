@@ -48,47 +48,54 @@ data class FluentFile(val name: String, private var _content: String) {
 
     fun groupByLargestPrefix(): Map<String, Map<String, String>> {
         val map = asMap()
-        val prefixes = mutableMapOf<String, MutableList<String>>()
 
-        val keys = map.keys.toMutableSet()
-        while (keys.isNotEmpty()) {
-            val current = keys.first()
-            if (current.startsWith("-")) {
-                if ("" !in prefixes) {
-                    prefixes[""] = mutableListOf()
-                }
-                prefixes[""]!!.add(current)
-                keys.remove(current)
-            } else {
-                val splitted = current.split("-")
-                var end = splitted.size - 1
-                var prefix = ""
-                var found = listOf<String>()
-                while (end > 0 && found.size <= 1) {
-                    prefix = splitted.subList(0, end).joinToString("-")
-                    found = keys.filter {
-                        if (prefix.isBlank()) {
-                            it == current
-                        } else {
-                            it.startsWith(prefix)
-                        }
-                    }
-                    end--
-                }
-                keys -= found.toSet()
-                if (found.size == 1) {
-                    prefix = ""
-                }
-                if (prefix !in prefixes) {
-                    prefixes[prefix] = mutableListOf()
-                }
-                prefixes[prefix]!!.addAll(found)
-            }
-        }
+        val prefixes = map.keys.groupIdsByLargestPrefix()
 
         return prefixes.map { (p, idList) ->
             val es = map.entries.filter { (id, value) -> id in idList }
             p to es.associate { (k, v) -> k to v }
         }.toMap()
     }
+
+}
+
+fun Iterable<String>.groupIdsByLargestPrefix(): MutableMap<String, MutableList<String>> {
+    val keys = this.toMutableSet()
+
+    val prefixes = mutableMapOf<String, MutableList<String>>()
+    while (keys.isNotEmpty()) {
+        val current = keys.first()
+        if (current.startsWith("-")) {
+            if ("" !in prefixes) {
+                prefixes[""] = mutableListOf()
+            }
+            prefixes[""]!!.add(current)
+            keys.remove(current)
+        } else {
+            val splitted = current.split("-")
+            var end = splitted.size - 1
+            var prefix = ""
+            var found = listOf<String>()
+            while (end > 0 && found.size <= 1) {
+                prefix = splitted.subList(0, end).joinToString("-")
+                found = keys.filter {
+                    if (prefix.isBlank()) {
+                        it == current
+                    } else {
+                        it.startsWith(prefix)
+                    }
+                }
+                end--
+            }
+            keys -= found.toSet()
+            if (found.size == 1) {
+                prefix = ""
+            }
+            if (prefix !in prefixes) {
+                prefixes[prefix] = mutableListOf()
+            }
+            prefixes[prefix]!!.addAll(found)
+        }
+    }
+    return prefixes
 }
