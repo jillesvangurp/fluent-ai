@@ -8,14 +8,15 @@ data class FluentFile(val name: String, private var _content: String) {
     val content get() = _content
 
     @Transient
-    private val fluentDefinitionRegex = Regex("""^\s*([a-zA-Z0-9_-]+)\s*=\s*(.*(\n\s+.*)*)""", RegexOption.MULTILINE)
+    private val fluentDefinitionRegex = Regex("""^\s*([a-zA-Z0-9_-]+)\s*=\s*(.*(\n[^#]\s+.*)*)""", RegexOption.MULTILINE)
 
     operator fun get(key: String): String? {
-        return asMap().get(key)
+        return asMap()[key]
     }
 
     fun put(key: String, newValue: String) {
-        if (fluentDefinitionRegex.containsMatchIn(_content)) {
+        asMap()[key]
+        if (keys().contains(key)) {
             _content = fluentDefinitionRegex.replace(_content) { matchResult ->
                 val id = matchResult.groupValues[1].trim()
                 console.log(id)

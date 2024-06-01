@@ -36,15 +36,32 @@ class FluentFileTest {
             bar = Another value
         """.trimIndent()
 
-//        fluentFile.put("baz", "New value")
-//        fluentFile.content shouldBe """
-//            # This is a comment
-//            foo = Updated value
-//                Continued value
-//            # Another comment
-//            bar = Another value
-//            baz = New value
-//        """.trimIndent()
+        fluentFile.put("baz", "New value")
+        fluentFile.content shouldBe """
+            # This is a comment
+            foo = Updated value
+                Continued value
+            # Another comment
+            bar = Another value
+            baz = New value
+        """.trimIndent()
+    }
+
+    @Test
+    fun shouldCorrectlyHandleComments() {
+        val sample = """
+            # Deutsch
+            -brand = FORMATION
+
+            # general
+
+            general-back = ZURÜCK
+            general-cancel = ABBRECHEN
+
+        """.trimIndent()
+        val fluentFile = FluentFile("example.ftl", sample)
+        fluentFile["-brand"] shouldBe "FORMATION"
+
     }
 
     @Test
