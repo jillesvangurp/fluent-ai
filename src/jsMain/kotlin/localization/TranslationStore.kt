@@ -5,22 +5,36 @@ package localization
 import com.tryformation.localization.LocalizedTranslationBundleSequence
 import com.tryformation.localization.LocalizedTranslationBundleSequenceProvider
 import com.tryformation.localization.Translatable
+import dev.fritz2.core.HtmlTag
 import dev.fritz2.core.RootStore
+
 import dev.fritz2.remote.http
 import kotlinx.browser.window
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import org.w3c.dom.HTMLElement
+import withKoin
+
+private val translationStore by lazy {
+    withKoin {
+        get<TranslationStore>()
+    }
+}
+
+fun HtmlTag<HTMLElement>.translate(translatable: Translatable,args: Map<String, Any>? = null) =
+    translationStore[translatable,args].renderText()
+
 
 class TranslationStore(
     bundleSequence: LocalizedTranslationBundleSequence,
     private val defaultLanguage: String = Locales.EN_US.id
 ) : RootStore<LocalizedTranslationBundleSequence>(bundleSequence, Job()) {
 
-    operator fun get(translatable: Translatable, json: Map<String, Any>? = null): Flow<String> {
+    operator fun get(translatable: Translatable, args: Map<String, Any>? = null): Flow<String> {
         return data.map { bundleSequence ->
-            bundleSequence.format(translatable, args = json)
+            bundleSequence.format(translatable, args = args)
         }.map { it.also {
             if(it.noTranslationFound) {
                 console.warn("No translation found for ${translatable.messageId}")
@@ -28,8 +42,8 @@ class TranslationStore(
         }.message }
     }
 
-    operator fun get(translatable: Translatable, jsonFlow: Flow<Map<String, Any>>): Flow<String> {
-        return data.combine(jsonFlow) { bundleSeq, json ->
+    operator fun get(translatable: Translatable, argsFlow: Flow<Map<String, Any>>): Flow<String> {
+        return data.combine(argsFlow) { bundleSeq, json ->
             bundleSeq.format(translatable, args = json).also {
                 if(it.noTranslationFound) {
                     console.warn("No translation found for ${translatable.messageId}")
@@ -38,8 +52,8 @@ class TranslationStore(
         }
     }
 
-    fun getString(translatable: Translatable, json: Map<String, Any>? = null): String {
-        return current.format(translatable, args = json).also {
+    fun getString(translatable: Translatable, args: Map<String, Any>? = null): String {
+        return current.format(translatable, args = args).also {
             if(it.noTranslationFound) {
                 console.warn("No translation found for ${translatable.messageId}")
             }

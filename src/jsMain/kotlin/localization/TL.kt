@@ -16,4 +16,11 @@ object TL {
         override val prefix = "language-select"
     }
 
+    enum class FileLoader: Translatable {
+        DragAndDrop
+        ;
+        override val prefix = "file-loader"
+
+    }
+
 }
