@@ -20,7 +20,6 @@ data class FluentFile(val name: String, private var _content: String) {
             _content = fluentDefinitionRegex.replace(_content) { matchResult ->
                 val id = matchResult.groupValues[1].trim()
                 if (id == key) {
-                    console.log("replacing $newValue on $id")
                     "$key = $newValue"
                 } else {
                     matchResult.value

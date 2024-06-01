@@ -2,6 +2,7 @@ package com.jillesvangurp.fluentai
 
 import kotlin.test.Test
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldEndWith
 import io.kotest.matchers.string.shouldStartWith
 
@@ -27,7 +28,10 @@ class FluentFileTest {
     @Test
     fun testPut() {
         val fluentFile = FluentFile("example.ftl", content)
+        val original = fluentFile.copy()
+        listOf(fluentFile) shouldBe listOf(original)
         fluentFile.put("foo", "Updated value\n    Continued value")
+        listOf(fluentFile) shouldNotBe listOf(original)
         fluentFile.content shouldBe """
             # This is a comment
             foo = Updated value

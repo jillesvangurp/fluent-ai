@@ -108,8 +108,8 @@ fun RenderContext.fluentBrowser() {
 
                                             clicks handledBy {
                                                 file.put(translationId, t)
-                                                translationEditor.update(file[translationId].orEmpty())
                                                 fluentFilesStore.addOrReplace(file)
+                                                translationEditor.update(file[translationId].orEmpty())
                                             }
                                         }
                                     }
