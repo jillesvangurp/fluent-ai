@@ -5,6 +5,7 @@ import localization.TranslationStore
 import org.koin.core.Koin
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
+import routing.routingModule
 
 inline fun <T> withKoin(block: Koin.() -> T): T = with(GlobalContext.get()) {
     block(this)
@@ -13,6 +14,7 @@ inline fun <T> withKoin(block: Koin.() -> T): T = with(GlobalContext.get()) {
 suspend fun startAppWithKoin(ui: RenderContext.()->Unit) {
     startKoin {
         modules(
+            routingModule,
             fileLoaderModule,
         )
     }

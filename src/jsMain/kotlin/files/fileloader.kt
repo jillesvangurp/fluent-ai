@@ -1,9 +1,9 @@
 package files
 
 import com.jillesvangurp.fluentai.FluentFile
+import components.LocalStoringStore
 import dev.fritz2.core.RenderContext
-import dev.fritz2.core.RootStore
-import kotlinx.coroutines.Job
+import kotlinx.serialization.builtins.ListSerializer
 import localization.TL
 import localization.translate
 import org.koin.dsl.module
@@ -12,9 +12,9 @@ import org.w3c.files.get
 import withKoin
 
 
-class FilesStore : RootStore<List<FluentFile>>(emptyList(), Job()) {
+class FilesStore : LocalStoringStore<List<FluentFile>>(emptyList(),"fluentfiles", ListSerializer(FluentFile.serializer()))  {
     val add = handle<FluentFile> { old, file ->
-        old.filter { it.name != file.name } + file
+        old?.filter { it.name != file.name }.orEmpty() + file
     }
 }
 
@@ -46,12 +46,10 @@ fun RenderContext.fileLoader() {
                                 val content = reader.result as String
                                 console.log("loaded ${file.name}")
 
-                                fileContentStore.update(
-                                    fileContentStore.current + FluentFile(
-                                        file.name,
-                                        content
-                                    )
-                                )
+                                fileContentStore.add(FluentFile(
+                                    file.name,
+                                    content
+                                ))
                             }
                             reader.readAsText(file)
                         } else {
@@ -68,7 +66,7 @@ fun RenderContext.listFiles() {
     withKoin {
         val fileContentStore = get<FilesStore>()
         fileContentStore.data.render { files ->
-            files.forEach { file ->
+            files?.forEach { file ->
                 div {
                     h2 { +file.name }
                     pre {
@@ -76,6 +74,8 @@ fun RenderContext.listFiles() {
                     }
 
                 }
+            }?: div {
+                +"-"
             }
         }
     }

@@ -1,8 +1,6 @@
 import dev.fritz2.headless.components.toastContainer
 import dev.fritz2.headless.foundation.portalRoot
-import files.fileLoader
-import files.listFiles
-import localization.languageSelector
+import routing.mainScreen
 import utils.JsLogLevel
 import utils.setJsLogLevel
 
@@ -10,13 +8,7 @@ suspend fun main() {
     setJsLogLevel(JsLogLevel.INFO)
     // little hack to get this to load in a co-routine scope because resource loading is suspending
     startAppWithKoin {
-        h1 {
-            +"Fluent AI"
-        }
-        languageSelector()
-
-        fileLoader()
-        listFiles()
+        mainScreen()
 
         // mount points for fritz2 stuff
         toastContainer(
