@@ -6,6 +6,7 @@ object TL {
     enum class Common : Translatable {
         FilterPlaceholder,
         Save,
+        Clear,
         Cancel,
         ;
 
@@ -19,7 +20,8 @@ object TL {
     }
 
     enum class FileLoader: Translatable {
-        DragAndDrop
+        DragAndDrop,
+        LoadOwnFtls,
         ;
         override val prefix = "file-loader"
     }

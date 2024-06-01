@@ -93,8 +93,13 @@ class TranslationStore(
             }
         }
 
-        private suspend fun fetchFtl(newLocale: String) = try {
-            http("$baseUrl/${newLocale}.ftl").get().body()
+        suspend fun fetchFtl(newLocale: String) = try {
+            val response = http("$baseUrl/${newLocale}.ftl").get()
+            if(response.ok) {
+                response.body()
+            } else {
+                null
+            }
         } catch (e: Exception) {
             null
         }

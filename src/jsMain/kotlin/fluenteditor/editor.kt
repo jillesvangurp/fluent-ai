@@ -91,7 +91,7 @@ fun RenderContext.fluentBrowser() {
                                                 text = TL.Common.Cancel,
                                                 iconSource = SvgIconSource.Cross,
                                         ) {
-                                            disabled(t == file[translationId])
+                                            disabled(t == file[translationId].orEmpty())
 
                                             clicks.map {
                                                 file[translationId].orEmpty()
@@ -104,7 +104,7 @@ fun RenderContext.fluentBrowser() {
                                                 iconSource = SvgIconSource.Check,
                                         ) {
                                             val original = file[translationId]
-                                            disabled(t == original)
+                                            disabled(t == original.orEmpty() )
 
                                             clicks handledBy {
                                                 file.put(translationId, t)

@@ -1,11 +1,15 @@
 package files
 
 import com.jillesvangurp.fluentai.FluentFile
+import components.secondaryButton
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.readOnly
 import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.textArea
+import icons.SvgIconSource
+import localization.Locales
 import localization.TL
+import localization.TranslationStore
 import localization.translate
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -20,12 +24,42 @@ val fileLoaderModule = module {
 }
 
 fun RenderContext.fileManager() {
-    div("flex flex-col grow m-5 bg-white") {
-        fileLoader()
-        listFiles()
+    withKoin {
+        val fluentFilesStore = get<FluentFilesStore>()
+
+        div("flex flex-col grow m-5 bg-white") {
+            fileLoader()
+            div("flex flex-row gap-2") {
+                secondaryButton(
+                    text = TL.Common.Clear,
+                    iconSource = SvgIconSource.Cross
+                ) {
+                    clicks handledBy {
+                        fluentFilesStore.clear()
+                    }
+                }
+                secondaryButton(
+                    text = TL.FileLoader.LoadOwnFtls,
+                    iconSource = SvgIconSource.Upload
+                ) {
+                    clicks handledBy {
+                        fluentFilesStore.loadOwnFtls()
+                    }
+                }
+            }
+            listFiles()
+        }
     }
 }
 
+suspend fun FluentFilesStore.loadOwnFtls() {
+    val files = Locales.entries.mapNotNull { locale ->
+        TranslationStore.fetchFtl(locale.id )?.let {
+            FluentFile(locale.id,it)
+        }
+    }.sortedBy { it.name }
+    persistAndUpdate(files)
+}
 
 fun RenderContext.fileLoader() {
     withKoin {
