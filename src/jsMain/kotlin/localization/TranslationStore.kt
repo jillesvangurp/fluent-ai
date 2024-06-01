@@ -26,6 +26,9 @@ private val translationStore by lazy {
 fun HtmlTag<HTMLElement>.translate(translatable: Translatable,args: Map<String, Any>? = null) =
     translationStore[translatable,args].renderText()
 
+fun getTranslationString(translatable: Translatable,args: Map<String, Any>? = null) =
+    translationStore.getString(translatable,args)
+
 
 class TranslationStore(
     bundleSequence: LocalizedTranslationBundleSequence,

@@ -4,7 +4,7 @@ import com.tryformation.localization.Translatable
 
 object TL {
     enum class Common : Translatable {
-        Add
+        FilterPlaceholder
         ;
 
         override val prefix = "common"

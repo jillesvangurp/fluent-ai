@@ -1,33 +1,36 @@
 package files
 
 import com.jillesvangurp.fluentai.FluentFile
-import components.LocalStoringStore
 import dev.fritz2.core.RenderContext
+import dev.fritz2.core.readOnly
 import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.textArea
-import kotlinx.serialization.builtins.ListSerializer
 import localization.TL
 import localization.translate
 import org.koin.dsl.module
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.files.FileReader
 import org.w3c.files.get
 import withKoin
 
 
-class FilesStore : LocalStoringStore<List<FluentFile>>(emptyList(),"fluentfiles", ListSerializer(FluentFile.serializer()))  {
-    val add = handle<FluentFile> { old, file ->
-        old?.filter { it.name != file.name }.orEmpty() + file
+val fileLoaderModule = module {
+    single { FluentFilesStore() }
+}
+
+fun RenderContext.fileManager() {
+    div("flex flex-col grow m-5 bg-white") {
+        fileLoader()
+        listFiles()
     }
 }
 
-val fileLoaderModule = module {
-    single { FilesStore() }
-}
 
 fun RenderContext.fileLoader() {
     withKoin {
         // Drag target store
-        val fileContentStore = get<FilesStore>()
+        val fileContentStore = get<FluentFilesStore>()
 
         // Drag target
         div(
@@ -66,7 +69,7 @@ fun RenderContext.fileLoader() {
 
 fun RenderContext.listFiles() {
     withKoin {
-        val fileContentStore = get<FilesStore>()
+        val fileContentStore = get<FluentFilesStore>()
         val currentFile = storeOf<FluentFile?>(null)
 
         div("flex flex-row gap-10 grow") {
@@ -94,8 +97,15 @@ fun RenderContext.listFiles() {
                     if(file !=null) {
                         val contentStore = storeOf(file.content)
                         textArea("grow") {
+                            inputs handledBy {
+                                val element = it.target as HTMLTextAreaElement
+                                contentStore.update(element.value)
+                            }
+
+                            value(contentStore)
                             textareaTextfield("w-full h-full") {
-                                value(contentStore)
+                                // FIXME we need some confirmation before wiping out any edits
+                                readOnly(true)
                             }
                         }
                     }

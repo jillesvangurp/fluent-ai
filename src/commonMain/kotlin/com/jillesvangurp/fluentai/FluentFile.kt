@@ -10,7 +10,7 @@ data class FluentFile(val name: String, private var _content: String) {
     @Transient
     private val fluentDefinitionRegex = Regex("""^\s*([a-zA-Z0-9_-]+)\s*=\s*(.*(\n\s+.*)*)""", RegexOption.MULTILINE)
 
-    fun get(key: String): String? {
+    operator fun get(key: String): String? {
         return asMap().get(key)
     }
 

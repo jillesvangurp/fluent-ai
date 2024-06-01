@@ -5,7 +5,9 @@ import dev.fritz2.core.RenderContext
 import dev.fritz2.routing.MapRouter
 import dev.fritz2.routing.routerOf
 import files.fileLoader
+import files.fileManager
 import files.listFiles
+import fluenteditor.fluentBrowser
 import kotlinx.coroutines.flow.map
 import localization.languageSelector
 import localization.translate
@@ -47,13 +49,8 @@ fun RenderContext.mainScreen() {
                     }
 
                     when(page) {
-                        Page.Editor -> div("grow m-5 bg-white") {
-                            +"TODO"
-                        }
-                        Page.Files -> div("flex flex-col grow m-5 bg-white") {
-                            fileLoader()
-                            listFiles()
-                        }
+                        Page.Editor -> fluentBrowser()
+                        Page.Files -> fileManager()
                         Page.Settings -> languageSelector()
                     }
 
@@ -61,3 +58,6 @@ fun RenderContext.mainScreen() {
         }
     }
 }
+
+
+
