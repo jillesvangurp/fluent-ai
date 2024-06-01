@@ -9,3 +9,4 @@ common-save = Opslaan
 common-filter-placeholder = Filter de lijst
 common-clear = Verwijderen
 common-cancel = Annuleren
+-brand = Fluent Translations AI
