@@ -1,3 +1,5 @@
+[![Process Pull Request](https://github.com/jillesvangurp/fluent-ai/actions/workflows/pr_master.yaml/badge.svg)](https://github.com/jillesvangurp/fluent-ai/actions/workflows/pr_master.yaml)
+
 # Fluent AI
 
 Editor for project fluent localization files.
