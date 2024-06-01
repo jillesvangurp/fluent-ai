@@ -4,7 +4,9 @@ import com.tryformation.localization.Translatable
 
 object TL {
     enum class Common : Translatable {
-        FilterPlaceholder
+        FilterPlaceholder,
+        Save,
+        Cancel,
         ;
 
         override val prefix = "common"
@@ -20,6 +22,9 @@ object TL {
         DragAndDrop
         ;
         override val prefix = "file-loader"
+    }
+
+    enum class FluentEditor {
 
     }
 

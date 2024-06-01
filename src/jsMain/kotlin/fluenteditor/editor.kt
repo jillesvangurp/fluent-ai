@@ -1,11 +1,15 @@
 package fluenteditor
 
+import components.primaryButton
+import components.secondaryButton
 import dev.fritz2.core.RenderContext
+import dev.fritz2.core.disabled
 import dev.fritz2.core.placeholder
 import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.inputField
 import dev.fritz2.headless.components.textArea
 import files.FluentFilesStore
+import icons.SvgIconSource
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -21,7 +25,7 @@ fun RenderContext.fluentBrowser() {
         val selectedIdStore = storeOf("")
 
         div("grow m-5 bg-white flex flex-row") {
-            fluentFilesStore.data.filterNotNull().render {files ->
+            fluentFilesStore.data.filterNotNull().render { files ->
 
                 val keys = files.flatMap { it.keys() }.distinct().sorted()
 
@@ -41,7 +45,7 @@ fun RenderContext.fluentBrowser() {
                     }
 
                     div("grow overflow-y-auto") {
-                        
+
                         div("max-h-0") {
                             searchStore.data.render { query ->
                                 keys.filter { translationId ->
@@ -66,10 +70,10 @@ fun RenderContext.fluentBrowser() {
                         p {
                             +translationId
                         }
-                        files.map { file ->
+                        files.sortedBy { it.name }.map { file ->
                             val translation = file[translationId] ?: ""
                             file to translation
-                        }.forEach { (file,translation) ->
+                        }.forEach { (file, translation) ->
                             div("w-full") {
                                 p {
                                     +file.name
@@ -79,6 +83,35 @@ fun RenderContext.fluentBrowser() {
                                     value(translationEditor)
                                     textareaTextfield("w-full") {
 
+                                    }
+                                }
+                                div("flex flex-row gap-3") {
+                                    translationEditor.data.render { t ->
+                                        secondaryButton(
+                                                text = TL.Common.Cancel,
+                                                iconSource = SvgIconSource.Cross,
+                                        ) {
+                                            disabled(t == file[translationId])
+
+                                            clicks.map {
+                                                file[translationId].orEmpty()
+                                            } handledBy translationEditor.update
+                                        }
+                                    }
+                                    translationEditor.data.render { t ->
+                                        primaryButton(
+                                                text = TL.Common.Save,
+                                                iconSource = SvgIconSource.Check,
+                                        ) {
+                                            val original = file[translationId]
+                                            disabled(t == original)
+
+                                            clicks handledBy {
+                                                file.put(translationId, t)
+                                                translationEditor.update(file[translationId].orEmpty())
+                                                fluentFilesStore.addOrReplace(file)
+                                            }
+                                        }
                                     }
                                 }
                             }

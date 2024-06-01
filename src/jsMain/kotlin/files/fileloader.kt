@@ -8,7 +8,6 @@ import dev.fritz2.headless.components.textArea
 import localization.TL
 import localization.translate
 import org.koin.dsl.module
-import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.files.FileReader
 import org.w3c.files.get
@@ -51,7 +50,7 @@ fun RenderContext.fileLoader() {
                                 val content = reader.result as String
                                 console.log("loaded ${file.name}")
 
-                                fileContentStore.add(FluentFile(
+                                fileContentStore.addOrReplace(FluentFile(
                                     file.name,
                                     content
                                 ))

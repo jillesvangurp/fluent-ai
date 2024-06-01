@@ -7,7 +7,8 @@ import kotlinx.serialization.builtins.ListSerializer
 class FluentFilesStore : LocalStoringStore<List<FluentFile>>(emptyList(),"fluentfiles",
     ListSerializer(FluentFile.serializer())
 )  {
-    val add = handle<FluentFile> { old, file ->
+    val addOrReplace = handle<FluentFile> { old, file ->
+//        console.log("adding ${file.name}")
         old?.filter { it.name != file.name }.orEmpty() + file
     }
 }
