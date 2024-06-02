@@ -25,7 +25,6 @@ open class LocalStoringStore<T>(
 
     fun persistAndUpdate(value: T) {
         val serialized = DEFAULT_JSON.encodeToString(serializer, value)
-        console.log(serialized)
         window.localStorage.setItem(key, serialized)
         update(value)
     }
@@ -42,8 +41,7 @@ open class LocalStoringStore<T>(
                 loaded = item
             }
         } catch (e: Exception) {
-            console.log(e)
-            console.log(key)
+            console.log("error initializing store",key,e)
         }
     }
 }

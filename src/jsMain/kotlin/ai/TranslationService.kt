@@ -55,10 +55,9 @@ $existingText
             )
 
             val result = openai.chatCompletion(ccr)
-            console.log(result)
-            result.choices.forEach {
-                console.log("message", it.message)
-            }
+//            result.choices.forEach {
+//                console.log("message", it.message)
+//            }
             result.choices.last().message.content
         }
     }

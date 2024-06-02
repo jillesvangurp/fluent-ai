@@ -15,7 +15,7 @@ file-loader-no-files-yet-cta = You don't have any ftl files yet. Create a new on
 
 language-select-select-language = Pick a language
 
-pages-editor = Edit Fluent Definitions
+pages-editor = Edit Translations
 pages-files = Manage Fluent Files
 pages-settings = Settings
 
