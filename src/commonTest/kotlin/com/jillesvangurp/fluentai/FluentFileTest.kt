@@ -90,6 +90,8 @@ class FluentFileTest {
         val content ="""
             -brand = Fluent Translations AI
 
+            # edge case with no -
+            foo = bar
             common-cancel = Cancel
             common-clear = Clear
             common-confirm = OK
@@ -120,7 +122,7 @@ class FluentFileTest {
 //        }
 
         grouped.keys shouldHaveAtLeastSize 5
-        grouped[""]!!.entries shouldHaveSize 2
+        grouped[""]!!.entries shouldHaveSize 3
         grouped["file-loader"]!!.entries shouldHaveSize 2
         grouped["pages"]!!.entries shouldHaveSize 3
         grouped.forEach { (prefix,map) ->
