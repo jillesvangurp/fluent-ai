@@ -56,7 +56,7 @@ fun RenderContext.fluentBrowser() {
                                         +"Total ${it.size}"
                                     }
                                 }.groupIdsByLargestPrefix().forEach { (prefix, ids) ->
-                                    val showIdsStore = storeOf(query.isNotBlank())
+                                    val showIdsStore = storeOf(true)
                                     showIdsStore.data.render {show ->
                                         div {
                                             a {
@@ -89,8 +89,6 @@ fun RenderContext.fluentBrowser() {
                                             }
                                         }
                                     }
-
-
                                 }
                             }
                         }

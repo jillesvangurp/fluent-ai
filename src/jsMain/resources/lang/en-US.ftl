@@ -23,3 +23,4 @@ settings-open-ai-key = Set your OpenAI API Key (needed for translations)
 settings-translation-language = Configure source language for AI translations. Note, the language is matched against your ftl file name with some normalization. Defaults to en-US.
 
 translation-editor-ai-translate = Translate using gpt-4o
+translation-editor-no-translation-id-selected = Select a language id to edit the translations.
