@@ -6,11 +6,9 @@ import dev.fritz2.core.RenderContext
 import dev.fritz2.core.ScopeContext
 import dev.fritz2.core.Store
 import dev.fritz2.core.placeholder
-import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.TextArea
 import dev.fritz2.headless.components.inputField
 import dev.fritz2.headless.components.textArea
-import localization.TL
 import localization.translate
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLInputElement
@@ -52,25 +50,14 @@ fun RenderContext.twFullWidthTextArea(
     }
 }
 
-/**
- * textareaTextfield for use in a twFullWidthTextArea. Has sensible default styling.
- */
-fun TextArea<HTMLDivElement>.twOneLineTextareaTextfield(
-    scope: (ScopeContext.() -> Unit) = {},
-    content: HtmlTag<HTMLTextAreaElement>.() -> Unit
-
-) {
-    textareaTextfield("w-full h-10 focus:h-48 flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-gray-100", scope=scope) {
-        content(this)
-    }
-}
-
 fun TextArea<HTMLDivElement>.twThreeLineTextareaTextfield(
     scope: (ScopeContext.() -> Unit) = {},
     content: HtmlTag<HTMLTextAreaElement>.() -> Unit
 
 ) {
-    textareaTextfield("w-full h-32 flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-gray-100", scope=scope) {
+    textareaTextfield("h-32 w-full border-1 border-blueBright-100 focus:border-2 " +
+        "focus:border-blueBright-300 focus:bg-blueBright-100 hover:bg-blueBright-50 " +
+        "placeholder:text-gray-300", scope=scope) {
         content(this)
     }
 }
@@ -89,10 +76,13 @@ fun RenderContext.twInputField(store: Store<String>, label: Translatable?=null, 
             val element = it.target as HTMLInputElement
             store.update(element.value)
         }
-        inputTextfield {
+        inputTextfield("w-64 border-1 border-blueBright-100 focus:border-2 " +
+            "focus:border-blueBright-300 focus:bg-blueBright-100 hover:bg-blueBright-50 " +
+            "placeholder:text-gray-300") {
             placeholder?.let {
                 placeholder(placeholder)
             }
         }
     }
 }
+

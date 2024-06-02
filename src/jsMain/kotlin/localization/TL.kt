@@ -25,10 +25,12 @@ object TL {
     }
 
     enum class FileLoader : Translatable {
+        FilesHeader,
         DragAndDrop,
         LoadOwnFtls,
-        NewFileFieldLabel,
-        AddNewFile,
+        AddNew,
+        CreateNewFile,
+        NoFilesYetCta,
         ;
 
         override val prefix = "file-loader"
@@ -36,6 +38,7 @@ object TL {
 
     enum class FluentEditor : Translatable {
         AiTranslate,
+        NoTranslationIdSelected
         ;
 
         override val prefix = "translation-editor"
@@ -49,5 +52,4 @@ object TL {
 
         override val prefix = "settings"
     }
-
 }

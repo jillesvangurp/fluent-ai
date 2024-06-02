@@ -6,8 +6,12 @@ common-confirm = OK
 common-filter-placeholder = Filter the list
 common-save = Save
 
+file-loader-files-header = Your Fluent Files
 file-loader-drag-and-drop = Drag ftl files here to load them
 file-loader-load-own-ftls = Load ftl files for { -brand }
+file-loader-add-new = Create or add ftl files
+file-loader-create-new-file = Create new ftl file
+file-loader-no-files-yet-cta = You don't have any ftl files yet. Create a new one or drag existing ones to the app.
 
 language-select-select-language = Pick a language
 

@@ -2,14 +2,17 @@ package files
 
 import com.jillesvangurp.fluentai.FluentFile
 import components.downloadButton
+import components.primaryButton
 import components.secondaryButton
 import components.twInputField
 import dev.fritz2.core.RenderContext
+import dev.fritz2.core.RootStore
 import dev.fritz2.core.disabled
 import dev.fritz2.core.readOnly
 import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.textArea
 import icons.SvgIconSource
+import kotlinx.coroutines.Job
 import localization.Locales
 import localization.TL
 import localization.TranslationStore
@@ -21,24 +24,28 @@ import org.w3c.files.FileReader
 import org.w3c.files.get
 import withKoin
 
+class CurrentFluentFileStore : RootStore<FluentFile?>(null, Job())
 
 val fileLoaderModule = module {
     singleOf(::FluentFilesStore)
+    singleOf(::CurrentFluentFileStore)
 }
 
 fun RenderContext.fileManager() {
     withKoin {
         val fluentFilesStore = get<FluentFilesStore>()
+        val currentFileStore = get<CurrentFluentFileStore>()
 
-        div("flex flex-col grow m-5 bg-white") {
-            fileLoader()
-            div("flex flex-row gap-2") {
+
+        div("flex flex-col grow m-2") {
+            div("flex flex-row gap-2 p-5 bg-white shadow-lg m-2") {
                 secondaryButton(
                     text = TL.Common.Clear,
                     iconSource = SvgIconSource.Cross
                 ) {
                     clicks handledBy {
                         fluentFilesStore.clear()
+                        currentFileStore.update(null)
                     }
                 }
                 secondaryButton(
@@ -47,27 +54,24 @@ fun RenderContext.fileManager() {
                 ) {
                     clicks handledBy {
                         fluentFilesStore.loadOwnFtls()
+                        currentFileStore.update(null)
                     }
                 }
-
-                val newFileStore = storeOf("")
-                twInputField(newFileStore,null,"en-PR.ftl")
-                fluentFilesStore.data.render {files ->
-                    newFileStore.data.render { name ->
-                        secondaryButton(
-                            text = TL.FileLoader.AddNewFile,
-                            iconSource = SvgIconSource.Plus
-                        ) {
-                            disabled(name.isBlank() || files.orEmpty().map { it.name }.contains(name))
-
-                            clicks handledBy {
-                                fluentFilesStore.addOrReplace(FluentFile(name, ""))
-                            }
-                        }
+                primaryButton(
+                    text = TL.FileLoader.AddNew,
+                    iconSource = SvgIconSource.Plus
+                ) {
+                    currentFileStore.data.render { current ->
+                        disabled(current == null)
+                    }
+                    clicks handledBy {
+                        currentFileStore.update(null)
                     }
                 }
             }
             listFiles()
+
+
         }
     }
 }
@@ -88,10 +92,11 @@ fun RenderContext.fileLoader() {
 
         // Drag target
         div(
-            "border-2 border-dashed border-gray-300 p-4 text-center hover:bg-gray-100 rounded mt-4"
+            "flex flex-col border-2 border-dashed border-blueMuted-400 p-2 place-content-center hover:bg-blueBright-100 rounded grow"
         ) {
-//            +"Drag and drop translation files here"
-            translate(TL.FileLoader.DragAndDrop)
+            div("text-center") {
+                translate(TL.FileLoader.DragAndDrop)
+            }
         }.apply {
             domNode.ondragover = { it.preventDefault() }
             domNode.ondrop = { event ->
@@ -123,33 +128,71 @@ fun RenderContext.fileLoader() {
 
 fun RenderContext.listFiles() {
     withKoin {
-        val fileContentStore = get<FluentFilesStore>()
-        val currentFileStore = storeOf<FluentFile?>(null)
+        val fluentFilesStore = get<FluentFilesStore>()
+        val currentFileStore = get<CurrentFluentFileStore>()
 
-        div("flex flex-row gap-10 grow") {
-            div("flex flex-col gap-2 w-96") {
-                fileContentStore.data.render { files ->
-                    files?.forEach { file ->
-                        div {
-                            a {
-                                +file.name
-                                clicks handledBy {
-                                    currentFileStore.update(file)
+        div("flex flex-row gap-2 grow") {
+            div("flex flex-col gap-2 w-96 bg-white shadow-lg m-2 p-5") {
+                fluentFilesStore.data.render { files ->
+                    h3 {
+                        translate(TL.FileLoader.FilesHeader)
+                    }
+                    if(files.isNullOrEmpty()) {
+                        div("grow h-full") {
+                            p {
+                                translate(TL.FileLoader.NoFilesYetCta)
+                            }
+                        }
+                    } else {
+                        files.forEach { file ->
+                            div {
+                                a {
+                                    +file.name
+                                    clicks handledBy {
+                                        if (currentFileStore.current == file) {
+                                            currentFileStore.update(null)
+                                        } else {
+                                            currentFileStore.update(file)
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }?: div {
-                        +"-"
                     }
                 }
             }
-            div("w-full grow my-5 p-5 flex flex-col") {
+            div("w-full grow p-5 flex flex-col bg-white shadow-lg m-2 p-5") {
                 currentFileStore.data.render { file->
-                    p {
-                        +(file?.name ?: "-")
-                    }
-                    if(file !=null) {
+                    if(file == null) {
+                        div("flex flex-row gap-2 my-2") {
+                            val newFileStore = storeOf("")
+                            twInputField(newFileStore, null, "en-PR.ftl")
+                            fluentFilesStore.data.render { files ->
+                                newFileStore.data.render { name ->
+                                    secondaryButton(
+                                        text = TL.FileLoader.CreateNewFile,
+                                        iconSource = SvgIconSource.Plus
+                                    ) {
+                                        disabled(name.isBlank() || files.orEmpty().map { it.name }
+                                            .contains(name))
+
+                                        clicks handledBy {
+                                            val file = FluentFile(name, "")
+                                            fluentFilesStore.addOrReplace(file)
+                                            currentFileStore.update(file)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        fileLoader()
+                    } else {
+                        h3 {
+                            +file.name
+                        }
                         val contentStore = storeOf(file.content)
+
                         textArea("grow") {
                             inputs handledBy {
                                 val element = it.target as HTMLTextAreaElement
@@ -163,13 +206,16 @@ fun RenderContext.listFiles() {
                             }
                         }
                         div("flex flex-row gap-2") {
-                            secondaryButton(text = TL.Common.Delete, iconSource = SvgIconSource.Delete) {
+                            secondaryButton(
+                                text = TL.Common.Delete,
+                                iconSource = SvgIconSource.Delete
+                            ) {
                                 clicks handledBy {
-                                    fileContentStore.delete(file.name)
+                                    fluentFilesStore.delete(file.name)
                                     currentFileStore.update(null)
                                 }
                             }
-                            downloadButton(file.content,file.name)
+                            downloadButton(file.content, file.name)
                         }
                     }
                 }
