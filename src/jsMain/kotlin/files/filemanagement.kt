@@ -148,6 +148,11 @@ fun RenderContext.listFiles() {
                             div {
                                 a {
                                     +file.name
+                                    currentFileStore.data.render {
+                                        if (currentFileStore.current == file) {
+                                            +" *"
+                                        }
+                                    }
                                     clicks handledBy {
                                         if (currentFileStore.current == file) {
                                             currentFileStore.update(null)

@@ -63,7 +63,7 @@ fun TextArea<HTMLDivElement>.twThreeLineTextareaTextfield(
 }
 
 fun RenderContext.twInputField(store: Store<String>, label: Translatable?=null, placeholder: String?=null) {
-    inputField("flex flex-col gap-2 p-2") {
+    inputField("flex flex-col gap-2") {
         label?.let {
             label {
                 translate(label)
@@ -76,7 +76,7 @@ fun RenderContext.twInputField(store: Store<String>, label: Translatable?=null, 
             val element = it.target as HTMLInputElement
             store.update(element.value)
         }
-        inputTextfield("w-64 border-1 border-blueBright-100 focus:border-2 " +
+        inputTextfield("w-full border-1 border-blueBright-100 focus:border-2 " +
             "focus:border-blueBright-300 focus:bg-blueBright-100 hover:bg-blueBright-50 " +
             "placeholder:text-gray-300") {
             placeholder?.let {

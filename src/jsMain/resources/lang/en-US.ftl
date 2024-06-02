@@ -1,5 +1,6 @@
 -brand = Fluent Translations AI
 
+common-add = Add
 common-cancel = Cancel
 common-clear = Clear
 common-confirm = OK
@@ -24,3 +25,5 @@ settings-translation-language = Configure source language for AI translations. N
 
 translation-editor-ai-translate = Translate using gpt-4o
 translation-editor-no-translation-id-selected = Select a language id to edit the translations.
+translation-editor-new-translation-id = Translation ID
+translation-editor-new-translation = Default translation

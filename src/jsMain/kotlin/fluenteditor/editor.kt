@@ -1,6 +1,7 @@
 package fluenteditor
 
 import ai.TranslationService
+import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.groupIdsByLargestPrefix
 import components.primaryButton
 import components.secondaryButton
@@ -14,6 +15,7 @@ import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.inputField
 import files.FluentFilesStore
 import icons.SvgIconSource
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -21,6 +23,7 @@ import localization.TL
 import localization.getTranslationString
 import localization.translate
 import org.w3c.dom.HTMLInputElement
+import settings.Settings
 import settings.SettingsStore
 import withKoin
 
@@ -40,7 +43,11 @@ fun RenderContext.fluentBrowser() {
                 div("w-96 flex flex-col gap-2 p-5 bg-white shadow-lg m-2") {
                     val searchStore = storeOf("")
 
-                    twInputField(searchStore,null,getTranslationString(TL.Common.FilterPlaceholder))
+                    twInputField(
+                        searchStore,
+                        null,
+                        getTranslationString(TL.Common.FilterPlaceholder),
+                    )
 
                     div("grow overflow-y-auto") {
 
@@ -57,28 +64,32 @@ fun RenderContext.fluentBrowser() {
                                     }
                                 }.groupIdsByLargestPrefix().forEach { (prefix, ids) ->
                                     val showIdsStore = storeOf(true)
-                                    showIdsStore.data.render {show ->
+                                    showIdsStore.data.render { show ->
                                         div {
                                             a {
-                                                +"${prefix.takeIf { it.isNotBlank() }?:"..other"} (${ids.size})"
+                                                +"${prefix.takeIf { it.isNotBlank() } ?: "..other"} (${ids.size})"
 
                                                 clicks handledBy {
                                                     showIdsStore.update(!showIdsStore.current)
                                                 }
                                             }
                                         }
-                                        if(show) {
+                                        if (show) {
                                             ids.forEach { translationId ->
                                                 div("ml-5") {
                                                     a {
-                                                        +translationId.replace("$prefix-".takeIf { it != "-" }?:"", "")
+                                                        +translationId.replace(
+                                                            "$prefix-".takeIf { it != "-" }
+                                                                ?: "",
+                                                            "",
+                                                        )
                                                         selectedIdStore.data.render {
-                                                            if(selectedIdStore.current == translationId) {
+                                                            if (selectedIdStore.current == translationId) {
                                                                 +" *"
                                                             }
                                                         }
                                                         clicks handledBy {
-                                                            if(selectedIdStore.current == translationId) {
+                                                            if (selectedIdStore.current == translationId) {
                                                                 selectedIdStore.update("")
                                                             } else {
                                                                 selectedIdStore.update(translationId)
@@ -96,10 +107,14 @@ fun RenderContext.fluentBrowser() {
                 }
                 div("grow p-5 bg-white shadow-lg m-2") {
                     selectedIdStore.data.render { translationId ->
-                        if(translationId.isBlank()) {
+                        if (translationId.isBlank()) {
                             p {
                                 translate(TL.FluentEditor.NoTranslationIdSelected)
                             }
+
+
+                            createNewTranslationId()
+
                         } else {
                             h3 {
                                 +translationId
@@ -174,6 +189,66 @@ fun RenderContext.fluentBrowser() {
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private fun RenderContext.createNewTranslationId() {
+    withKoin {
+        val fluentFilesStore = get<FluentFilesStore>()
+        val settingsStore = get<SettingsStore>()
+        val selectedIdStore = storeOf("")
+
+        div("flex flex-col gap-2 w-96 mx-auto") {
+            val newIdStore = storeOf("")
+            val newTranslationStore = storeOf("")
+            twInputField(
+                newIdStore,
+                TL.FluentEditor.NewTranslationId,
+                "component-inputfield-placeholder",
+            )
+            twFullWidthTextArea(newTranslationStore) {
+                label {
+                    translate(TL.FluentEditor.NewTranslation)
+                }
+                twThreeLineTextareaTextfield {
+                    placeholder("")
+                }
+            }
+
+            fluentFilesStore.data.render { files ->
+                settingsStore.data.render { settings ->
+                    primaryButton(
+                        text = TL.Common.Add,
+                        iconSource = SvgIconSource.Plus,
+                    ) {
+
+                        newIdStore.data.render { newId ->
+                            newTranslationStore.data.render {newTranslation ->
+                                disabled(
+                                    files.isNullOrEmpty() || newTranslation.isBlank() ||
+                                        newId.isBlank() || files.orEmpty().flatMap { it.keys() }
+                                        .contains(newId),
+                                )
+                            }
+                        }
+
+                        clicks handledBy {
+                            console.log("click!")
+                            val newId = newIdStore.current
+                            val preferred = settings?.translationSourceLanguage ?: "en"
+                            console.log(preferred)
+                            val fluentFile =
+                                files?.firstOrNull { it.matches(preferred) } ?: files?.first()
+                            console
+                            fluentFile?.put(newId, newTranslationStore.current)
+                                ?: error("file not found")
+                            fluentFilesStore.addOrReplace(fluentFile)
+                            selectedIdStore.update(newId)
                         }
                     }
                 }

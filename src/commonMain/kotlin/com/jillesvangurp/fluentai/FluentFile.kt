@@ -75,7 +75,11 @@ fun Iterable<String>.groupIdsByLargestPrefix(): MutableMap<String, MutableList<S
             val splitted = current.split("-")
             var end = splitted.size - 1
             var prefix = ""
-            var found = listOf<String>()
+            var found = if (splitted.size == 1) {
+                listOf(current)
+            } else {
+                emptyList()
+            }
             while (end > 0 && found.size <= 1) {
                 prefix = splitted.subList(0, end).joinToString("-")
                 found = keys.filter {

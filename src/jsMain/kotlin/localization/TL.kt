@@ -12,6 +12,7 @@ object TL {
         Delete,
         Download,
         Downloaded,
+        Add,
         ;
 
         override val prefix = "common"
@@ -38,7 +39,9 @@ object TL {
 
     enum class FluentEditor : Translatable {
         AiTranslate,
-        NoTranslationIdSelected
+        NoTranslationIdSelected,
+        NewTranslationId,
+        NewTranslation,
         ;
 
         override val prefix = "translation-editor"
