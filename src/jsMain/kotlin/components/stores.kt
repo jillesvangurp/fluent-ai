@@ -29,6 +29,15 @@ open class LocalStoringStore<T>(
         update(value)
     }
 
+    fun persistCurrent() {
+        val c = current
+        c?.let {
+            val serialized = DEFAULT_JSON.encodeToString(serializer, it)
+            window.localStorage.setItem(key, serialized)
+        }
+    }
+
+
     init {
         try {
             window.localStorage.getItem(key)?.let { content ->

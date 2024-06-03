@@ -12,7 +12,13 @@ import dev.fritz2.core.readOnly
 import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.textArea
 import icons.SvgIconSource
+import kotlin.js.Promise
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import localization.Locales
 import localization.TL
 import localization.TranslationStore
@@ -22,6 +28,7 @@ import org.koin.dsl.module
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.files.FileReader
 import org.w3c.files.get
+import utils.handlerScope
 import withKoin
 
 class CurrentFluentFileStore : RootStore<FluentFile?>(null, Job())
@@ -40,8 +47,8 @@ fun RenderContext.fileManager() {
         div("flex flex-col grow m-2") {
             div("flex flex-row gap-2 p-5 bg-white shadow-lg m-2") {
                 secondaryButton(
-                    text = TL.Common.Clear,
-                    iconSource = SvgIconSource.Cross
+                        text = TL.Common.Clear,
+                        iconSource = SvgIconSource.Cross,
                 ) {
                     clicks handledBy {
                         fluentFilesStore.clear()
@@ -49,8 +56,8 @@ fun RenderContext.fileManager() {
                     }
                 }
                 secondaryButton(
-                    text = TL.FileLoader.LoadOwnFtls,
-                    iconSource = SvgIconSource.Upload
+                        text = TL.FileLoader.LoadOwnFtls,
+                        iconSource = SvgIconSource.Upload,
                 ) {
                     clicks handledBy {
                         fluentFilesStore.loadOwnFtls()
@@ -58,8 +65,8 @@ fun RenderContext.fileManager() {
                     }
                 }
                 primaryButton(
-                    text = TL.FileLoader.AddNew,
-                    iconSource = SvgIconSource.Plus
+                        text = TL.FileLoader.AddNew,
+                        iconSource = SvgIconSource.Plus,
                 ) {
                     currentFileStore.data.render { current ->
                         disabled(current == null)
@@ -78,8 +85,8 @@ fun RenderContext.fileManager() {
 
 suspend fun FluentFilesStore.loadOwnFtls() {
     val files = Locales.entries.mapNotNull { locale ->
-        TranslationStore.fetchFtl(locale.id )?.let {
-            FluentFile(locale.id,it)
+        TranslationStore.fetchFtl(locale.id)?.let {
+            FluentFile(locale.id, it)
         }
     }.sortedBy { it.name }
     persistAndUpdate(files)
@@ -92,7 +99,7 @@ fun RenderContext.fileLoader() {
 
         // Drag target
         div(
-            "flex flex-col border-2 border-dashed border-blueMuted-400 p-2 place-content-center hover:bg-blueBright-100 rounded grow"
+                "flex flex-col border-2 border-dashed border-blueMuted-400 p-2 place-content-center hover:bg-blueBright-100 rounded grow",
         ) {
             div("text-center") {
                 translate(TL.FileLoader.DragAndDrop)
@@ -102,6 +109,8 @@ fun RenderContext.fileLoader() {
             domNode.ondrop = { event ->
                 event.preventDefault()
                 event.dataTransfer?.files?.let { files ->
+                    val loadedFiles = mutableListOf<FluentFile>()
+                    var processedFiles = files.length
                     for (index in 0 until files.length) {
                         val file = files[index] ?: error("file should be there")
                         if (file.type == "text/plain") {
@@ -110,16 +119,30 @@ fun RenderContext.fileLoader() {
                                 val content = reader.result as String
                                 console.log("loaded ${file.name}")
 
-                                fileContentStore.addOrReplace(FluentFile(
-                                    file.name,
-                                    content
-                                ))
+                                loadedFiles.add(
+                                        FluentFile(
+                                                file.name,
+                                                content,
+                                        ),
+                                )
+                                processedFiles--
                             }
                             reader.readAsText(file)
                         } else {
                             console.warn("unsupported content of type ${file.type} in file ${file.name}")
+                            processedFiles--
                         }
                     }
+                    // we can't do rapid writes because they'll overlap
+                    // so gather everything and wait for that to finish
+                    // asynchronously and then store
+                    handlerScope.launch {
+                        while (processedFiles > 0) {
+                            delay(5.milliseconds)
+                        }
+                        fileContentStore.persistAndUpdate(loadedFiles)
+                    }
+
                 }
             }
         }
@@ -137,7 +160,7 @@ fun RenderContext.listFiles() {
                     h3 {
                         translate(TL.FileLoader.FilesHeader)
                     }
-                    if(files.isNullOrEmpty()) {
+                    if (files.isNullOrEmpty()) {
                         div("grow h-full") {
                             p {
                                 translate(TL.FileLoader.NoFilesYetCta)
@@ -167,19 +190,21 @@ fun RenderContext.listFiles() {
                 }
             }
             div("w-full grow p-5 flex flex-col bg-white shadow-lg m-2 p-5") {
-                currentFileStore.data.render { file->
-                    if(file == null) {
+                currentFileStore.data.render { file ->
+                    if (file == null) {
                         div("flex flex-row gap-2 my-2") {
                             val newFileStore = storeOf("")
                             twInputField(newFileStore, null, "en-PR.ftl")
                             fluentFilesStore.data.render { files ->
                                 newFileStore.data.render { name ->
                                     secondaryButton(
-                                        text = TL.FileLoader.CreateNewFile,
-                                        iconSource = SvgIconSource.Plus
+                                            text = TL.FileLoader.CreateNewFile,
+                                            iconSource = SvgIconSource.Plus,
                                     ) {
-                                        disabled(name.isBlank() || files.orEmpty().map { it.name }
-                                            .contains(name))
+                                        disabled(
+                                                name.isBlank() || files.orEmpty().map { it.name }
+                                                        .contains(name),
+                                        )
 
                                         clicks handledBy {
                                             val file = FluentFile(name, "")
@@ -212,8 +237,8 @@ fun RenderContext.listFiles() {
                         }
                         div("flex flex-row gap-2") {
                             secondaryButton(
-                                text = TL.Common.Delete,
-                                iconSource = SvgIconSource.Delete
+                                    text = TL.Common.Delete,
+                                    iconSource = SvgIconSource.Delete,
                             ) {
                                 clicks handledBy {
                                     fluentFilesStore.delete(file.name)
