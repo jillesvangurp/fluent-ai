@@ -39,6 +39,9 @@ object TL {
 
     enum class FluentEditor : Translatable {
         AiTranslate,
+        DeleteThisId,
+        ConfigureKey,
+        TranslateUsingOpenAi,
         NoTranslationIdSelected,
         NewTranslationIdHeader,
         NewTranslationId,

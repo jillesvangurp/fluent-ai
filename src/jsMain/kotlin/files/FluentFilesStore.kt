@@ -14,6 +14,13 @@ class FluentFilesStore : LocalStoringStore<List<FluentFile>>(emptyList(),"fluent
         persistAndUpdate(new.sortedBy { it.name })
     }
 
+    fun deleteKey(key:String) {
+        val updatedFiles = current?.map {
+            it.delete(key)
+        }
+        persistAndUpdate(updatedFiles.orEmpty())
+    }
+
     fun delete(fileName: String) {
         val new = current?.filter { it.name != fileName }.orEmpty()
         persistAndUpdate(new.sortedBy { it.name })

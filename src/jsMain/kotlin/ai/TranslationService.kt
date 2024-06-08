@@ -17,6 +17,8 @@ val translationServiceModule = module {
 
 class TranslationService(val settingsStore: SettingsStore) {
 
+    fun enabled() = !settingsStore.current?.openAIKey.isNullOrBlank()
+
     suspend fun translate(id: String, existingText: String, target: String): String? {
         val key = settingsStore.current?.openAIKey?: error("no key")
         return settingsStore.current?.openAIKey?.let {
@@ -55,9 +57,6 @@ $existingText
             )
 
             val result = openai.chatCompletion(ccr)
-//            result.choices.forEach {
-//                console.log("message", it.message)
-//            }
             result.choices.last().message.content
         }
     }
