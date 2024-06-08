@@ -27,14 +27,11 @@ data class FluentFile(val name: String, val content: String) {
 
         map[key] = FluentChunk(comment.orEmpty(),key,newValue)
 
-        val grouped = map.groupByLargestPrefix()
-        val newContent = grouped.entries.sortedBy { it.key }.map { (_,group) ->
-            group.values.map {
-                "${it.comment.orEmpty()}${it.id} = ${it.definition}"
-            }.joinToString("\n")
-        }.joinToString("\n\n")
+        return FluentFile(name, map.sortedContent())
+    }
 
-        return FluentFile(name, newContent)
+    fun delete(key: String): FluentFile {
+        return FluentFile(name, asMap().filter { it.key != key }.sortedContent())
     }
 
     fun keys(): Set<String> {
@@ -49,6 +46,17 @@ data class FluentFile(val name: String, val content: String) {
         val normalized = name.lowercase().replace(".ftl", "").replace("_", "-")
         return normalized.contains(language.lowercase().replace(".ftl", "").replace("_", "-"))
     }
+}
+
+fun Map<String,FluentChunk>.sortedContent(): String {
+    val grouped = groupByLargestPrefix()
+    val newContent = grouped.entries.sortedBy { it.key }.map { (_,group) ->
+        group.values.map {
+            "${it.comment.orEmpty()}${it.id} = ${it.definition}"
+        }.joinToString("\n")
+    }.joinToString("\n\n")
+
+    return newContent
 }
 
 fun Map<String, FluentChunk>.groupByLargestPrefix(): Map<String, Map<String, FluentChunk>> {

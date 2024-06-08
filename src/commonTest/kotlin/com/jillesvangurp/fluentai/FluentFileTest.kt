@@ -28,7 +28,7 @@ class FluentFileTest {
     }
 
     @Test
-    fun shouldModifyWithPut() {
+    fun shouldModifyWithPutAndDelete() {
         var fluentFile = FluentFile("example.ftl", content)
         val original = fluentFile.copy()
         listOf(fluentFile) shouldBe listOf(original)
@@ -54,6 +54,17 @@ baz = New value
 foo = Updated value
     Continued value
 """.trimIndent()
+
+        fluentFile = fluentFile.delete("baz")
+        fluentFile.content shouldBe """
+# Another comment
+bar = Another value
+
+# This is a comment
+foo = Updated value
+    Continued value
+""".trimIndent()
+
     }
 
     @Test
