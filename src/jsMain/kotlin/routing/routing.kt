@@ -42,7 +42,13 @@ fun RenderContext.mainScreen() {
         div("w-screen h-screen bg-gray-100 flex flex-col") {
             router.select("page")
                 .map { (p, pp) ->
-                    (p?.let { Page.valueOf(p) } ?: Page.default) to pp
+                    (p?.let {
+                        try {
+                            Page.valueOf(p)
+                        } catch (e: Exception) {
+                            console.warn("No such page $p")
+                        }
+                    } ?: Page.default) to pp
                 }.render { (page, params) ->
                     div("flex flex-row w-full gap-2 bg-white place-items-center") {
                         h1("text-blueBright-500 font-bold my-0 pr-5") {
