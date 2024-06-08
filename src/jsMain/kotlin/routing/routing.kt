@@ -49,7 +49,7 @@ fun RenderContext.mainScreen() {
                     } ?: Page.default) to pp
                 }.render { (page, params) ->
                     div("flex flex-row w-full gap-2 bg-white place-items-center") {
-                        h1("text-blueBright-500 font-bold my-0 pr-5") {
+                        h1("text-blueBright-500 font-bold my-0 pl-5") {
                             translate(TL.Common.AppName)
                         }
                         div("flex flex-row gap-5 bg-white py-2 border-b border-gray-300") {
