@@ -24,11 +24,6 @@ import withKoin
 fun RenderContext.fluentBrowser() {
         div("flex flex-col grow m-2") {
 
-            div("flex flex-row gap-2 p-5 bg-white shadow-lg m-2") {
-                secondaryButton(text = TL.Common.Add, iconSource = SvgIconSource.Plus) {
-                    // FIXME add handler and some routing for the main view
-                }
-            }
             withKoin {
                 val fluentFilesStore = get<FluentFilesStore>()
 
@@ -36,13 +31,17 @@ fun RenderContext.fluentBrowser() {
                 val translationService = get<TranslationService>()
                 val settingsStore = get<SettingsStore>()
 
-
                 div("grow m-2 flex flex-row") {
                     fluentFilesStore.data.filterNotNull().render { files ->
 
                         val keys = files.flatMap { it.keys() }.distinct().sorted()
 
                         div("w-96 flex flex-col gap-2 p-5 bg-white shadow-lg m-2") {
+                            secondaryButton(text = TL.Common.Add, iconSource = SvgIconSource.Plus) {
+                                clicks handledBy {
+                                    selectedIdStore.update("")
+                                }
+                            }
                             val searchStore = storeOf("")
 
                             twInputField(
@@ -217,7 +216,7 @@ private fun RenderContext.createNewTranslationId() {
             val newTranslationStore = storeOf("")
             twInputField(
                 newIdStore,
-                TL.FluentEditor.NewTranslationId,
+                TL.FluentEditor.    NewTranslationId,
                 "component-inputfield-placeholder",
             )
             twFullWidthTextArea(newTranslationStore) {
