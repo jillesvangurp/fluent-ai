@@ -1,6 +1,7 @@
 package files
 
 import com.jillesvangurp.fluentai.FluentFile
+import com.jillesvangurp.fluentai.sortedContent
 import components.downloadButton
 import components.primaryButton
 import components.secondaryButton
@@ -140,7 +141,10 @@ fun RenderContext.fileLoader() {
                         while (processedFiles > 0) {
                             delay(5.milliseconds)
                         }
-                        fileContentStore.persistAndUpdate(loadedFiles)
+                        fileContentStore.persistAndUpdate(loadedFiles.map {
+                            // sort on load
+                            FluentFile(it.name, it.asMap().sortedContent())
+                        })
                     }
 
                 }
