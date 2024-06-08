@@ -10,12 +10,14 @@ common-save = Save
 common-delete = Delete
 common-download = Download
 
-confirmation-dialog-default-question = Are you sure?
-confirmation-dialog-default-description = If you click yes, the action will be executed.
 confirmation-dialog-yes = Yes
 confirmation-dialog-no = No
 
+confirmation-dialog-default-question = Are you sure?
+confirmation-dialog-default-description = If you click yes, the action will be executed.
+
 file-loader-clear-confirmation = This will remove any current files and edits. Make sure you have downloaded anything you care about.
+file-loader-delete-file-confirmation = This will remove { $file }.
 file-loader-files-header = Your Fluent Files
 file-loader-drag-and-drop = Drag ftl files here to load them
 file-loader-load-own-ftls = Load ftl files for { -brand }
