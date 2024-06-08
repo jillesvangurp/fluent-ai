@@ -1,6 +1,6 @@
 
 translation-editor-ai-translate = Translate usin' GPT-4
--brand = Fluent Translations AI
+-brand = Fluent AI
 language-select-select-language = Pick a tongue
 common-cancel = Belay
 common-clear = Swab

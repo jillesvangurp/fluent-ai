@@ -4,6 +4,7 @@ import com.tryformation.localization.Translatable
 
 object TL {
     enum class Common : Translatable {
+        AppName,
         FilterPlaceholder,
         Save,
         Clear,

@@ -1,6 +1,7 @@
 package routing
 
 import com.tryformation.localization.Translatable
+import components.flexRow
 import dev.fritz2.core.RenderContext
 import dev.fritz2.routing.MapRouter
 import dev.fritz2.routing.routerOf
@@ -9,20 +10,23 @@ import files.fileManager
 import files.listFiles
 import fluenteditor.fluentBrowser
 import kotlinx.coroutines.flow.map
+import localization.TL
 import localization.languageSelector
 import localization.translate
 import org.koin.dsl.module
 import settings.settingsScreen
 import withKoin
 
-enum class Page(_title: String?=null) : Translatable {
+enum class Page(_title: String? = null) : Translatable {
     Editor,
     Files,
     Settings,
     ;
-    val title = _title?:name
+
+    val title = _title ?: name
     val route = mapOf("page" to name)
     override val prefix = "pages"
+
     companion object {
         val default = Page.Editor
     }
@@ -37,25 +41,39 @@ fun RenderContext.mainScreen() {
         val router = get<MapRouter>()
         div("w-screen h-screen bg-gray-100 flex flex-col") {
             router.select("page")
-                .map { (p,pp) ->
+                .map { (p, pp) ->
                     (p?.let { Page.valueOf(p) } ?: Page.default) to pp
-                }.render {(page, params) ->
-                    div("flex flex-row gap-5 bg-white p-5") {
-                        Page.entries.forEach { p ->
-                            a {
-                                translate(p)
-                                clicks.map { p.route } handledBy router.navTo
+                }.render { (page, params) ->
+                    div("flex flex-row w-full gap-2 bg-white place-items-center") {
+                        h1("text-blueBright-500 font-bold my-0 pr-5") {
+                            translate(TL.Common.AppName)
+                        }
+                        div("flex flex-row gap-5 bg-white py-2 border-b border-gray-300") {
+                            Page.entries.forEach { p ->
+                                if (page == p) {
+                                    a("px-4 py-2 text-gray-600 hover:text-gray-800 border-b-2 border-blueBright-500 text-blueBright-500") {
+                                        translate(p)
+                                        clicks.map { p.route } handledBy router.navTo
+                                    }
+
+                                } else {
+                                    a("px-4 py-2 text-gray-600 hover:text-gray-800 border-b-2 border-transparent") {
+                                        translate(p)
+                                        clicks.map { p.route } handledBy router.navTo
+                                    }
+
+                                }
                             }
                         }
                     }
 
-                    when(page) {
+                    when (page) {
                         Page.Editor -> fluentBrowser()
                         Page.Files -> fileManager()
                         Page.Settings -> settingsScreen()
                     }
 
-            }
+                }
         }
     }
 }

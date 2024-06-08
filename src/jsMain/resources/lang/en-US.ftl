@@ -1,5 +1,6 @@
--brand = Fluent Translations AI
+-brand = Fluent AI
 
+common-app-name = { -brand }
 common-add = Add
 common-cancel = Cancel
 common-clear = Clear
