@@ -251,8 +251,12 @@ fun RenderContext.listFiles() {
                                     iconSource = SvgIconSource.Delete,
                             ) {
                                 clicks handledBy {
-                                    fluentFilesStore.delete(file.name)
-                                    currentFileStore.update(null)
+                                    confirm(description = TL.FileLoader.DeleteFileConfirmation, translationArgs = mapOf(
+                                        "file" to file.name
+                                    ), job = job) {
+                                        fluentFilesStore.delete(file.name)
+                                        currentFileStore.update(null)
+                                    }
                                 }
                             }
                             downloadButton(file.content, file.name)

@@ -39,6 +39,7 @@ object TL {
     enum class FileLoader : Translatable {
         FilesHeader,
         ClearConfirmation,
+        DeleteFileConfirmation,
         DragAndDrop,
         LoadOwnFtls,
         LoadOwnFtlsConfirmation,

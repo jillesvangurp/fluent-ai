@@ -14,6 +14,7 @@ suspend fun confirm(
     description: Translatable = TL.ConfirmDialog.DefaultDescription,
     yes: Translatable = TL.ConfirmDialog.Yes,
     no: Translatable = TL.ConfirmDialog.No,
+    translationArgs: Map<String,Any>?=null,
     job: Job,
     conditionalBlock: suspend () -> Unit,
 ) {
@@ -47,22 +48,22 @@ suspend fun confirm(
                     div("mt-3 text-center sm:mt-0 sm:text-left") {
                         modalTitle("text-white bg-blueBright-700 p-2 items-center") {
                             p("text-center") {
-                                translate(question)
+                                translate(question, translationArgs)
                             }
                         }
                         div("mt-2") {
                             p {
-                                translate(description)
+                                translate(description, translationArgs)
                             }
                             flexRowCentered {
                                 secondaryButton {
-                                    translate(TL.ConfirmDialog.No)
+                                    translate(TL.ConfirmDialog.No, translationArgs)
                                     clicks handledBy {
                                         openStateStore.update(false)
                                     }
                                 }
                                 primaryButton {
-                                    translate(TL.ConfirmDialog.Yes)
+                                    translate(TL.ConfirmDialog.Yes, translationArgs)
                                     clicks handledBy {
                                         conditionalBlock.invoke()
                                         openStateStore.update(false)
