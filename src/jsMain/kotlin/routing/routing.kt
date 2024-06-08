@@ -1,17 +1,14 @@
 package routing
 
 import com.tryformation.localization.Translatable
-import components.flexRow
 import dev.fritz2.core.RenderContext
 import dev.fritz2.routing.MapRouter
 import dev.fritz2.routing.routerOf
-import files.fileLoader
+import documentation.about
 import files.fileManager
-import files.listFiles
 import fluenteditor.fluentBrowser
 import kotlinx.coroutines.flow.map
 import localization.TL
-import localization.languageSelector
 import localization.translate
 import org.koin.dsl.module
 import settings.settingsScreen
@@ -21,6 +18,7 @@ enum class Page(_title: String? = null) : Translatable {
     Editor,
     Files,
     Settings,
+    About,
     ;
 
     val title = _title ?: name
@@ -77,6 +75,7 @@ fun RenderContext.mainScreen() {
                         Page.Editor -> fluentBrowser()
                         Page.Files -> fileManager()
                         Page.Settings -> settingsScreen()
+                        Page.About -> about()
                     }
 
                 }

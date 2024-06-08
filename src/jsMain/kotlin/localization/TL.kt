@@ -39,6 +39,14 @@ object TL {
         override val prefix = "cookies"
     }
 
+    enum class Docs: Translatable {
+        About
+        ;
+
+        // sort to bottom
+        override val prefix = "zzdocs"
+    }
+
     enum class LanguageSelector : Translatable {
         SelectLanguage,
         ;

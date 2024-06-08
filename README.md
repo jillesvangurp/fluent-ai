@@ -4,6 +4,10 @@
 
 Open source editor for [project fluent](https://projectfluent.org/) localization files.
 
+## Getting Started
+
+Open [Fluent AI](https://fluent-ai.jillesvangurp.com/)
+
 ## Features
 
 - drag and drop your ftl files to the browser to load them
@@ -15,16 +19,6 @@ Open source editor for [project fluent](https://projectfluent.org/) localization
 
 - make sure you have a recent jdk installed
 - run `./gradlew jsBrowserDevelopment -t`, that will run a development version of the app. Look at the kotlin-js [documentation](https://kotlinlang.org/docs/js-project-setup.html#run-task) for more things you can do.
-
-## TODO
-
-Even though it's usable, this is not a finished project, yet
-
-- [ ] Do some styling with tailwind. Most of this is pretty barebones so far.
-- [ ] Add an exporter to download the files. You can sort of copy paste the file content from the manage files screen currently but that needs work.
-- [ ] Do full AI assisted translations of entire ftl files.
-- [ ] Deploy this somewhere so people don't have to run it themselves.
-- [ ] Look into some kind of electron version of the app with the ability to actually save files.
 
 If this gets a bit of traction, I might look into ways to monetize this. For now it's all free OSS.
 

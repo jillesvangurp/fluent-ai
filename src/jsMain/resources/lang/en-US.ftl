@@ -37,6 +37,7 @@ language-select-select-language = Select UI language
 pages-editor = Edit Translations
 pages-files = Manage Fluent Files
 pages-settings = Settings
+pages-about = About
 
 settings-open-ai-key = Set your OpenAI API Key (needed for translations)
 settings-translation-language = Configure source language for AI translations. Note, the language is matched against your ftl file name with some normalization. Defaults to en-US.
@@ -50,3 +51,26 @@ translation-editor-new-translation-id-header = Create a new translation definiti
 translation-editor-new-translation-id = Translation ID
 translation-editor-new-translation = Default translation
 translation-editor-translate-using-open-ai = Translate using OpenAI
+
+zzdocs-about = # About Fluent AI
+
+    Fluent AI helps you localize your applications. It can load your [Project Fluent](https://projectfluent.org/) localization files and allows you to edit translations side by side.
+
+    More importantly, it has built-in support for using OpenAI to translate your localizations.
+
+    ## How does it work
+
+    - Configure your OpenAI API key in the settings. Without this the AI translations won't work.
+    - Load your `.ftl` files in the files section
+    - And then goto the editor to edit your translation strings.
+
+    ## Limitations
+
+    - This currently does not validate the fluent syntax
+    - It runs in a browser so there is no direct file system access. However you can drag and drop files to the UI and download modified files from the UI.
+    - It is a bit opinionated about re-ordering all the translations, carefully examine diffs before committing changes to your localization files.
+
+    ## Bugs and issues
+
+    This project is free and open source and distributed under the MIT license. If you need help ping me
+    or use the [issue tracker](https://github.com/jillesvangurp/fluent-ai/issues).
