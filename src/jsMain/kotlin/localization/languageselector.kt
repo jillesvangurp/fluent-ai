@@ -15,8 +15,10 @@ fun RenderContext.languageSelector() {
         translationStore.data.render { bundleSequence ->
             selectComponent {
                 changes handledBy { selected ->
-                    val t = selected.target as HTMLSelectElement
-                    translationStore.updateLocale(t.value)
+                    val element = selected.target as HTMLSelectElement
+                    val selectedLanguage = element.value
+                    console.log("Setting language to $selectedLanguage")
+                    translationStore.updateLocale(selectedLanguage)
                 }
                 Locales.entries.sorted().forEach { locale ->
                     option {
