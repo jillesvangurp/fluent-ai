@@ -19,8 +19,13 @@ open class LocalStoringStore<T>(
     private var loaded: T? = null
 
     suspend fun awaitLoaded() {
+        var tries = 0
         // flows are updating async so we need to poll for the loaded item to appear in the flow after update
-        while (current != loaded) delay(10.milliseconds)
+        while (current != loaded && tries < 20) {
+            delay(10.milliseconds)
+            // don't wait forever; edgecase if the store does not exist
+            tries++
+        }
     }
 
     fun persistAndUpdate(value: T) {
@@ -47,7 +52,9 @@ open class LocalStoringStore<T>(
                 }
             }?.let { item ->
                 update(item)
-                loaded = item
+            } ?: {
+                // otherwise awaitLoaded waits forever ...
+                loaded = null
             }
         } catch (e: Exception) {
             console.log("error initializing store",key,e)
