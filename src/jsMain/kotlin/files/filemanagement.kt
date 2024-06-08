@@ -192,7 +192,7 @@ fun RenderContext.listFiles() {
             div("w-full grow p-5 flex flex-col bg-white shadow-lg m-2 p-5") {
                 currentFileStore.data.render { file ->
                     if (file == null) {
-                        div("flex flex-row gap-2 my-2") {
+                        div("flex flex-row gap-2 my-2 place-items-center") {
                             val newFileStore = storeOf("")
                             twInputField(newFileStore, null, "en-PR.ftl")
                             fluentFilesStore.data.render { files ->

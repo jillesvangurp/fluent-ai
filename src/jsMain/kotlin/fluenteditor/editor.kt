@@ -112,7 +112,7 @@ fun RenderContext.fluentBrowser() {
                         div("grow p-5 bg-white shadow-lg m-2") {
                             selectedIdStore.data.render { translationId ->
                                 if (translationId.isBlank()) {
-                                    p {
+                                    p("text-center") {
                                         translate(TL.FluentEditor.NoTranslationIdSelected)
                                     }
 
@@ -211,12 +211,15 @@ private fun RenderContext.createNewTranslationId() {
         val settingsStore = get<SettingsStore>()
         val selectedIdStore = storeOf("")
 
-        div("flex flex-col gap-2 w-96 mx-auto") {
+        div("flex flex-col gap-2 w-96") {
             val newIdStore = storeOf("")
             val newTranslationStore = storeOf("")
+            h2 {
+                translate(TL.FluentEditor.NewTranslationIdHeader)
+            }
             twInputField(
                 newIdStore,
-                TL.FluentEditor.    NewTranslationId,
+                TL.FluentEditor.NewTranslationId,
                 "component-inputfield-placeholder",
             )
             twFullWidthTextArea(newTranslationStore) {

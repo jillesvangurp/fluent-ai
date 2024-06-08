@@ -40,6 +40,7 @@ object TL {
     enum class FluentEditor : Translatable {
         AiTranslate,
         NoTranslationIdSelected,
+        NewTranslationIdHeader,
         NewTranslationId,
         NewTranslation,
         ;
