@@ -4,6 +4,7 @@ import ai.TranslationService
 import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.groupIdsByLargestPrefix
 import components.confirm
+import components.fadeInFadeoutTransition
 import components.primaryButton
 import components.secondaryButton
 import components.twFullWidthTextArea
@@ -15,6 +16,7 @@ import dev.fritz2.core.disabled
 import dev.fritz2.core.placeholder
 import dev.fritz2.core.storeOf
 import dev.fritz2.core.title
+import dev.fritz2.core.transition
 import files.FluentFilesStore
 import icons.SvgIconSource
 import kotlinx.coroutines.flow.filterNotNull
@@ -27,6 +29,7 @@ import withKoin
 
 fun RenderContext.fluentBrowser() {
     div("flex flex-col grow m-2") {
+        fadeInFadeoutTransition()
         val selectedIdStore = storeOf("")
 
         div("grow m-2 flex flex-row") {

@@ -1,22 +1,20 @@
 package settings
 
 import components.LocalStoringStore
+import components.fadeInFadeoutTransition
 import components.primaryButton
 import components.twInputField
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.disabled
-import dev.fritz2.core.placeholder
 import dev.fritz2.core.storeOf
-import dev.fritz2.headless.components.inputField
+import dev.fritz2.core.transition
 import icons.SvgIconSource
 import kotlinx.serialization.Serializable
 import localization.Locales
 import localization.TL
 import localization.languageSelector
-import localization.translate
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import org.w3c.dom.HTMLInputElement
 import withKoin
 
 val settingsModule = module {
@@ -43,7 +41,7 @@ class SettingsStore : LocalStoringStore<Settings>(Settings(), "settings", Settin
 fun RenderContext.settingsScreen() {
 
     div("grow m-5 bg-white flex flex-col gap-2 p-5") {
-
+        fadeInFadeoutTransition()
         languageSelector()
 
         openAiKeyEditor()

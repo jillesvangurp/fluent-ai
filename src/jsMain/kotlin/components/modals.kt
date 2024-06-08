@@ -43,14 +43,7 @@ suspend fun confirm(
                     | shadow-xl transform transition-all 
                     | text-left overflow-hidden""".trimMargin()
                 ) {
-                    transition(
-                        "ease-out duration-300",
-                        "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
-                        "opacity-100 translate-y-0 sm:scale-100",
-                        "ease-in duration-200",
-                        "opacity-100 translate-y-0 sm:scale-100",
-                        "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    )
+                    fadeInFadeoutTransition()
                     div("mt-3 text-center sm:mt-0 sm:text-left") {
                         modalTitle("text-white bg-blueBright-700 p-2 items-center") {
                             p("text-center") {

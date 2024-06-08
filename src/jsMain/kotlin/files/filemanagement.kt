@@ -4,6 +4,7 @@ import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.sortedContent
 import components.confirm
 import components.downloadButton
+import components.fadeInFadeoutTransition
 import components.primaryButton
 import components.secondaryButton
 import components.twInputField
@@ -12,13 +13,11 @@ import dev.fritz2.core.RootStore
 import dev.fritz2.core.disabled
 import dev.fritz2.core.readOnly
 import dev.fritz2.core.storeOf
+import dev.fritz2.core.transition
 import dev.fritz2.headless.components.textArea
 import icons.SvgIconSource
-import kotlin.js.Promise
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import localization.Locales
@@ -47,6 +46,7 @@ fun RenderContext.fileManager() {
 
 
         div("flex flex-col grow m-2") {
+            fadeInFadeoutTransition()
             div("flex flex-row gap-2 p-5 bg-white shadow-lg m-2") {
                 secondaryButton(
                         text = TL.Common.Clear,
