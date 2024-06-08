@@ -18,6 +18,16 @@ object TL {
         override val prefix = "common"
     }
 
+    enum class ConfirmDialog: Translatable {
+        DefaultQuestion,
+        DefaultDescription,
+        Yes,
+        No,
+        ;
+
+        override val prefix = "confirmation-dialog"
+    }
+
     enum class LanguageSelector : Translatable {
         SelectLanguage,
         ;
@@ -27,8 +37,10 @@ object TL {
 
     enum class FileLoader : Translatable {
         FilesHeader,
+        ClearConfirmation,
         DragAndDrop,
         LoadOwnFtls,
+        LoadOwnFtlsConfirmation,
         AddNew,
         CreateNewFile,
         NoFilesYetCta,
@@ -40,6 +52,7 @@ object TL {
     enum class FluentEditor : Translatable {
         AiTranslate,
         DeleteThisId,
+        DeleteThisIdConfirmation,
         ConfigureKey,
         TranslateUsingOpenAi,
         NoTranslationIdSelected,

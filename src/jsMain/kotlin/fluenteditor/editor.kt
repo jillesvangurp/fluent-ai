@@ -3,6 +3,7 @@ package fluenteditor
 import ai.TranslationService
 import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.groupIdsByLargestPrefix
+import components.confirm
 import components.primaryButton
 import components.secondaryButton
 import components.twFullWidthTextArea
@@ -147,8 +148,10 @@ fun RenderContext.selectedTranslationEditor(
                             translate(TL.FluentEditor.DeleteThisId)
 
                             clicks handledBy {
-                                selectedIdStore.update("")
-                                fluentFilesStore.deleteKey(translationId)
+                                confirm(description = TL.FluentEditor.DeleteThisIdConfirmation, job = job) {
+                                    selectedIdStore.update("")
+                                    fluentFilesStore.deleteKey(translationId)
+                                }
                             }
                         }
                         files.sortedBy { it.name }.map { file ->

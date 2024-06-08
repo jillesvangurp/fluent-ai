@@ -2,6 +2,7 @@ package files
 
 import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.sortedContent
+import components.confirm
 import components.downloadButton
 import components.primaryButton
 import components.secondaryButton
@@ -52,8 +53,10 @@ fun RenderContext.fileManager() {
                         iconSource = SvgIconSource.Cross,
                 ) {
                     clicks handledBy {
-                        fluentFilesStore.clear()
-                        currentFileStore.update(null)
+                        confirm(description = TL.FileLoader.ClearConfirmation, job = job) {
+                            fluentFilesStore.clear()
+                            currentFileStore.update(null)
+                        }
                     }
                 }
                 secondaryButton(
@@ -61,8 +64,11 @@ fun RenderContext.fileManager() {
                         iconSource = SvgIconSource.Upload,
                 ) {
                     clicks handledBy {
-                        fluentFilesStore.loadOwnFtls()
-                        currentFileStore.update(null)
+                        confirm(description = TL.FileLoader.LoadOwnFtlsConfirmation, job = job) {
+                            fluentFilesStore.clear()
+                            fluentFilesStore.loadOwnFtls()
+                            currentFileStore.update(null)
+                        }
                     }
                 }
                 primaryButton(
