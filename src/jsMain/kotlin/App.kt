@@ -1,11 +1,9 @@
 import dev.fritz2.headless.components.toastContainer
 import dev.fritz2.headless.foundation.portalRoot
 import routing.mainScreen
-import utils.JsLogLevel
-import utils.setJsLogLevel
 
 suspend fun main() {
-    setJsLogLevel(JsLogLevel.INFO)
+//    setJsLogLevel(JsLogLevel.INFO)
     // little hack to get this to load in a co-routine scope because resource loading is suspending
     startAppWithKoin {
         mainScreen()
