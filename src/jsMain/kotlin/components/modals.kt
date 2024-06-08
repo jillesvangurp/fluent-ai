@@ -1,6 +1,8 @@
 package components
 
 import com.tryformation.localization.Translatable
+import dev.fritz2.core.HtmlTag
+import dev.fritz2.core.RenderContext
 import dev.fritz2.core.storeOf
 import dev.fritz2.core.transition
 import dev.fritz2.headless.components.modal
@@ -8,6 +10,7 @@ import dev.fritz2.headless.foundation.setInitialFocus
 import kotlinx.coroutines.Job
 import localization.TL
 import localization.translate
+import org.w3c.dom.HTMLDivElement
 
 suspend fun confirm(
     question: Translatable = TL.ConfirmDialog.DefaultQuestion,
@@ -78,3 +81,37 @@ suspend fun confirm(
         }
     }
 }
+
+enum class ZPriority {
+    NORMAL,
+    PLUS,
+    TOP
+}
+
+fun RenderContext.zDiv(priority: ZPriority, content: HtmlTag<HTMLDivElement>.() -> Unit) {
+    when(priority) {
+        ZPriority.NORMAL -> div("z-5", content = content) // below fritz2 Modal (confirm dialog)
+        ZPriority.PLUS -> div("z-20", content = content)
+        ZPriority.TOP -> div("z-50", content = content)
+    }
+}
+
+fun RenderContext.overlay(
+    baseClass: String? = "mx-auto bg-white h-screen md:w-3/6 p-5 flex flex-col overflow-y-auto",
+    priority: ZPriority = ZPriority.NORMAL,
+    closeHandler: (()-> Unit)?=null,
+    content: HtmlTag<HTMLDivElement>.() -> Unit,
+) {
+    zDiv(priority) {
+        closeHandler?.let {
+            clicks handledBy {
+                closeHandler.invoke()
+            }
+        }
+        div("absolute h-screen w-screen top-0 left-0 bg-gray-300 bg-opacity-90") {
+            div(baseClass, content = content)
+
+        }
+    }
+}
+

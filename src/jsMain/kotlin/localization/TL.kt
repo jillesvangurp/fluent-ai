@@ -29,6 +29,16 @@ object TL {
         override val prefix = "confirmation-dialog"
     }
 
+    enum class Cookies: Translatable {
+        Disclaimer,
+        Header,
+        Welcome,
+
+        ;
+
+        override val prefix = "cookies"
+    }
+
     enum class LanguageSelector : Translatable {
         SelectLanguage,
         ;

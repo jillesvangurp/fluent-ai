@@ -5,6 +5,8 @@ import routing.mainScreen
 suspend fun main() {
     try {
         startAppWithKoin {
+            cookiePopup()
+
             mainScreen()
 
             // mount points for fritz2 stuff
