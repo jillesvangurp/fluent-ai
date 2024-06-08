@@ -3,8 +3,7 @@ import dev.fritz2.headless.foundation.portalRoot
 import routing.mainScreen
 
 suspend fun main() {
-    try {//    setJsLogLevel(JsLogLevel.INFO)
-        // little hack to get this to load in a co-routine scope because resource loading is suspending
+    try {
         startAppWithKoin {
             mainScreen()
 
