@@ -9,9 +9,8 @@ enum class Locales(
     override val countryCode: String?,
     override val aliases: Array<String>,
 ) : Locale {
-    EN_GB("en", "GB", arrayOf("en-US", "en")),
     EN_US("en", "US", arrayOf("en-GB", "en")),
-    EN_PIRATE("en", "Pirate", arrayOf("en-PR","en-GB", "en")),
+    EN_PIRATE("en", "pirate", arrayOf("en-PR","en-GB", "en")),
     NL_NL("nl", "NL", arrayOf("nl", "nl-BE")),
     ;
 
