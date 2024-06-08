@@ -69,7 +69,7 @@ fun RenderContext.fluentBrowser() {
                                             showIdsStore.data.render { show ->
                                                 div {
                                                     a {
-                                                        +"${prefix.takeIf { it.isNotBlank() } ?: "..other"} (${ids.size})"
+                                                        +"${prefix.takeIf { it.isNotBlank() } ?: "-terms"} (${ids.size})"
 
                                                         clicks handledBy {
                                                             showIdsStore.update(!showIdsStore.current)

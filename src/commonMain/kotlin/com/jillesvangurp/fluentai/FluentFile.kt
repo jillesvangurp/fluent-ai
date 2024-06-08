@@ -97,7 +97,7 @@ fun Iterable<String>.groupIdsByLargestPrefix(): MutableMap<String, MutableList<S
             }
             keys -= found.toSet()
             if (found.size == 1) {
-                prefix = ""
+                prefix = found.first()
             }
             if (prefix !in prefixes) {
                 prefixes[prefix] = mutableListOf()
