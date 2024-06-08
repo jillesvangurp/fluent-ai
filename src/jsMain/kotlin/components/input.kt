@@ -1,5 +1,6 @@
 package components
 
+import com.jillesvangurp.fluentai.FluentChunk
 import com.tryformation.localization.Translatable
 import dev.fritz2.core.HtmlTag
 import dev.fritz2.core.RenderContext

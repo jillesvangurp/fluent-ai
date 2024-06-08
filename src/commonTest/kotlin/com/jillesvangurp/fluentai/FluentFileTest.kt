@@ -19,37 +19,37 @@ class FluentFileTest {
     """.trimIndent()
 
     @Test
-    fun testGet() {
+    fun shouldCorrectlyGetChunks() {
         val fluentFile = FluentFile("example.ftl", content)
-        fluentFile.get("foo") shouldStartWith  "First line"
-        fluentFile.get("foo") shouldEndWith   "Second line"
-        fluentFile.get("bar") shouldBe "Another value"
-        fluentFile.get("baz") shouldBe null
+        fluentFile["foo"]?.definition shouldStartWith  "First line"
+        fluentFile["foo"]?.definition shouldEndWith   "Second line"
+        fluentFile["bar"]?.definition shouldBe "Another value"
+        fluentFile["baz"]?.definition shouldBe null
     }
 
     @Test
-    fun testPut() {
-        val fluentFile = FluentFile("example.ftl", content)
+    fun shouldModifyWithPut() {
+        var fluentFile = FluentFile("example.ftl", content)
         val original = fluentFile.copy()
         listOf(fluentFile) shouldBe listOf(original)
-        fluentFile.put("foo", "Updated value\n    Continued value")
+        fluentFile = fluentFile.put("foo", "Updated value\n    Continued value", fluentFile["foo"]?.comment)
         listOf(fluentFile) shouldNotBe listOf(original)
         fluentFile.content shouldBe """
-            # This is a comment
-            foo = Updated value
-                Continued value
             # Another comment
             bar = Another value
-        """.trimIndent()
-
-        fluentFile.put("baz", "New value")
-        fluentFile.content shouldBe """
             # This is a comment
             foo = Updated value
                 Continued value
+        """.trimIndent()
+
+        fluentFile = fluentFile.put("baz", "New value")
+        fluentFile.content shouldBe """
             # Another comment
             bar = Another value
             baz = New value
+            # This is a comment
+            foo = Updated value
+                Continued value
         """.trimIndent()
     }
 
@@ -66,23 +66,14 @@ class FluentFileTest {
 
         """.trimIndent()
         val fluentFile = FluentFile("example.ftl", sample)
-        fluentFile["-brand"] shouldBe "FORMATION"
+        fluentFile["-brand"]?.definition shouldBe "FORMATION"
 
     }
 
     @Test
-    fun testKeys() {
+    fun shouldListKeys() {
         val fluentFile = FluentFile("example.ftl", content)
         fluentFile.keys() shouldBe setOf("foo", "bar")
-    }
-
-    @Test
-    fun testEntries() {
-        val fluentFile = FluentFile("example.ftl", content)
-        fluentFile.asMap() shouldBe mapOf(
-            "foo" to "First line\n     Second line",
-            "bar" to "Another value"
-        )
     }
 
     @Test
@@ -112,14 +103,7 @@ class FluentFileTest {
 
         """.trimIndent()
         val fluentFile = FluentFile("example.ftl", content)
-        val grouped = fluentFile.groupByLargestPrefix()
-//        console.log(grouped.keys.joinToString(","))
-
-//        grouped.forEach {(pre,map) ->
-//            map.forEach { (id,  value) ->
-//                println("$pre: $id")
-//            }
-//        }
+        val grouped = fluentFile.asMap().groupByLargestPrefix()
 
         grouped.keys shouldHaveAtLeastSize 5
         grouped[""]!!.entries shouldHaveSize 3

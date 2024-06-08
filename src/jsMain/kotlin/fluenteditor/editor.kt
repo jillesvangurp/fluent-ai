@@ -1,7 +1,6 @@
 package fluenteditor
 
 import ai.TranslationService
-import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.groupIdsByLargestPrefix
 import components.primaryButton
 import components.secondaryButton
@@ -12,87 +11,95 @@ import dev.fritz2.core.RenderContext
 import dev.fritz2.core.disabled
 import dev.fritz2.core.placeholder
 import dev.fritz2.core.storeOf
-import dev.fritz2.headless.components.inputField
 import files.FluentFilesStore
 import icons.SvgIconSource
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import localization.TL
 import localization.getTranslationString
 import localization.translate
-import org.w3c.dom.HTMLInputElement
-import settings.Settings
 import settings.SettingsStore
 import withKoin
 
 fun RenderContext.fluentBrowser() {
-    withKoin {
-        val fluentFilesStore = get<FluentFilesStore>()
+        div("flex flex-col grow m-2") {
 
-        val selectedIdStore = storeOf("")
-        val translationService = get<TranslationService>()
-        val settingsStore = get<SettingsStore>()
+            div("flex flex-row gap-2 p-5 bg-white shadow-lg m-2") {
+                secondaryButton(text = TL.Common.Add, iconSource = SvgIconSource.Plus) {
+                    // FIXME add handler and some routing for the main view
+                }
+            }
+            withKoin {
+                val fluentFilesStore = get<FluentFilesStore>()
 
-        div("grow m-2 flex flex-row") {
-            fluentFilesStore.data.filterNotNull().render { files ->
+                val selectedIdStore = storeOf("")
+                val translationService = get<TranslationService>()
+                val settingsStore = get<SettingsStore>()
 
-                val keys = files.flatMap { it.keys() }.distinct().sorted()
 
-                div("w-96 flex flex-col gap-2 p-5 bg-white shadow-lg m-2") {
-                    val searchStore = storeOf("")
+                div("grow m-2 flex flex-row") {
+                    fluentFilesStore.data.filterNotNull().render { files ->
 
-                    twInputField(
-                        searchStore,
-                        null,
-                        getTranslationString(TL.Common.FilterPlaceholder),
-                    )
+                        val keys = files.flatMap { it.keys() }.distinct().sorted()
 
-                    div("grow overflow-y-auto") {
+                        div("w-96 flex flex-col gap-2 p-5 bg-white shadow-lg m-2") {
+                            val searchStore = storeOf("")
 
-                        div("max-h-0") {
-                            searchStore.data.render { query ->
-                                keys.filter { translationId ->
-                                    if (query.isBlank()) true
-                                    else {
-                                        translationId.lowercase().contains(query.lowercase())
-                                    }
-                                }.also {
-                                    p {
-                                        +"Total ${it.size}"
-                                    }
-                                }.groupIdsByLargestPrefix().forEach { (prefix, ids) ->
-                                    val showIdsStore = storeOf(true)
-                                    showIdsStore.data.render { show ->
-                                        div {
-                                            a {
-                                                +"${prefix.takeIf { it.isNotBlank() } ?: "..other"} (${ids.size})"
+                            twInputField(
+                                searchStore,
+                                null,
+                                getTranslationString(TL.Common.FilterPlaceholder),
+                            )
 
-                                                clicks handledBy {
-                                                    showIdsStore.update(!showIdsStore.current)
-                                                }
+                            div("grow overflow-y-auto") {
+
+                                div("max-h-0") {
+                                    searchStore.data.render { query ->
+                                        keys.filter { translationId ->
+                                            if (query.isBlank()) true
+                                            else {
+                                                translationId.lowercase()
+                                                    .contains(query.lowercase())
                                             }
-                                        }
-                                        if (show) {
-                                            ids.forEach { translationId ->
-                                                div("ml-5") {
+                                        }.also {
+                                            p {
+                                                +"Total ${it.size}"
+                                            }
+                                        }.groupIdsByLargestPrefix().forEach { (prefix, ids) ->
+                                            val showIdsStore = storeOf(true)
+                                            showIdsStore.data.render { show ->
+                                                div {
                                                     a {
-                                                        +translationId.replace(
-                                                            "$prefix-".takeIf { it != "-" }
-                                                                ?: "",
-                                                            "",
-                                                        )
-                                                        selectedIdStore.data.render {
-                                                            if (selectedIdStore.current == translationId) {
-                                                                +" *"
-                                                            }
-                                                        }
+                                                        +"${prefix.takeIf { it.isNotBlank() } ?: "..other"} (${ids.size})"
+
                                                         clicks handledBy {
-                                                            if (selectedIdStore.current == translationId) {
-                                                                selectedIdStore.update("")
-                                                            } else {
-                                                                selectedIdStore.update(translationId)
+                                                            showIdsStore.update(!showIdsStore.current)
+                                                        }
+                                                    }
+                                                }
+                                                if (show) {
+                                                    ids.forEach { translationId ->
+                                                        div("ml-5") {
+                                                            a {
+                                                                +translationId.replace(
+                                                                    "$prefix-".takeIf { it != "-" }
+                                                                        ?: "",
+                                                                    "",
+                                                                )
+                                                                selectedIdStore.data.render {
+                                                                    if (selectedIdStore.current == translationId) {
+                                                                        +" *"
+                                                                    }
+                                                                }
+                                                                clicks handledBy {
+                                                                    if (selectedIdStore.current == translationId) {
+                                                                        selectedIdStore.update("")
+                                                                    } else {
+                                                                        selectedIdStore.update(
+                                                                            translationId
+                                                                        )
+                                                                    }
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -103,86 +110,89 @@ fun RenderContext.fluentBrowser() {
                                 }
                             }
                         }
-                    }
-                }
-                div("grow p-5 bg-white shadow-lg m-2") {
-                    selectedIdStore.data.render { translationId ->
-                        if (translationId.isBlank()) {
-                            p {
-                                translate(TL.FluentEditor.NoTranslationIdSelected)
-                            }
-
-
-                            createNewTranslationId()
-
-                        } else {
-                            h3 {
-                                +translationId
-                            }
-                            files.sortedBy { it.name }.map { file ->
-                                val translation = file[translationId] ?: ""
-                                file to translation
-                            }.forEach { (file, translation) ->
-                                div("w-full") {
+                        div("grow p-5 bg-white shadow-lg m-2") {
+                            selectedIdStore.data.render { translationId ->
+                                if (translationId.isBlank()) {
                                     p {
-                                        +file.name
-                                    }
-                                    val translationEditor = storeOf(translation)
-
-                                    twFullWidthTextArea(translationEditor) {
-                                        twThreeLineTextareaTextfield {
-
-                                        }
+                                        translate(TL.FluentEditor.NoTranslationIdSelected)
                                     }
 
-                                    div("flex flex-row gap-3") {
-                                        translationEditor.data.render { t ->
-                                            secondaryButton(
-                                                text = TL.Common.Cancel,
-                                                iconSource = SvgIconSource.Cross,
-                                            ) {
-                                                disabled(t == file[translationId].orEmpty())
 
-                                                clicks.map {
-                                                    file[translationId].orEmpty()
-                                                } handledBy translationEditor.update
+                                    createNewTranslationId()
+
+                                } else {
+                                    h3 {
+                                        +translationId
+                                    }
+                                    files.sortedBy { it.name }.map { file ->
+                                        val translation = file[translationId]
+                                        file to translation
+                                    }.forEach { (file, chunk) ->
+                                        div("w-full") {
+                                            p {
+                                                +file.name
                                             }
-                                            val originalText = files.first {
-                                                it.matches(
-                                                    settingsStore.current?.translationSourceLanguage
-                                                        ?: "en-US",
-                                                )
-                                            }[translationId].orEmpty()
-                                            secondaryButton(
-                                                text = TL.FluentEditor.AiTranslate,
-                                                iconSource = SvgIconSource.Check,
-                                            ) {
-                                                disabled(originalText.isBlank())
+                                            val translationEditor = storeOf(chunk?.definition.orEmpty())
 
-                                                clicks handledBy {
-                                                    val translated = translationService.translate(
-                                                        translationId,
-                                                        originalText, file.name,
-                                                    )
-                                                    translationEditor.update(translated ?: ":-(")
-                                                    if (translated != null) {
-                                                        file.put(translationId, translated)
-                                                        fluentFilesStore.addOrReplace(file)
-                                                        translationEditor.update(file[translationId].orEmpty())
-                                                    }
+                                            twFullWidthTextArea(translationEditor) {
+                                                twThreeLineTextareaTextfield {
+
                                                 }
                                             }
-                                            primaryButton(
-                                                text = TL.Common.Save,
-                                                iconSource = SvgIconSource.Check,
-                                            ) {
-                                                val original = file[translationId]
-                                                disabled(t == original.orEmpty())
 
-                                                clicks handledBy {
-                                                    file.put(translationId, t)
-                                                    fluentFilesStore.addOrReplace(file)
-                                                    translationEditor.update(file[translationId].orEmpty())
+                                            div("flex flex-row gap-3") {
+                                                translationEditor.data.render { t ->
+                                                    secondaryButton(
+                                                        text = TL.Common.Cancel,
+                                                        iconSource = SvgIconSource.Cross,
+                                                    ) {
+                                                        disabled(t == file[translationId]?.definition.orEmpty())
+
+                                                        clicks.map {
+                                                            file[translationId]?.definition.orEmpty()
+                                                        } handledBy translationEditor.update
+                                                    }
+                                                    val originalText = files.first {
+                                                        it.matches(
+                                                            settingsStore.current?.translationSourceLanguage
+                                                                ?: "en-US",
+                                                        )
+                                                    }[translationId]?.definition.orEmpty()
+                                                    secondaryButton(
+                                                        text = TL.FluentEditor.AiTranslate,
+                                                        iconSource = SvgIconSource.Check,
+                                                    ) {
+                                                        disabled(originalText.isBlank())
+
+                                                        clicks handledBy {
+                                                            val translated =
+                                                                translationService.translate(
+                                                                    translationId,
+                                                                    originalText, file.name,
+                                                                )
+                                                            translationEditor.update(
+                                                                translated ?: ":-("
+                                                            )
+                                                            if (translated != null) {
+                                                                val newFile = file.put(translationId, translated,)
+                                                                fluentFilesStore.addOrReplace(newFile)
+                                                                translationEditor.update(newFile[translationId]?.definition.orEmpty())
+                                                            }
+                                                        }
+                                                    }
+                                                    primaryButton(
+                                                        text = TL.Common.Save,
+                                                        iconSource = SvgIconSource.Check,
+                                                    ) {
+                                                        val original = file[translationId]
+                                                        disabled(t == original?.definition.orEmpty())
+
+                                                        clicks handledBy {
+                                                            val newFile = file.put(translationId, t, chunk?.comment)
+                                                            fluentFilesStore.addOrReplace(newFile)
+                                                            translationEditor.update(newFile[translationId]?.definition.orEmpty())
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -194,7 +204,6 @@ fun RenderContext.fluentBrowser() {
                 }
             }
         }
-    }
 }
 
 private fun RenderContext.createNewTranslationId() {
@@ -238,16 +247,15 @@ private fun RenderContext.createNewTranslationId() {
                         }
 
                         clicks handledBy {
-                            console.log("click!")
                             val newId = newIdStore.current
                             val preferred = settings?.translationSourceLanguage ?: "en"
                             console.log(preferred)
                             val fluentFile =
                                 files?.firstOrNull { it.matches(preferred) } ?: files?.first()
                             console
-                            fluentFile?.put(newId, newTranslationStore.current)
+                            val newFile = fluentFile?.put(newId, newTranslationStore.current)
                                 ?: error("file not found")
-                            fluentFilesStore.addOrReplace(fluentFile)
+                            fluentFilesStore.addOrReplace(newFile)
                             selectedIdStore.update(newId)
                         }
                     }

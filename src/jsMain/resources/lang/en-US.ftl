@@ -6,6 +6,8 @@ common-clear = Clear
 common-confirm = OK
 common-filter-placeholder = Filter the list
 common-save = Save
+common-delete = Delete
+common-download = Download
 
 file-loader-files-header = Your Fluent Files
 file-loader-drag-and-drop = Drag ftl files here to load them
