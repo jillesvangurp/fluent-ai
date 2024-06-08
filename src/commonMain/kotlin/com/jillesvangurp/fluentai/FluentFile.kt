@@ -28,15 +28,12 @@ data class FluentFile(val name: String, val content: String) {
         map[key] = FluentChunk(comment.orEmpty(),key,newValue)
 
         val grouped = map.groupByLargestPrefix()
-        val newContent = grouped.map { (_,group) ->
+        val newContent = grouped.entries.sortedBy { it.key }.map { (_,group) ->
             group.values.map {
                 "${it.comment.orEmpty()}${it.id} = ${it.definition}"
             }.joinToString("\n")
         }.joinToString("\n\n")
 
-//        val newContent = map.values.sortedBy { it.id }.map {
-//            "${it.comment.orEmpty()}${it.id} = ${it.definition}"
-//        }.joinToString("\n")
         return FluentFile(name, newContent)
     }
 

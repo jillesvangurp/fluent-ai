@@ -35,22 +35,25 @@ class FluentFileTest {
         fluentFile = fluentFile.put("foo", "Updated value\n    Continued value", fluentFile["foo"]?.comment)
         listOf(fluentFile) shouldNotBe listOf(original)
         fluentFile.content shouldBe """
-            # Another comment
-            bar = Another value
-            # This is a comment
-            foo = Updated value
-                Continued value
-        """.trimIndent()
+# Another comment
+bar = Another value
+
+# This is a comment
+foo = Updated value
+    Continued value
+""".trimIndent()
 
         fluentFile = fluentFile.put("baz", "New value")
         fluentFile.content shouldBe """
-            # Another comment
-            bar = Another value
-            baz = New value
-            # This is a comment
-            foo = Updated value
-                Continued value
-        """.trimIndent()
+# Another comment
+bar = Another value
+
+baz = New value
+
+# This is a comment
+foo = Updated value
+    Continued value
+""".trimIndent()
     }
 
     @Test
@@ -106,7 +109,7 @@ class FluentFileTest {
         val grouped = fluentFile.asMap().groupByLargestPrefix()
 
         grouped.keys shouldHaveAtLeastSize 5
-        grouped[""]!!.entries shouldHaveSize 3
+        grouped[""]!!.entries shouldHaveSize 1
         grouped["file-loader"]!!.entries shouldHaveSize 2
         grouped["pages"]!!.entries shouldHaveSize 3
         grouped.forEach { (prefix,map) ->
