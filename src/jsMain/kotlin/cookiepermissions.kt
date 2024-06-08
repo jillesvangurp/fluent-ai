@@ -17,7 +17,7 @@ val cookiePermissionModule = module {
 @Serializable
 data class CookiePermission(val ok: Boolean = true, val dateAgreed: Instant = Clock.System.now())
 
-class CookiePermissionStore() : LocalStoringStore<CookiePermission>(null, "permissions", CookiePermission.serializer())
+class CookiePermissionStore() : LocalStoringStore<CookiePermission>(null, "cookie-permissions", CookiePermission.serializer())
 
 fun RenderContext.cookiePopup() {
     withKoin {
@@ -35,9 +35,9 @@ fun RenderContext.cookiePopup() {
                         primaryButton {
                             +"Agreed"
 
-                            clicks.map {
-                                CookiePermission()
-                            } handledBy cookiePermissionStore.update
+                            clicks handledBy {
+                                cookiePermissionStore.persistAndUpdate(CookiePermission())
+                            }
                             clicks handledBy { infoBubble(TL.Cookies.Welcome) }
                         }
                     },
