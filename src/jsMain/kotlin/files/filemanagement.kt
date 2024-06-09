@@ -1,12 +1,15 @@
 package files
 
+import ai.TranslationService
 import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.cleanupTranslations
+import com.jillesvangurp.fluentai.master
 import com.jillesvangurp.fluentai.sortedContent
 import components.confirm
 import components.downloadButton
 import components.fadeInFadeoutTransition
 import components.primaryButton
+import components.runWithBusy
 import components.secondaryButton
 import components.twInputField
 import dev.fritz2.core.RenderContext
@@ -240,6 +243,7 @@ fun RenderContext.listFiles() {
                                     }
                                 }
                             }
+                            translateMissingButton(file)
                             downloadButton(file.content, file.name)
                         }
                         val showContentStore = storeOf(false)
@@ -256,6 +260,35 @@ fun RenderContext.listFiles() {
                             }
                             if (show) {
                                 showContent(file)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun RenderContext.translateMissingButton(file:FluentFile) {
+    withKoin {
+        val settingsStore = get<SettingsStore>()
+        val translationService = get<TranslationService>()
+        val fluentFilesStore = get<FluentFilesStore>()
+        val currentFluentFileStore = get<CurrentFluentFileStore>()
+        settingsStore.data.render { settings ->
+            fluentFilesStore.data.filterNotNull().render { files ->
+                val master = files.master(settings.preferredTranslationLanguage)
+                if (master != null && file != master && file.keys().size < master.keys().size) {
+                    primaryButton(text = TL.FileLoader.TranslateMissing, iconSource = SvgIconSource.OpenAI) {
+                        clicks handledBy {
+                            runWithBusy(
+                                {
+                                    translationService.batchTranslate(master, file)
+                                },
+                                translationArgs = mapOf("language" to file.name)
+                            ) { newFile ->
+                                fluentFilesStore.addOrReplace(newFile)
+                                currentFluentFileStore.update(newFile)
                             }
                         }
                     }

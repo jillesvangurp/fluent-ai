@@ -38,6 +38,7 @@ file-loader-load-own-ftls-confirmation = his will remove any current files and e
 file-loader-add-new = Create or add ftl files
 file-loader-create-new-file = Create new ftl file
 file-loader-no-files-yet-cta = You don't have any ftl files yet. Create a new one or drag existing ones to the app.
+file-loader-translate-missing = Add missing with OpenAI
 
 language-select-select-language = Select UI language
 

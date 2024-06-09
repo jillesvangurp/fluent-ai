@@ -82,7 +82,7 @@ $existingText
         sourceFile: FluentFile,
         targetFile: FluentFile,
         skipExistingTranslations: Boolean = true,
-        chunkSize: Int = 20,
+        chunkSize: Int = 50,
     ): FluentFile {
         val existingTranslations = targetFile.asMap()
         val toTranslate = sourceFile.chunks.mapNotNull { t ->

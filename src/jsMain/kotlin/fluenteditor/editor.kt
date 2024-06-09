@@ -204,7 +204,7 @@ fun RenderContext.selectedTranslationEditor(
                                         }
                                         secondaryButton(
                                             text = TL.FluentEditor.AiTranslate,
-                                            iconSource = SvgIconSource.Check,
+                                            iconSource = SvgIconSource.OpenAI,
                                         ) {
                                             val originalText = files.first {
                                                 it.matches(
