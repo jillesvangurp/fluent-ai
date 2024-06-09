@@ -1,3 +1,4 @@
+import components.busyPopupMountPoint
 import dev.fritz2.headless.components.toastContainer
 import dev.fritz2.headless.foundation.portalRoot
 import routing.mainScreen
@@ -6,6 +7,11 @@ suspend fun main() {
     try {
         startAppWithKoin {
             cookiePopup()
+            try {
+                busyPopupMountPoint()
+            } catch (e: Exception) {
+                console.error(e)
+            }
 
             mainScreen()
 

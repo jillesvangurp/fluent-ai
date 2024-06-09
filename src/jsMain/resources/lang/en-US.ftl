@@ -1,5 +1,10 @@
 -brand = Fluent AI
 
+busy-failure = Error
+busy-initial-title = Translating
+busy-initial-message = Using OpenAI to translate to {$language}
+busy-success = Done translating to {$language}
+
 common-app-name = { -brand }
 common-add = Add
 common-cancel = Cancel
@@ -9,6 +14,8 @@ common-filter-placeholder = Filter the list
 common-save = Save
 common-delete = Delete
 common-download = Download
+common-hide = Hide {$content}
+common-show = Show {$content}
 
 cookies-disclaimer = This website uses browser local storage to store json content
         that you create in the app. This information is never shared elsewhere.

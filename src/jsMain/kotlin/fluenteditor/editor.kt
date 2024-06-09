@@ -1,11 +1,11 @@
 package fluenteditor
 
 import ai.TranslationService
-import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.groupIdsByLargestPrefix
 import components.confirm
 import components.fadeInFadeoutTransition
 import components.primaryButton
+import components.runWithBusy
 import components.secondaryButton
 import components.twFullWidthTextArea
 import components.twInputField
@@ -16,7 +16,6 @@ import dev.fritz2.core.disabled
 import dev.fritz2.core.placeholder
 import dev.fritz2.core.storeOf
 import dev.fritz2.core.title
-import dev.fritz2.core.transition
 import files.FluentFilesStore
 import icons.SvgIconSource
 import kotlinx.coroutines.flow.filterNotNull
@@ -68,8 +67,7 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
                             keys.filter { translationId ->
                                 if (query.isBlank()) true
                                 else {
-                                    translationId.lowercase()
-                                        .contains(query.lowercase())
+                                    translationId.lowercase().contains(query.lowercase())
                                 }
                             }.also {
                                 p {
@@ -92,8 +90,7 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
                                             div("ml-5") {
                                                 a {
                                                     +translationId.replace(
-                                                        "$prefix-".takeIf { it != "-" }
-                                                            ?: "",
+                                                        "$prefix-".takeIf { it != "-" } ?: "",
                                                         "",
                                                     )
                                                     selectedIdStore.data.render {
@@ -106,7 +103,7 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
                                                             selectedIdStore.update("")
                                                         } else {
                                                             selectedIdStore.update(
-                                                                    translationId,
+                                                                translationId,
                                                             )
                                                         }
                                                     }
@@ -151,7 +148,10 @@ fun RenderContext.selectedTranslationEditor(
                             translate(TL.FluentEditor.DeleteThisId)
 
                             clicks handledBy {
-                                confirm(description = TL.FluentEditor.DeleteThisIdConfirmation, job = job) {
+                                confirm(
+                                    description = TL.FluentEditor.DeleteThisIdConfirmation,
+                                    job = job,
+                                ) {
                                     selectedIdStore.update("")
                                     fluentFilesStore.deleteKey(translationId)
                                 }
@@ -197,26 +197,33 @@ fun RenderContext.selectedTranslationEditor(
                                             }[translationId]?.definition.orEmpty()
                                             val isDisabled = !translationService.enabled()
                                             disabled(originalText.isBlank() || isDisabled)
-                                            if(isDisabled) {
+                                            if (isDisabled) {
                                                 title(getTranslationString(TL.FluentEditor.ConfigureKey))
                                             } else {
                                                 title(getTranslationString(TL.FluentEditor.TranslateUsingOpenAi))
                                             }
 
                                             clicks handledBy {
-                                                val translated =
-                                                    translationService.translate(
-                                                        translationId,
-                                                        originalText, file.name,
+                                                runWithBusy(
+                                                    {
+                                                        translationService.translate(
+                                                            originalText,
+                                                            file.name,
+                                                        )
+                                                    },
+                                                    translationArgs = mapOf("language" to file.name),
+                                                ) { translated ->
+                                                    translationEditor.update(
+                                                        translated ?: ":-(",
                                                     )
-                                                translationEditor.update(
-                                                    translated ?: ":-(",
-                                                )
-                                                if (translated != null) {
-                                                    val newFile =
-                                                        file.put(translationId, translated)
-                                                    fluentFilesStore.addOrReplace(newFile)
-                                                    translationEditor.update(newFile[translationId]?.definition.orEmpty())
+                                                    if (translated != null) {
+                                                        val newFile =
+                                                            file.put(translationId, translated)
+                                                        fluentFilesStore.addOrReplace(newFile)
+                                                        translationEditor.update(newFile[translationId]?.definition.orEmpty())
+                                                    } else {
+                                                        console.error("no translation")
+                                                    }
                                                 }
                                             }
                                         }
@@ -281,9 +288,8 @@ private fun RenderContext.createNewTranslationId() {
                         newIdStore.data.render { newId ->
                             newTranslationStore.data.render { newTranslation ->
                                 disabled(
-                                    files.isNullOrEmpty() || newTranslation.isBlank() ||
-                                        newId.isBlank() || files.orEmpty().flatMap { it.keys() }
-                                        .contains(newId),
+                                    files.isNullOrEmpty() || newTranslation.isBlank() || newId.isBlank() || files.orEmpty()
+                                        .flatMap { it.keys() }.contains(newId),
                                 )
                             }
                         }

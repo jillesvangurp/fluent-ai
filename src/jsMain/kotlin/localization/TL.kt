@@ -3,6 +3,16 @@ package localization
 import com.tryformation.localization.Translatable
 
 object TL {
+    enum class Busy: Translatable {
+        InitialTitle,
+        InitialMessage,
+        Success,
+        Failure,
+        ;
+
+        override val prefix = "busy"
+    }
+
     enum class Common : Translatable {
         AppName,
         FilterPlaceholder,
@@ -14,6 +24,8 @@ object TL {
         Download,
         Downloaded,
         Add,
+        Show,
+        Hide
         ;
 
         override val prefix = "common"
@@ -47,12 +59,6 @@ object TL {
         override val prefix = "zzdocs"
     }
 
-    enum class LanguageSelector : Translatable {
-        SelectLanguage,
-        ;
-
-        override val prefix = "language-select"
-    }
 
     enum class FileLoader : Translatable {
         FilesHeader,
@@ -83,6 +89,13 @@ object TL {
 
         override val prefix = "translation-editor"
 
+    }
+
+    enum class LanguageSelector : Translatable {
+        SelectLanguage,
+        ;
+
+        override val prefix = "language-select"
     }
 
     enum class Settings : Translatable {

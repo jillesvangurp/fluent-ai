@@ -1,4 +1,5 @@
 import ai.translationServiceModule
+import components.busyPopupModule
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.render
 import files.fileLoaderModule
@@ -21,6 +22,7 @@ suspend fun startAppWithKoin(ui: RenderContext.()->Unit) {
             module {
                 singleOf(::CookiePermissionStore)
             },
+            busyPopupModule,
             routingModule,
             settingsModule,
             fileLoaderModule,

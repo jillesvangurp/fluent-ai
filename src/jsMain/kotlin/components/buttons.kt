@@ -94,7 +94,7 @@ fun RenderContext.downloadButton(
             href("data:${mimeType};charset=utf-8,$downloadContent")
             download(fileName)
         }
-    secondaryButton {
+    primaryButton {
         // invisible link that we simulate a click on
         div("flex flex-row gap-2 place-items-center") {
             iconImage(SvgIconSource.Download, baseClass = "h-5 w-5 fill-white place-items-center")
