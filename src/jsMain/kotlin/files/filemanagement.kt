@@ -164,7 +164,8 @@ fun RenderContext.fileLoader() {
                             loadedFiles.map {
                                 // sort on load
                                 FluentFile(it.name, it.asMap().sortedContent())
-                            }.cleanupTranslations(settingsStore.current.preferredTranslationLanguage),
+                            }
+                                .cleanupTranslations(settingsStore.current.preferredTranslationLanguage),
                         )
                     }
 
@@ -254,9 +255,9 @@ fun RenderContext.listFiles() {
                                 } else {
                                     translate(TL.Common.Show, mapOf("content" to file.name))
                                 }
-                            }
-                            clicks handledBy {
-                                showContentStore.update(!showContentStore.current)
+                                clicks handledBy {
+                                    showContentStore.update(!showContentStore.current)
+                                }
                             }
                             if (show) {
                                 showContent(file)
@@ -269,7 +270,7 @@ fun RenderContext.listFiles() {
     }
 }
 
-fun RenderContext.translateMissingButton(file:FluentFile) {
+fun RenderContext.translateMissingButton(file: FluentFile) {
     withKoin {
         val settingsStore = get<SettingsStore>()
         val translationService = get<TranslationService>()
@@ -278,17 +279,31 @@ fun RenderContext.translateMissingButton(file:FluentFile) {
         settingsStore.data.render { settings ->
             fluentFilesStore.data.filterNotNull().render { files ->
                 val master = files.master(settings.preferredTranslationLanguage)
-                if (master != null && file != master && file.keys().size < master.keys().size) {
-                    primaryButton(text = TL.FileLoader.TranslateMissing, iconSource = SvgIconSource.OpenAI) {
-                        clicks handledBy {
-                            runWithBusy(
-                                {
-                                    translationService.batchTranslate(master, file)
-                                },
-                                translationArgs = mapOf("language" to file.name)
-                            ) { newFile ->
-                                fluentFilesStore.addOrReplace(newFile)
-                                currentFluentFileStore.update(newFile)
+                primaryButton(
+                        text = TL.FileLoader.TranslateMissing,
+                        iconSource = SvgIconSource.OpenAI,
+                ) {
+
+                    disabled(!(master != null && file != master && file.keys().size < master.keys().size))
+                    clicks handledBy {
+                        confirm(
+                                description = TL.FileLoader.TranslateMissingConfirmation,
+                                translationArgs = mapOf(
+                                        "number_translations" to master?.keys()
+                                                .orEmpty().size - file.keys().size,
+                                ),
+                                job = job,
+                        ) {
+                            if(master != null) {
+                                runWithBusy(
+                                    {
+                                        translationService.batchTranslate(master, file)
+                                    },
+                                    translationArgs = mapOf("language" to file.name),
+                                ) { newFile ->
+                                    fluentFilesStore.addOrReplace(newFile)
+                                    currentFluentFileStore.update(newFile)
+                                }
                             }
                         }
                     }
@@ -314,7 +329,7 @@ fun RenderContext.fileStats(file: FluentFile) {
                     if (source != null && source.name != file.name) {
                         val numberOfTranslationsInSource = source.chunks.size
                         li {
-                            +"${numberOfTranslationsInSource - numberOfTranslations } missing translations"
+                            +"${numberOfTranslationsInSource - numberOfTranslations} missing translations"
                         }
                     }
                 }

@@ -1,10 +1,20 @@
 -brand = Fluent AI
 
+busy-failure = Arrr! Blimey!
+busy-initial-title = Translating
+busy-initial-message = Usin' OpenAI to translate t' {$language}
+busy-success = Done translatin' t' {$language}
+
+common-app-name = { -brand }
+common-save = Save thar
+common-delete = Scuttle
+common-download = Plunder
+common-hide = Stow {$content}
+common-show = Show {$content}
 common-cancel = Belay
 common-clear = Swab
 common-confirm = Aye
 common-filter-placeholder = Filter th' list
-common-save = Save
 common-add = Add ye scallywag
 
 confirmation-dialog-yes = Aye
@@ -12,9 +22,11 @@ confirmation-dialog-no = Nay
 confirmation-dialog-default-description = If ye click aye, the action will be carried out.
 confirmation-dialog-default-question = Be ye certain?
 
+cookies-welcome = Ahoy to {-brand}
 cookies-disclaimer = This here website be usin' yer browser's local storage to stash the json booty ye be creatin' in the app. This here info be stayin' with us; we ain't sharin' it with no one else. To be usin' this app, ye gotta agree to be usin' local storage. Arrr!
 cookies-header = Cookies & permissions = Cookies & articles o' accordance
 
+file-loader-translate-missing = Be addin' missin' with OpenAI
 file-loader-drag-and-drop = Drag ftl files here to be loaded
 file-loader-load-own-ftls = Load ftl files fer { -brand }
 file-loader-add-new = Create or be addin' ftl files
@@ -35,6 +47,7 @@ pages-about = 'Bout
 settings-open-ai-key = Set yer OpenAI API Key (needed fer translatin')
 settings-translation-language = Set ye source lingo for yer AI translations, matey. Be warned, the lingo be matched against yer ftl file name with some normalizin'. Defaults to en-US.
 
+translation-editor-translate-using-open-ai = Translate usin' OpenAI
 translation-editor-ai-translate = Translate usin' GPT-4
 translation-editor-configure-key = Set sail an OpenAI API key in the settin's
 translation-editor-delete-this-id = Delete this 'ere translatin' id
@@ -43,7 +56,6 @@ translation-editor-new-translation = Arrr translation
 translation-editor-new-translation-id = Ahoy matey! Ye be lookin' for some English Pirate translations, eh? Here we be:
 translation-editor-new-translation-id-header = Arr, be creatin' a new translation definition
 translation-editor-no-translation-id-selected = Select a language id on the port side to be editing the translation.
-translation-editor-translate-using-open-ai = Translate using OpenAI
 
 zzdocs-about = # 'Bout Fluent AI
 

@@ -39,6 +39,7 @@ file-loader-add-new = Create or add ftl files
 file-loader-create-new-file = Create new ftl file
 file-loader-no-files-yet-cta = You don't have any ftl files yet. Create a new one or drag existing ones to the app.
 file-loader-translate-missing = Add missing with OpenAI
+file-loader-translate-missing-confirmation = Add missing {$number_translations} missing translations with OpenAI. Note. a large amount of translations may take some time and will of course cost you some tokens.
 
 language-select-select-language = Select UI language
 

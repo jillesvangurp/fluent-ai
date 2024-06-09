@@ -70,7 +70,8 @@ object TL {
         AddNew,
         CreateNewFile,
         NoFilesYetCta,
-        TranslateMissing
+        TranslateMissing,
+        TranslateMissingConfirmation,
         ;
 
         override val prefix = "file-loader"
