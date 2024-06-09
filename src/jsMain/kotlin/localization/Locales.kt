@@ -13,6 +13,7 @@ enum class Locales(
     EN_PIRATE("en", "pirate", arrayOf("en-PR","en-GB", "en")),
     FR_FR("fr", "FR", arrayOf("fr", "fr-BE")),
     NL_NL("nl", "NL", arrayOf("nl", "nl-BE")),
+    DE_DE("de", "DE", arrayOf("de")),
     ;
 
     val title = "${languageCode}-${countryCode}"
