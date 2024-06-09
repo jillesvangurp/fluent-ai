@@ -1,6 +1,7 @@
 package files
 
 import com.jillesvangurp.fluentai.FluentFile
+import com.jillesvangurp.fluentai.cleanupTranslations
 import com.jillesvangurp.fluentai.sortedContent
 import components.confirm
 import components.downloadButton
@@ -31,6 +32,7 @@ import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.files.FileReader
 import org.w3c.files.get
 import settings.SettingsStore
+import settings.preferredTranslationLanguage
 import utils.handlerScope
 import withKoin
 
@@ -93,18 +95,22 @@ fun RenderContext.fileManager() {
 }
 
 suspend fun FluentFilesStore.loadOwnFtls() {
-    val files = Locales.entries.mapNotNull { locale ->
-        TranslationStore.fetchFtl(locale.id)?.let {
-            FluentFile(locale.id, it)
-        }
-    }.sortedBy { it.name }
-    persistAndUpdate(files)
+    withKoin {
+        val settingsStore = get<SettingsStore>()
+        val files = Locales.entries.mapNotNull { locale ->
+            TranslationStore.fetchFtl(locale.id)?.let {
+                FluentFile(locale.id, it)
+            }
+        }.sortedBy { it.name }
+        persistAndUpdate(files.cleanupTranslations(settingsStore.current.preferredTranslationLanguage))
+    }
 }
 
 fun RenderContext.fileLoader() {
     withKoin {
         // Drag target store
         val fileContentStore = get<FluentFilesStore>()
+        val settingsStore = get<SettingsStore>()
 
         // Drag target
         div(
@@ -149,11 +155,13 @@ fun RenderContext.fileLoader() {
                         while (processedFiles > 0) {
                             delay(5.milliseconds)
                         }
+                        val pl = settingsStore.current.preferredTranslationLanguage
+
                         fileContentStore.persistAndUpdate(
                             loadedFiles.map {
                                 // sort on load
                                 FluentFile(it.name, it.asMap().sortedContent())
-                            },
+                            }.cleanupTranslations(settingsStore.current.preferredTranslationLanguage),
                         )
                     }
 
@@ -263,7 +271,7 @@ fun RenderContext.fileStats(file: FluentFile) {
         val fileStore = get<FluentFilesStore>()
         fileStore.data.filterNotNull().render { files ->
             settingsStore.data.render { settings ->
-                val preferredLanguage = settings?.translationSourceLanguage ?: "en-US"
+                val preferredLanguage = settings.preferredTranslationLanguage
                 val source = files.firstOrNull { it.matches(preferredLanguage) }
                 ul {
                     val numberOfTranslations = file.chunks.size

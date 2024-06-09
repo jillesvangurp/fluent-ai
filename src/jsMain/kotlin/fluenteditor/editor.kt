@@ -1,7 +1,9 @@
 package fluenteditor
 
 import ai.TranslationService
+import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.groupIdsByLargestPrefix
+import com.jillesvangurp.fluentai.missingTranslations
 import components.confirm
 import components.fadeInFadeoutTransition
 import components.primaryButton
@@ -24,6 +26,7 @@ import localization.TL
 import localization.getTranslationString
 import localization.translate
 import settings.SettingsStore
+import settings.preferredTranslationLanguage
 import withKoin
 
 fun RenderContext.fluentBrowser() {
@@ -36,75 +39,90 @@ fun RenderContext.fluentBrowser() {
             selectedTranslationEditor(selectedIdStore)
         }
     }
-
 }
 
 fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
     withKoin {
         val fluentFilesStore = get<FluentFilesStore>()
-        fluentFilesStore.data.filterNotNull().render { files ->
+        val settingsStore = get<SettingsStore>()
+        settingsStore.data.render {settings->
+            fluentFilesStore.data.filterNotNull().render { files ->
+                val missingTranslations =
+                    files .firstOrNull { it.matches(settings.preferredTranslationLanguage) }
+                    ?.let { preferred ->
+                        files.missingTranslations(preferred)
+                }.orEmpty()
 
-            val keys = files.flatMap { it.keys() }.distinct().sorted()
+                val keys = files.flatMap { it.keys() }.distinct().sorted()
 
-            div("w-96 flex flex-col gap-2 p-5 bg-white shadow-lg m-2") {
-                secondaryButton(text = TL.Common.Add, iconSource = SvgIconSource.Plus) {
-                    clicks handledBy {
-                        selectedIdStore.update("")
+                div("w-96 flex flex-col gap-2 p-5 bg-white shadow-lg m-2") {
+                    secondaryButton(text = TL.Common.Add, iconSource = SvgIconSource.Plus) {
+                        clicks handledBy {
+                            selectedIdStore.update("")
+                        }
                     }
-                }
-                val searchStore = storeOf("")
+                    val searchStore = storeOf("")
 
-                twInputField(
-                    searchStore,
-                    null,
-                    getTranslationString(TL.Common.FilterPlaceholder),
-                )
+                    twInputField(
+                        searchStore,
+                        null,
+                        getTranslationString(TL.Common.FilterPlaceholder),
+                    )
 
-                div("grow overflow-y-auto") {
+                    div("grow overflow-y-auto") {
 
-                    div("max-h-0") {
-                        searchStore.data.render { query ->
-                            keys.filter { translationId ->
-                                if (query.isBlank()) true
-                                else {
-                                    translationId.lowercase().contains(query.lowercase())
-                                }
-                            }.also {
-                                p {
-                                    +"Total ${it.size}"
-                                }
-                            }.groupIdsByLargestPrefix().forEach { (prefix, ids) ->
-                                val showIdsStore = storeOf(true)
-                                showIdsStore.data.render { show ->
-                                    div {
-                                        a {
-                                            +"${prefix.takeIf { it.isNotBlank() } ?: "-terms"} (${ids.size})"
+                        div("max-h-0") {
+                            searchStore.data.render { query ->
+                                keys.filter { translationId ->
+                                    if (query.isBlank()) true
+                                    else {
+                                        translationId.lowercase().contains(query.lowercase())
+                                    }
+                                }.also {
+                                    p {
+                                        +"Total ${it.size}"
+                                    }
+                                }.groupIdsByLargestPrefix().forEach { (prefix, ids) ->
+                                    val showIdsStore = storeOf(true)
+                                    showIdsStore.data.render { show ->
+                                        div {
+                                            a {
+                                                +"${prefix.takeIf { it.isNotBlank() } ?: "-terms"} (${ids.size})"
 
-                                            clicks handledBy {
-                                                showIdsStore.update(!showIdsStore.current)
+                                                clicks handledBy {
+                                                    showIdsStore.update(!showIdsStore.current)
+                                                }
                                             }
                                         }
-                                    }
-                                    if (show) {
-                                        ids.forEach { translationId ->
-                                            div("ml-5") {
-                                                a {
-                                                    +translationId.replace(
-                                                        "$prefix-".takeIf { it != "-" } ?: "",
-                                                        "",
-                                                    )
-                                                    selectedIdStore.data.render {
-                                                        if (selectedIdStore.current == translationId) {
-                                                            +" *"
+                                        if (show) {
+                                            ids.forEach { translationId ->
+                                                div("ml-5") {
+                                                    a {
+                                                        +translationId.replace(
+                                                            "$prefix-".takeIf { it != "-" } ?: "",
+                                                            "",
+                                                        )
+                                                        selectedIdStore.data.render {
+                                                            if (selectedIdStore.current == translationId) {
+                                                                +" *"
+                                                            }
+                                                        }
+
+                                                        clicks handledBy {
+                                                            if (selectedIdStore.current == translationId) {
+                                                                selectedIdStore.update("")
+                                                            } else {
+                                                                selectedIdStore.update(
+                                                                    translationId,
+                                                                )
+                                                            }
                                                         }
                                                     }
-                                                    clicks handledBy {
-                                                        if (selectedIdStore.current == translationId) {
-                                                            selectedIdStore.update("")
-                                                        } else {
-                                                            selectedIdStore.update(
-                                                                translationId,
-                                                            )
+                                                    missingTranslations[translationId]?.let {missing ->
+                                                        if(missing>0) {
+                                                            span {
+                                                                +" missing $missing"
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -117,7 +135,6 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
                     }
                 }
             }
-
         }
     }
 }
@@ -191,8 +208,7 @@ fun RenderContext.selectedTranslationEditor(
                                         ) {
                                             val originalText = files.first {
                                                 it.matches(
-                                                    settingsStore.current?.translationSourceLanguage
-                                                        ?: "en-US",
+                                                    settingsStore.current.preferredTranslationLanguage,
                                                 )
                                             }[translationId]?.definition.orEmpty()
                                             val isDisabled = !translationService.enabled()
@@ -204,27 +220,12 @@ fun RenderContext.selectedTranslationEditor(
                                             }
 
                                             clicks handledBy {
-                                                runWithBusy(
-                                                    {
-                                                        translationService.translate(
-                                                            originalText,
-                                                            file.name,
-                                                        )
-                                                    },
-                                                    translationArgs = mapOf("language" to file.name),
-                                                ) { translated ->
-                                                    translationEditor.update(
-                                                        translated ?: ":-(",
-                                                    )
-                                                    if (translated != null) {
-                                                        val newFile =
-                                                            file.put(translationId, translated)
-                                                        fluentFilesStore.addOrReplace(newFile)
-                                                        translationEditor.update(newFile[translationId]?.definition.orEmpty())
-                                                    } else {
-                                                        console.error("no translation")
-                                                    }
-                                                }
+                                                translateWithOpenAI(
+                                                        translationId,
+                                                        originalText,
+                                                        file,
+                                                        translationEditor,
+                                                )
                                             }
                                         }
                                         primaryButton(
@@ -247,6 +248,40 @@ fun RenderContext.selectedTranslationEditor(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+private suspend fun translateWithOpenAI(
+    translationId: String,
+    originalText: String,
+    file: FluentFile,
+    translationEditor: Store<String>
+) {
+    withKoin {
+        val fluentFilesStore = get<FluentFilesStore>()
+        val translationService = get<TranslationService>()
+
+        runWithBusy(
+            {
+                translationService.translate(
+                    originalText,
+                    file.name,
+                )
+            },
+            translationArgs = mapOf("language" to file.name),
+        ) { translated ->
+            translationEditor.update(
+                translated ?: ":-(",
+            )
+            if (translated != null) {
+                val newFile =
+                    file.put(translationId, translated)
+                fluentFilesStore.addOrReplace(newFile)
+                translationEditor.update(newFile[translationId]?.definition.orEmpty())
+            } else {
+                console.error("no translation")
             }
         }
     }
@@ -288,15 +323,17 @@ private fun RenderContext.createNewTranslationId() {
                         newIdStore.data.render { newId ->
                             newTranslationStore.data.render { newTranslation ->
                                 disabled(
-                                    files.isNullOrEmpty() || newTranslation.isBlank() || newId.isBlank() || files.orEmpty()
-                                        .flatMap { it.keys() }.contains(newId),
+                                        files.isNullOrEmpty()
+                                                || newTranslation.isBlank()
+                                                || newId.isBlank()
+                                                || files.flatMap { it.keys() }.contains(newId),
                                 )
                             }
                         }
 
                         clicks handledBy {
                             val newId = newIdStore.current
-                            val preferred = settings?.translationSourceLanguage ?: "en"
+                            val preferred = settings.preferredTranslationLanguage
                             console.log(preferred)
                             val fluentFile =
                                 files?.firstOrNull { it.matches(preferred) } ?: files?.first()

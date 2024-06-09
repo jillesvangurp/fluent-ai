@@ -28,6 +28,8 @@ data class Settings(
     val openAIKey: String? = null,
 )
 
+val Settings?.preferredTranslationLanguage get() = this?.translationSourceLanguage?:"en-US"
+
 class SettingsStore : LocalStoringStore<Settings>(Settings(), "settings", Settings.serializer()) {
     fun setLocale(locale: Locales) {
         persistAndUpdate(

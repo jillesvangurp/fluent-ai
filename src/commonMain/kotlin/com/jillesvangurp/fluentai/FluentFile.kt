@@ -151,3 +151,26 @@ fun String.parseFluent(): List<FluentChunk> {
         }
     }
 }
+
+fun List<FluentFile>.missingTranslations(preferred: FluentFile): Map<String, Int> {
+    val others = filter { it.name != preferred.name }
+    return preferred.keys().map { key ->
+        val source = preferred[key]?: error("key should have definition")
+        key to others.mapNotNull {
+            it[key]?.takeIf { it.definition != source.definition }
+        }.size.let { others.size - it }
+    }.toMap()
+}
+
+fun List<FluentFile>.master(masterLanguage: String) = firstOrNull { it.matches(masterLanguage) }
+
+fun List<FluentFile>.cleanupTranslations(masterLanguage: String): List<FluentFile> {
+    return master(masterLanguage)?.let { master ->
+        (filter { it.name != master.name }.map { file ->
+            val cleaned = file.asMap().entries.filter {(id,chunk) ->
+                master[id]?.definition != chunk.definition && chunk.definition.isNotBlank()
+            }.map { it.value }
+            FluentFile(file.name, cleaned.associateBy { it.id }.sortedContent())
+        } + master).sortedBy { it.name }
+    }?: this
+}
