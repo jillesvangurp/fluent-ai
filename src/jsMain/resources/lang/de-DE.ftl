@@ -6,10 +6,10 @@ busy-initial-message = Verwenden von OpenAI zum Übersetzen nach {$language}
 busy-success = Übersetzung nach {$language} abgeschlossen
 
 common-app-name = { -brand }
+common-confirm = OK
 common-add = Hinzufügen
 common-cancel = Abbrechen
 common-clear = Löschen
-common-confirm = OK
 common-filter-placeholder = Liste filtern
 common-save = Speichern
 common-delete = Löschen
@@ -60,23 +60,31 @@ translation-editor-translate-using-open-ai = Mit OpenAI übersetzen
 
 zzdocs-about = # Über Fluent AI
 
-    Fluent AI hilft Ihnen bei der Lokalisierung Ihrer Anwendungen. Es kann Ihre [Project Fluent](https://projectfluent.org/) Lokalisierungsdateien laden und ermöglicht es Ihnen, Übersetzungen nebeneinander zu bearbeiten.
-
-    Wichtiger ist, dass es eine eingebaute Unterstützung für die Nutzung von OpenAI zur Übersetzung Ihrer Lokalisierungen hat.
+    Fluent AI hilft Ihnen, Ihre Anwendungen zu lokalisieren. Es kann Ihre [Project Fluent](https://projectfluent.org/) Lokalisierungsdateien laden und bearbeiten und sie mit KI in verschiedene Sprachen übersetzen.
 
     ## Wie funktioniert es
 
-    - Konfigurieren Sie Ihren OpenAI API-Schlüssel in den Einstellungen. Ohne diesen funktionieren die AI-Übersetzungen nicht.
-    - Laden Sie Ihre `.ftl` Dateien im Dateibereich
-    - Gehen Sie dann zum Editor, um Ihre Übersetzungstexte zu bearbeiten.
+    - Konfigurieren Sie Ihren OpenAI API-Schlüssel in den Einstellungen. Ohne diesen funktionieren die KI-Übersetzungen nicht.
+    - Laden Sie Ihre `.ftl`-Dateien im Dateibereich, indem Sie sie in die Benutzeroberfläche ziehen und ablegen.
+    - Oder laden Sie die ftl-Dateien für Fluent AI, wenn Sie nur herumspielen möchten.
+    - Für jede Datei wird die Anzahl der fehlenden Übersetzungen angezeigt, und es wird angeboten, die fehlenden zu übersetzen.
+    - Sie können sie auch manuell mit dem Editor bearbeiten, um Ihre Übersetzungsstrings zu bearbeiten oder einzelne Strings mit OpenAI zu übersetzen.
 
     ## Einschränkungen
 
-    - Dies validiert derzeit nicht die Fluent-Syntax
-    - Es läuft in einem Browser, daher gibt es keinen direkten Zugriff auf das Dateisystem. Sie können jedoch Dateien per Drag-and-Drop in die Benutzeroberfläche ziehen und geänderte Dateien aus der Benutzeroberfläche herunterladen.
-    - Es ist etwas eigenwillig bei der Neuordnung aller Übersetzungen. Überprüfen Sie die Änderungen sorgfältig, bevor Sie Änderungen an Ihren Lokalisierungsdateien übernehmen.
+    - Fluent AI validiert derzeit nicht die Fluent-Syntax
+    - Es läuft in einem Browser, daher gibt es keinen direkten Zugriff auf das Dateisystem. Sie können jedoch Dateien in die Benutzeroberfläche ziehen und ablegen und geänderte Dateien aus der Benutzeroberfläche herunterladen.
+    - Es ist etwas eigensinnig in Bezug auf die Neuordnung aller Übersetzungen, überprüfen Sie die Diffs sorgfältig, bevor Sie Änderungen an Ihren Lokalisierungsdateien übernehmen.
+    - OpenAI ist gut, aber nicht fehlerfrei und manchmal liegt es einfach falsch. Außerdem hat es möglicherweise nicht genügend Kontext, um alles korrekt zu übersetzen.
+    - Obwohl Sie Übersetzungen für Fluent AI selbst bearbeiten können, werden sie derzeit nicht in der Benutzeroberfläche neu geladen. Ich könnte das später hinzufügen.
 
     ## Fehler und Probleme
 
-    Dieses Projekt ist frei und Open Source und wird unter der MIT-Lizenz verteilt. Wenn Sie Hilfe benötigen, kontaktieren Sie mich
-    oder verwenden Sie den [Issue-Tracker](https://github.com/jillesvangurp/fluent-ai/issues).
+    Dieses Projekt ist kostenlos und Open Source und wird unter der MIT-Lizenz verteilt.
+    Das Hauptprojekt ist auf [Github](https://github.com/jillesvangurp/fluent-ai) verfügbar.
+    Wenn Sie Hilfe benötigen, kontaktieren Sie mich
+    oder nutzen Sie den [Issue Tracker](https://github.com/jillesvangurp/fluent-ai/issues).
+
+    ## Credits
+
+    Fluent AI wurde von [Jilles van Gurp](https://jillesvangurp.com) erstellt.

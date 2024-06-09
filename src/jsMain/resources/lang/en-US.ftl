@@ -17,17 +17,16 @@ common-download = Download
 common-hide = Hide {$content}
 common-show = Show {$content}
 
+confirmation-dialog-yes = Yes
+confirmation-dialog-no = No
+confirmation-dialog-default-question = Are you sure?
+confirmation-dialog-default-description = If you click yes, the action will be executed.
+
 cookies-disclaimer = This website uses browser local storage to store json content
         that you create in the app. This information is never shared elsewhere.
         In order to use this app, you have to agree to the usage of local storage.
 cookies-header = Cookies & permissions
 cookies-welcome = Welcome to {-brand}
-
-confirmation-dialog-yes = Yes
-confirmation-dialog-no = No
-
-confirmation-dialog-default-question = Are you sure?
-confirmation-dialog-default-description = If you click yes, the action will be executed.
 
 file-loader-clear-confirmation = This will remove any current files and edits. Make sure you have downloaded anything you care about.
 file-loader-delete-file-confirmation = This will remove { $file }.
@@ -63,23 +62,31 @@ translation-editor-translate-using-open-ai = Translate using OpenAI
 
 zzdocs-about = # About Fluent AI
 
-    Fluent AI helps you localize your applications. It can load your [Project Fluent](https://projectfluent.org/) localization files and allows you to edit translations side by side.
-
-    More importantly, it has built-in support for using OpenAI to translate your localizations.
+    Fluent AI helps you localize your applications. It can load and edit your [Project Fluent](https://projectfluent.org/) localization files with it and translate them to different languages using AI.
 
     ## How does it work
 
     - Configure your OpenAI API key in the settings. Without this the AI translations won't work.
-    - Load your `.ftl` files in the files section
-    - And then goto the editor to edit your translation strings.
+    - Load your `.ftl` files in the files section by dragging and dropping them to the UI.
+    - Or load the ftl files for Fluent AI if you just want to play around.
+    - For each file it will show you the number of missing translations and offer to translate the missing ones.
+    - You can also manually edit them with the editor to edit your translation strings or translate individual strings with OpenAI.
 
     ## Limitations
 
-    - This currently does not validate the fluent syntax
+    - Fluent AI currently does not validate the fluent syntax
     - It runs in a browser so there is no direct file system access. However you can drag and drop files to the UI and download modified files from the UI.
     - It is a bit opinionated about re-ordering all the translations, carefully examine diffs before committing changes to your localization files.
+    - OpenAI is good but not flawless and sometimes it just gets it wrong. Also, it may not have enough context to correctly translate everything.
+    - Whole you can edit translations for Fluent AI itself, it does not currently reload them in the UI. I may add this later.
 
     ## Bugs and issues
 
-    This project is free and open source and distributed under the MIT license. If you need help ping me
+    This project is free and open source and distributed under the MIT license.
+    The main project is available on [Github](https://github.com/jillesvangurp/fluent-ai).
+    If you need help ping me
     or use the [issue tracker](https://github.com/jillesvangurp/fluent-ai/issues).
+
+    ## Credits
+
+    Fluent AI was created by [Jilles van Gurp](https://jillesvangurp.com).

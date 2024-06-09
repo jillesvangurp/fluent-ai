@@ -1,16 +1,17 @@
 -brand = Fluent AI
 
 busy-failure = Arrr! Blimey!
-busy-initial-title = Translating
-busy-initial-message = Usin' OpenAI to translate t' {$language}
 busy-success = Done translatin' t' {$language}
 
+busy-initial-title = Translating
+busy-initial-message = Usin' OpenAI to translate t' {$language}
+
 common-app-name = { -brand }
+common-show = Show {$content}
 common-save = Save thar
 common-delete = Scuttle
 common-download = Plunder
 common-hide = Stow {$content}
-common-show = Show {$content}
 common-cancel = Belay
 common-clear = Swab
 common-confirm = Aye
@@ -26,7 +27,6 @@ cookies-welcome = Ahoy to {-brand}
 cookies-disclaimer = This here website be usin' yer browser's local storage to stash the json booty ye be creatin' in the app. This here info be stayin' with us; we ain't sharin' it with no one else. To be usin' this app, ye gotta agree to be usin' local storage. Arrr!
 cookies-header = Cookies & permissions = Cookies & articles o' accordance
 
-file-loader-translate-missing = Be addin' missin' with OpenAI
 file-loader-drag-and-drop = Drag ftl files here to be loaded
 file-loader-load-own-ftls = Load ftl files fer { -brand }
 file-loader-add-new = Create or be addin' ftl files
@@ -36,6 +36,9 @@ file-loader-delete-file-confirmation = This be removin' { $file }.
 file-loader-files-header = Ye Fluent Files
 file-loader-load-own-ftls-confirmation = This will be removin' any current files and edits and replacin' 'em with the ftl files fer { -brand }. Be sure ye've downloaded anythin' ye care about, matey.
 file-loader-no-files-yet-cta = Ye don't have any ftl files yet. Create a new one or drag existin' ones to the app.
+
+file-loader-translate-missing-confirmation = Add missin' {$number_translations} missin' translations wit' OpenAI. Note. a large amount o' translations may take some time 'n' will o' course cost ye some tokens.
+file-loader-translate-missing = Be addin' missin' with OpenAI
 
 language-select-select-language = Pick a tongue
 
@@ -57,24 +60,33 @@ translation-editor-new-translation-id = Ahoy matey! Ye be lookin' for some Engli
 translation-editor-new-translation-id-header = Arr, be creatin' a new translation definition
 translation-editor-no-translation-id-selected = Select a language id on the port side to be editing the translation.
 
-zzdocs-about = # 'Bout Fluent AI
+zzdocs-about = # About Fluent AI
 
-    Fluent AI be helpin' ye localize yer applications. It can hoist yer [Project Fluent](https://projectfluent.org/) localization files 'n allows ye t' edit translations side by side.
+    Fluent AI be helpin' ye localize yer applications. It be able t' load and edit yer [Project Fluent](https://projectfluent.org/) localization files with it 'n translate 'em to different languages usin' AI.
 
-    More importantly, it be havin' built-in support fer usin' OpenAI t' translate yer localizations.
+    ## How does it work
 
-    ## How be it workin'
-
-    - Configure yer OpenAI API key in th' settings. Without this th' AI translations won't work.
-    - Load yer `.ftl` files in th' files section
-    - An' then go t' th' editor t' edit yer translation strings.
+    - Configure ye OpenAI API key in th' settin's. Without this the AI translations won’t work.
+    - Load yer `.ftl` files in th' files section by draggin' 'n droppin' 'em to th' UI.
+    - Or load the ftl files fer Fluent AI if ye jus' want t' play around.
+    - Fer each file it be showin' ye th' number o' missin' translations 'n offer t' translate th' missin' ones.
+    - Ye can also manually edit 'em with th' editor t' edit yer translation strings or translate individual strings with OpenAI.
 
     ## Limitations
 
-    - This currently does not validate th' fluent syntax
-    - It runs in a browser so there be no direct file system access. However ye can drag 'n drop files t' th' UI an' download modified files from th' UI.
-    - It be a bit opinionated 'bout re-orderin' all th' translations, carefully examine diffs afore committin' changes t' yer localization files.
+    - Fluent AI currently does not validate th' fluent syntax
+    - It runs in a browser so thar be no direct file system access. Howev'r ye can drag 'n drop files to th' UI 'n download modified files from th' UI.
+    - It be a bit opinionated about re-orderin' all th' translations, carefully examine diffs before committin' changes t' yer localization files.
+    - OpenAI be good but not flawless 'n sometimes it jus' gets it wrong. Also, it may not have enough context t' correctly translate everythin'.
+    - While ye can edit translations fer Fluent AI itself, it does not currently reload 'em in th' UI. I may be addin' this later.
 
     ## Bugs 'n issues
 
-    This project be free 'n open source 'n distributed under th' MIT license. If ye need help ping me or use th' [issue tracker](https://github.com/jillesvangurp/fluent-ai/issues).
+    This project be free 'n open source 'n distributed under th' MIT license.
+    Th' main project be available on [Github](https://github.com/jillesvangurp/fluent-ai).
+    If ye need help ping me
+    or use th' [issue tracker](https://github.com/jillesvangurp/fluent-ai/issues).
+
+    ## Credits
+
+    Fluent AI was created by [Jilles van Gurp](https://jillesvangurp.com).
