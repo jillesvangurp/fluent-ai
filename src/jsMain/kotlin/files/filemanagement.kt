@@ -15,12 +15,15 @@ import components.twInputField
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.RootStore
 import dev.fritz2.core.disabled
+import dev.fritz2.core.download
+import dev.fritz2.core.href
 import dev.fritz2.core.readOnly
 import dev.fritz2.core.storeOf
-import dev.fritz2.core.transition
 import dev.fritz2.headless.components.textArea
 import icons.SvgIconSource
+import io.ktor.util.encodeBase64
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.browser.document
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterNotNull
@@ -32,6 +35,7 @@ import localization.translate
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import org.w3c.dom.HTMLTextAreaElement
+import org.w3c.dom.events.MouseEvent
 import org.w3c.files.FileReader
 import org.w3c.files.get
 import settings.SettingsStore
@@ -89,11 +93,47 @@ fun RenderContext.fileManager() {
                         currentFileStore.update(null)
                     }
                 }
+                fluentFilesStore.data.filterNotNull().renderEach {file->
+                    a("hidden", id="download-all-${file.name}") {
+                        +"invisible"
+
+                        href("data:text/plain;charset=utf-8;base64,${file.content.encodeBase64()}")
+                        download(file.name.let {
+                            if(it.endsWith(".ftl")) it else "${it}.ftl"
+                        })
+                    }
+                }
+
+                primaryButton(text = TL.FileLoader.DownloadAll, iconSource = SvgIconSource.Download) {
+                    fluentFilesStore.data.render {
+                        disabled(it.isNullOrEmpty())
+                    }
+                    clicks handledBy {
+                        downloadAll()
+                    }
+                }
             }
             listFiles()
 
 
         }
+    }
+}
+
+fun downloadAll() {
+    withKoin {
+        val fluentFilesStore = get<FluentFilesStore>()
+        fluentFilesStore.current?.let { files ->
+            files.forEach { file ->
+
+                val e = document.createEvent("MouseEvents") as MouseEvent
+                e.initEvent("click", bubbles = true, cancelable = true)
+                // issue a click on the link to cause the download to happen
+                document.getElementById("download-all-${file.name}")?.dispatchEvent(e)
+                    ?: console.log("could not find link to click")
+            }
+        }
+
     }
 }
 
@@ -245,7 +285,7 @@ fun RenderContext.listFiles() {
                                 }
                             }
                             translateMissingButton(file)
-                            downloadButton(file.content, file.name)
+                            downloadButton(file.content.encodeBase64(), file.name, mimeType = "text/plain;charset=utf-8;base64")
                         }
                         val showContentStore = storeOf(false)
                         showContentStore.data.render { show ->

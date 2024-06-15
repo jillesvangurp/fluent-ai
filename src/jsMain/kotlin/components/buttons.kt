@@ -7,17 +7,14 @@ import dev.fritz2.core.ScopeContext
 import dev.fritz2.core.disabled
 import dev.fritz2.core.download
 import dev.fritz2.core.href
-import dev.fritz2.routing.encodeURIComponent
 import icons.SvgIconSource
 import icons.iconImage
 import kotlin.random.Random
 import kotlin.random.nextULong
 import kotlinx.browser.document
-import kotlinx.serialization.KSerializer
 import localization.TL
 import localization.translate
 import org.w3c.dom.HTMLButtonElement
-import org.w3c.dom.MimeType
 import org.w3c.dom.events.MouseEvent
 
 fun RenderContext.primaryButton(

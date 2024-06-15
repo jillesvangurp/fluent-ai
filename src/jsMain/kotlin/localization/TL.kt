@@ -68,6 +68,7 @@ object TL {
         LoadOwnFtls,
         LoadOwnFtlsConfirmation,
         AddNew,
+        DownloadAll,
         CreateNewFile,
         NoFilesYetCta,
         TranslateMissing,
