@@ -2,25 +2,22 @@
 
 # Fluent AI
 
-Open source editor for [project fluent](https://projectfluent.org/) localization files.
+Open source editor for [project fluent](https://projectfluent.org/) localization files with AI assisted translations. Save time and money translating your applications into any language you want.
 
 ## Getting Started
 
-Open [Fluent AI](https://fluent-ai.jillesvangurp.com/)
+Open [Fluent AI](https://fluent-ai.jillesvangurp.com/) or run it locally (see below). 
 
 ## Features
 
-- drag and drop your ftl files to the browser to load them
-- browse through and see all the translations for each id side by side
-- edit translations in the browser
-- get AI assisted translations
+Briefly, the application uses OpenAI to provide translations for either indididual translation ids in your localiazation files or entire fluent files. This is amazing for quickly adding new languages to your application.
+
+For a more detailed overview of the application, go to the [About](https://fluent-ai.jillesvangurp.com/#page=About) screen in Fluent AI. Also, don't miss out on some of the creative translations done by OpenAI. My favorite is the **en-poet** one.
 
 ## Running this yourself
 
 - make sure you have a recent jdk installed
-- run `./gradlew jsBrowserDevelopment -t`, that will run a development version of the app. Look at the kotlin-js [documentation](https://kotlinlang.org/docs/js-project-setup.html#run-task) for more things you can do.
-
-If this gets a bit of traction, I might look into ways to monetize this. For now it's all free OSS.
+- run `./gradlew jsBrowserDevelopment -t`, that will run a development version of the app. Look at the kotlin-js [documentation](https://kotlinlang.org/docs/js-project-setup.html#run-task) for more things you can do with kotlin-js.
 
 ## Why?
 
