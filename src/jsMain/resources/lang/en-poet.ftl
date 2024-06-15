@@ -59,7 +59,9 @@ supported-models-gpt-4-o = The genius model, vast is its mind like the stars. Go
 supported-models-gpt-35-turbo = An elder mind, yet wise and sufficient. Tokens it desires, fewer than its kin.
 
 translation-editor-add-translation-id = Birth a new id of translation
-translation-editor-ai-translate = Let gpt-4o weave its words
+translation-editor-ai-translate = Translate
+
+
 translation-editor-configure-key = Set an OpenAI key in the sacred settings
 translation-editor-delete-this-id = Banish this translation id
 translation-editor-delete-this-id-confirmation = This banishment shall erase the id from every tome. Leave empty the page if thou dost wish to erase but one translation.

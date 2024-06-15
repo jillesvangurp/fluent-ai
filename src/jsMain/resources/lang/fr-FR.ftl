@@ -54,7 +54,7 @@ supported-models-gpt-4-o = Modèle le plus performant, fenêtre de contexte plus
 
 translation-editor-add-translation-id = Créer un nouvel identifiant de traduction
 translation-editor-no-files-cta = Vous avez besoin d'au moins un fichier de traduction pour éditer. Allez à [{ -manage-files }](/#page=Files) et créez ou ajoutez des fichiers de traduction.
-translation-editor-ai-translate = Translater avec gpt-4o
+translation-editor-ai-translate = Traduire
 translation-editor-configure-key = Configurez une clé API OpenAI dans les paramètres
 translation-editor-delete-this-id = Supprimer cette identité de traduction
 translation-editor-delete-this-id-confirmation = Cela supprimera l'identifiant de traduction de tous les fichiers chargés. Laissez la définition vide si vous souhaitez simplement supprimer une traduction spécifique.

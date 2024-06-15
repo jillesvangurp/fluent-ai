@@ -59,7 +59,7 @@ supported-models-gpt-4-o = Most capable model, large context window. More costly
 supported-models-gpt-35-turbo = Older model but still adequate for translations. Lower token cost.
 
 translation-editor-add-translation-id = Create new translation id
-translation-editor-ai-translate = Translate using gpt-4o
+translation-editor-ai-translate = Translate
 translation-editor-configure-key = Configure an OpenAI API key in the settings
 translation-editor-delete-this-id = Delete this translation id
 translation-editor-delete-this-id-confirmation = This will delete the translation id from all loaded files. Set the definition to empty if you just want to delete a specific translation.

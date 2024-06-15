@@ -55,7 +55,7 @@ supported-models-gpt-4-o = Meest capabele model, groot contextvenster. Duurder d
 translation-editor-add-translation-id = Maak nieuw vertalings-ID
 translation-editor-no-files-cta = Je hebt minstens één vertalingsbestand nodig om te bewerken. Ga naar [{ -manage-files }](/#page=Files) en maak of voeg vertalingsbestanden toe.
 translation-editor-number-of-keys = Totaal {$amount}
-translation-editor-ai-translate = Vertalen met behulp van gpt-4
+translation-editor-ai-translate = Vertalen
 translation-editor-configure-key = Configureer een OpenAI API-sleutel in de instellingen
 translation-editor-delete-this-id = Deze vertalings-id verwijderen
 translation-editor-delete-this-id-confirmation = Dit zal de vertaal-id uit alle geladen bestanden verwijderen. Stel de definitie in op leeg als je alleen een specifieke vertaling wilt verwijderen.

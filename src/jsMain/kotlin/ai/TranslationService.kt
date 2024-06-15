@@ -68,7 +68,9 @@ class TranslationService(settingsStore: SettingsStore) {
                             The texts are project fluent format and you are to preserve the variable names and other fluent syntax. 
                             
                             But don't include the id = part; we only want the part after the =
-                            
+
+                            Do not invent new variable names.
+
                             The target language can be inferred from the locale name in the .ftl file name.
                             
                             Respond in plain text, preserve any markdown formatting but do not surround with ```
@@ -168,6 +170,8 @@ $existingText
                             The texts are project fluent format and you are to preserve the variable names and other fluent syntax. 
                                                         
                             Infer the target language from the provided locale or .ftl file name.
+                            
+                            Do not invent new variable names.
                             
                             Respond in plain text, preserve any markdown formatting but do not surround with ```
 

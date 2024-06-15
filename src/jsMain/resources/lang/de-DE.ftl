@@ -53,7 +53,7 @@ supported-models-gpt-4-o = Das leistungsfähigste Modell, großes Kontextfenster
 translation-editor-add-translation-id = Neue Übersetzungs-ID erstellen
 translation-editor-no-files-cta = Du benötigst mindestens eine Übersetzungsdatei zum Bearbeiten. Gehe zu [{ -manage-files }](/#page=Files) und erstelle oder füge einige Übersetzungsdateien hinzu.
 translation-editor-number-of-keys = Gesamt {$amount}
-translation-editor-ai-translate = Mit gpt-4.0 übersetzen
+translation-editor-ai-translate = Übersetzen
 translation-editor-configure-key = Konfigurieren Sie einen OpenAI-API-Schlüssel in den Einstellungen
 translation-editor-delete-this-id = Diese Übersetzungs-ID löschen
 translation-editor-delete-this-id-confirmation = Dies wird die Übersetzungs-ID aus allen geladenen Dateien löschen. Setzen Sie die Definition auf leer, wenn Sie nur eine bestimmte Übersetzung löschen möchten.
