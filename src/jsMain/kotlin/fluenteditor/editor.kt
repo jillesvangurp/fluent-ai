@@ -201,12 +201,13 @@ fun RenderContext.selectedTranslationEditor(
                                     }
 
                                     div("flex flex-row gap-3") {
-                                        translationEditor.data.render { t ->
                                             secondaryButton(
                                                 text = TL.Common.Cancel,
                                                 iconSource = SvgIconSource.Cross,
                                             ) {
-                                                disabled(t == file[translationId]?.definition.orEmpty())
+                                                translationEditor.data.render { t ->
+                                                    disabled(t == file[translationId]?.definition.orEmpty())
+                                                }
 
                                                 clicks.map {
                                                     file[translationId]?.definition.orEmpty()
@@ -243,16 +244,18 @@ fun RenderContext.selectedTranslationEditor(
                                                 iconSource = SvgIconSource.Check,
                                             ) {
                                                 val original = file[translationId]
-                                                disabled(t == original?.definition.orEmpty())
+                                                translationEditor.data.render { t ->
+                                                    disabled(t == original?.definition.orEmpty())
+                                                }
 
                                                 clicks handledBy {
                                                     val newFile =
-                                                        file.put(translationId, t, chunk?.comment)
+                                                        file.put(translationId, translationEditor.current, chunk?.comment)
                                                     fluentFilesStore.addOrReplace(newFile)
                                                     translationEditor.update(newFile[translationId]?.definition.orEmpty())
                                                 }
                                             }
-                                        }
+
                                     }
                                 }
                             }
