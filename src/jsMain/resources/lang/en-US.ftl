@@ -79,8 +79,12 @@ zzdocs-about = # About Fluent AI
     {-brand} helps you **localize your applications using AI**. It uses OpenAI to do in seconds
     what would otherwise take a trained translator weeks. This **saves you time and money**.
 
-    {-brand} can load and edit your [Project Fluent](https://projectfluent.org/) localization files
-    and it offers a convenient editor for reviewing and editing translations for your translations side by side.
+    - effortlessly support new languages, simply add a new language and let OpenAI do the work.
+    - easy side by side editing of translations for different languages
+    - identify missing translations easily and then fix them using AI.
+    - sorts and organizes your translations by common prefix
+
+    {-brand} supports [Project Fluent](https://projectfluent.org/) localization files.
 
     ## How do I use {-brand}?
 
@@ -93,7 +97,7 @@ zzdocs-about = # About Fluent AI
     ## What is project Fluent and why should you use it?
 
     Invented by Mozilla to support localizing products like Firefox, Thunderbird, etc. to hundreds of languages,
-    Project Fluent is designed with flexibility and usability in mind. Their translations dependd on
+    Project Fluent is designed with flexibility and usability in mind. Their translations depend on
     a large user community contributing translations. Therefore they wanted to make this as easy
     as possible to do. Additionally, they needed the flexibility to deal with various grammatical variations
     in languages for e.g. gender, tense, amount, etc.
@@ -102,7 +106,7 @@ zzdocs-about = # About Fluent AI
     over other solutions in this space based on e.g. properties files or libraries like gettext:
 
     - **Flexibility.** It supports conditinal logic and variables that you can use in your translations.
-    - **Ease of use.** It's simple and easy to use and edit. Any file with lines containing `key = translation` is a valid `ftl` file
+    - **Ease of use.** It's simple and easy to use and edit. Any file with lines containing `key = translation` is a valid `ftl` file. And you can use multi line strings, markdown, etc.
     - **Portability.** There are libraries that make supporting Fluent based localizations easy in both native, mobile, and web applications.
 
     ## Limitations of {-brand}
@@ -111,6 +115,7 @@ zzdocs-about = # About Fluent AI
     - It runs in a browser so there is no direct file system access. However you can drag and drop files to the UI and download modified files from the UI. Given enough interest, I may at some point create an Electron wrapper for {-brand}.
     - It is a bit opinionated about re-ordering and cleaning up translations. Carefully examine diffs before committing changes to your localization files.
     - OpenAI is good but of course not flawless and sometimes it just gets it wrong. Also, it may not always have enough context to correctly translate everything. You should of course use professional translators to review translations. However, it does nail it rather often.
+    - Sometimes OpenAI ignores its instructions and produces the wrong thing or dreams up some new variables. For best results use gp4-4o. I find it's more consistently good.
     - While you can edit translations for Fluent AI itself, it does not currently reload them in the UI. I may add this later.
     - Currently only OpenAI is supported. If there's interest, I may add more models later.
     - Translating large files can take quite a bit of time.
