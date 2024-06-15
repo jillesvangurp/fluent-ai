@@ -88,8 +88,9 @@ fun RenderContext.downloadButton(
         a("hidden", id = downloadLinkId) {
             +"invisible"
 
-            href("data:${mimeType};charset=utf-8,$downloadContent")
-            download(fileName)
+            href("data:${mimeType},$downloadContent")
+            val f =if(fileName.endsWith(".ftl")) fileName else "${fileName}.ftl"
+            download(if (fileName.endsWith(".ftl")) fileName else "${fileName}.ftl")
         }
     primaryButton {
         // invisible link that we simulate a click on
