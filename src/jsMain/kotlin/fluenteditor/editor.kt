@@ -112,64 +112,62 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
                             }
                             missingTranslationsData.distinctUntilChanged()
                                 .render { missingTranslations ->
-                                    missingTranslationsData.distinctUntilChanged()
-                                        .render { missingTranslations ->
 
-                                            groups.renderEach { (prefix, ids) ->
+                                    groups.renderEach { (prefix, ids) ->
+                                        div {
+                                            val showIdsStore = storeOf(true)
+                                            showIdsStore.data.render { show ->
                                                 div {
-                                                    val showIdsStore = storeOf(true)
-                                                    showIdsStore.data.render { show ->
-                                                        div {
+                                                    a {
+                                                        +"${prefix.takeIf { it.isNotBlank() } ?: "-terms"} (${ids.size})"
+
+                                                        clicks handledBy {
+                                                            showIdsStore.update(!showIdsStore.current)
+                                                        }
+                                                    }
+                                                }
+                                                if (show) {
+                                                    ids.forEach { translationId ->
+                                                        div("ml-5") {
                                                             a {
-                                                                +"${prefix.takeIf { it.isNotBlank() } ?: "-terms"} (${ids.size})"
+                                                                +translationId.replace(
+                                                                    "$prefix-".takeIf { it != "-" }
+                                                                        ?: "",
+                                                                    "",
+                                                                )
+                                                                selectedIdStore.data.render {
+                                                                    if (selectedIdStore.current == translationId) {
+                                                                        +" *"
+                                                                    }
+                                                                }
 
                                                                 clicks handledBy {
-                                                                    showIdsStore.update(!showIdsStore.current)
-                                                                }
-                                                            }
-                                                        }
-                                                        if (show) {
-                                                            ids.forEach { translationId ->
-                                                                div("ml-5") {
-                                                                    a {
-                                                                        +translationId.replace(
-                                                                            "$prefix-".takeIf { it != "-" }
-                                                                                ?: "",
+                                                                    if (selectedIdStore.current == translationId) {
+                                                                        selectedIdStore.update(
                                                                             "",
                                                                         )
-                                                                        selectedIdStore.data.render {
-                                                                            if (selectedIdStore.current == translationId) {
-                                                                                +" *"
-                                                                            }
-                                                                        }
-
-                                                                        clicks handledBy {
-                                                                            if (selectedIdStore.current == translationId) {
-                                                                                selectedIdStore.update(
-                                                                                    "",
-                                                                                )
-                                                                            } else {
-                                                                                selectedIdStore.update(
-                                                                                    translationId,
-                                                                                )
-                                                                            }
-                                                                        }
+                                                                    } else {
+                                                                        selectedIdStore.update(
+                                                                            translationId,
+                                                                        )
                                                                     }
-                                                                    missingTranslations[translationId]?.let { missing ->
-                                                                        if (missing > 0) {
-                                                                            span {
-                                                                                +" missing $missing"
-                                                                            }
-                                                                        }
+                                                                }
+                                                            }
+                                                            missingTranslations[translationId]?.let { missing ->
+                                                                if (missing > 0) {
+                                                                    span {
+                                                                        +" missing $missing"
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
-
                                             }
                                         }
+
+                                    }
+
                                 }
                         }
                     }
