@@ -87,6 +87,9 @@ object TL {
         NewTranslationIdHeader,
         NewTranslationId,
         NewTranslation,
+        NoFilesCta,
+        AddTranslationId,
+        NumberOfKeys,
         ;
 
         override val prefix = "translation-editor"

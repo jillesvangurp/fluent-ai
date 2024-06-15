@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.map
 import localization.TL
 import localization.getTranslationString
 import localization.translate
+import markdown.markdownDiv
 import settings.SettingsStore
 import settings.preferredTranslationLanguage
 import withKoin
@@ -51,6 +52,7 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
         val keysData = fluentFilesStore.data.filterNotNull().map { files ->
             files.flatMap { it.keys() }.distinct().sorted()
         }
+        val filesSizeData = fluentFilesStore.data.filterNotNull().map { it.size }
         settingsStore.data.render { settings ->
             val missingTranslationsData = fluentFilesStore.data.filterNotNull().map { files ->
                 files.firstOrNull { it.matches(settings.preferredTranslationLanguage) }
@@ -62,9 +64,19 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
             keysData.distinctUntilChanged().render { keys ->
 
                 div("w-96 flex flex-col gap-2 p-5 bg-white shadow-lg m-2") {
-                    secondaryButton(text = TL.Common.Add, iconSource = SvgIconSource.Plus) {
-                        clicks handledBy {
-                            selectedIdStore.update("")
+
+                    filesSizeData.render {numberOfFiles ->
+                        if(numberOfFiles == 0) {
+                            markdownDiv(TL.FluentEditor.NoFilesCta)
+                        } else {
+                            secondaryButton(text = TL.FluentEditor.AddTranslationId, iconSource = SvgIconSource.Plus) {
+                                selectedIdStore.data.render {
+                                    disabled(it.isBlank())
+                                }
+                                clicks handledBy {
+                                    selectedIdStore.update("")
+                                }
+                            }
                         }
                     }
                     val searchStore = storeOf("")
@@ -86,7 +98,9 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
                                     }
                                 }.also {
                                     p {
-                                        +"Total ${it.size}"
+                                        translate(TL.FluentEditor.NumberOfKeys, mapOf(
+                                            "amount" to it.size
+                                        ))
                                     }
                                 }.groupIdsByLargestPrefix().forEach { (prefix, ids) ->
                                     val showIdsStore = storeOf(true)
@@ -201,60 +215,64 @@ fun RenderContext.selectedTranslationEditor(
                                     }
 
                                     div("flex flex-row gap-3") {
-                                            secondaryButton(
-                                                text = TL.Common.Cancel,
-                                                iconSource = SvgIconSource.Cross,
-                                            ) {
-                                                translationEditor.data.render { t ->
-                                                    disabled(t == file[translationId]?.definition.orEmpty())
-                                                }
-
-                                                clicks.map {
-                                                    file[translationId]?.definition.orEmpty()
-                                                } handledBy translationEditor.update
+                                        secondaryButton(
+                                            text = TL.Common.Cancel,
+                                            iconSource = SvgIconSource.Cross,
+                                        ) {
+                                            translationEditor.data.render { t ->
+                                                disabled(t == file[translationId]?.definition.orEmpty())
                                             }
-                                            secondaryButton(
-                                                text = TL.FluentEditor.AiTranslate,
-                                                iconSource = SvgIconSource.OpenAI,
-                                            ) {
-                                                val originalText = files.first {
-                                                    it.matches(
-                                                        settingsStore.current.preferredTranslationLanguage,
+
+                                            clicks.map {
+                                                file[translationId]?.definition.orEmpty()
+                                            } handledBy translationEditor.update
+                                        }
+                                        secondaryButton(
+                                            text = TL.FluentEditor.AiTranslate,
+                                            iconSource = SvgIconSource.OpenAI,
+                                        ) {
+                                            val originalText = files.first {
+                                                it.matches(
+                                                    settingsStore.current.preferredTranslationLanguage,
+                                                )
+                                            }[translationId]?.definition.orEmpty()
+                                            val isDisabled = !translationService.enabled()
+                                            disabled(originalText.isBlank() || isDisabled)
+                                            if (isDisabled) {
+                                                title(getTranslationString(TL.FluentEditor.ConfigureKey))
+                                            } else {
+                                                title(getTranslationString(TL.FluentEditor.TranslateUsingOpenAi))
+                                            }
+
+                                            clicks handledBy {
+                                                translateWithOpenAI(
+                                                    translationId,
+                                                    originalText,
+                                                    file,
+                                                    translationEditor,
+                                                )
+                                            }
+                                        }
+                                        primaryButton(
+                                            text = TL.Common.Save,
+                                            iconSource = SvgIconSource.Check,
+                                        ) {
+                                            val original = file[translationId]
+                                            translationEditor.data.render { t ->
+                                                disabled(t == original?.definition.orEmpty())
+                                            }
+
+                                            clicks handledBy {
+                                                val newFile =
+                                                    file.put(
+                                                            translationId,
+                                                            translationEditor.current,
+                                                            chunk?.comment,
                                                     )
-                                                }[translationId]?.definition.orEmpty()
-                                                val isDisabled = !translationService.enabled()
-                                                disabled(originalText.isBlank() || isDisabled)
-                                                if (isDisabled) {
-                                                    title(getTranslationString(TL.FluentEditor.ConfigureKey))
-                                                } else {
-                                                    title(getTranslationString(TL.FluentEditor.TranslateUsingOpenAi))
-                                                }
-
-                                                clicks handledBy {
-                                                    translateWithOpenAI(
-                                                        translationId,
-                                                        originalText,
-                                                        file,
-                                                        translationEditor,
-                                                    )
-                                                }
+                                                fluentFilesStore.addOrReplace(newFile)
+                                                translationEditor.update(newFile[translationId]?.definition.orEmpty())
                                             }
-                                            primaryButton(
-                                                text = TL.Common.Save,
-                                                iconSource = SvgIconSource.Check,
-                                            ) {
-                                                val original = file[translationId]
-                                                translationEditor.data.render { t ->
-                                                    disabled(t == original?.definition.orEmpty())
-                                                }
-
-                                                clicks handledBy {
-                                                    val newFile =
-                                                        file.put(translationId, translationEditor.current, chunk?.comment)
-                                                    fluentFilesStore.addOrReplace(newFile)
-                                                    translationEditor.update(newFile[translationId]?.definition.orEmpty())
-                                                }
-                                            }
+                                        }
 
                                     }
                                 }

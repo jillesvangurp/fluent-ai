@@ -42,10 +42,6 @@ file-loader-translate-missing = Be addin' missin' with OpenAI
 
 language-select-select-language = Pick a tongue
 
-pages-editor = Edit the Fluent Definitions
-pages-files = Manage Fluent Files = Arrr'ange Fluent Files
-pages-settings = Settin's
-pages-about = 'Bout
 
 settings-open-ai-key = Set yer OpenAI API Key (needed fer translatin')
 settings-translation-language = Set ye source lingo for yer AI translations, matey. Be warned, the lingo be matched against yer ftl file name with some normalizin'. Defaults to en-US.
@@ -60,33 +56,3 @@ translation-editor-new-translation-id = Ahoy matey! Ye be lookin' for some Engli
 translation-editor-new-translation-id-header = Arr, be creatin' a new translation definition
 translation-editor-no-translation-id-selected = Select a language id on the port side to be editing the translation.
 
-zzdocs-about = # About Fluent AI
-
-    Fluent AI be helpin' ye localize yer applications. It be able t' load and edit yer [Project Fluent](https://projectfluent.org/) localization files with it 'n translate 'em to different languages usin' AI.
-
-    ## How does it work
-
-    - Configure ye OpenAI API key in th' settin's. Without this the AI translations won’t work.
-    - Load yer `.ftl` files in th' files section by draggin' 'n droppin' 'em to th' UI.
-    - Or load the ftl files fer Fluent AI if ye jus' want t' play around.
-    - Fer each file it be showin' ye th' number o' missin' translations 'n offer t' translate th' missin' ones.
-    - Ye can also manually edit 'em with th' editor t' edit yer translation strings or translate individual strings with OpenAI.
-
-    ## Limitations
-
-    - Fluent AI currently does not validate th' fluent syntax
-    - It runs in a browser so thar be no direct file system access. Howev'r ye can drag 'n drop files to th' UI 'n download modified files from th' UI.
-    - It be a bit opinionated about re-orderin' all th' translations, carefully examine diffs before committin' changes t' yer localization files.
-    - OpenAI be good but not flawless 'n sometimes it jus' gets it wrong. Also, it may not have enough context t' correctly translate everythin'.
-    - While ye can edit translations fer Fluent AI itself, it does not currently reload 'em in th' UI. I may be addin' this later.
-
-    ## Bugs 'n issues
-
-    This project be free 'n open source 'n distributed under th' MIT license.
-    Th' main project be available on [Github](https://github.com/jillesvangurp/fluent-ai).
-    If ye need help ping me
-    or use th' [issue tracker](https://github.com/jillesvangurp/fluent-ai/issues).
-
-    ## Credits
-
-    Fluent AI was created by [Jilles van Gurp](https://jillesvangurp.com).

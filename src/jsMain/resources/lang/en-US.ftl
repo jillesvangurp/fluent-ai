@@ -1,4 +1,8 @@
+-about = About
 -brand = Fluent AI
+-manage-files = Manage Fluent Files
+-settings = Settings
+-translation-editor = Translation Editor
 
 busy-failure = Error
 busy-initial-title = Translating
@@ -42,14 +46,15 @@ file-loader-translate-missing-confirmation = Add missing {$number_translations} 
 
 language-select-select-language = Select UI language
 
-pages-editor = Edit Translations
-pages-files = Manage Fluent Files
-pages-settings = Settings
-pages-about = About
+pages-editor = { -translation-editor }
+pages-files = { -manage-files }
+pages-settings = { -settings }
+pages-about = { -about }
 
 settings-open-ai-key = Set your OpenAI API Key (needed for translations)
 settings-translation-language = Configure source language for AI translations. Note, the language is matched against your ftl file name with some normalization. Defaults to en-US.
 
+translation-editor-add-translation-id = Create new translation id
 translation-editor-ai-translate = Translate using gpt-4o
 translation-editor-configure-key = Configure an OpenAI API key in the settings
 translation-editor-delete-this-id = Delete this translation id
@@ -58,27 +63,50 @@ translation-editor-no-translation-id-selected = Select a language id on the left
 translation-editor-new-translation-id-header = Create a new translation definition
 translation-editor-new-translation-id = Translation ID
 translation-editor-new-translation = Default translation
+translation-editor-no-files-cta = You need at least one translation file to edit. Go to [{ -manage-files }](/#page=Files) and create or add some translation files.
+translation-editor-number-of-keys = Total {$amount}
 translation-editor-translate-using-open-ai = Translate using OpenAI
 
 zzdocs-about = # About Fluent AI
 
-    Fluent AI helps you localize your applications. It can load and edit your [Project Fluent](https://projectfluent.org/) localization files with it and translate them to different languages using AI.
+    {-brand} helps you **localize your applications using AI**. It uses OpenAI to do in seconds
+    what would otherwise take a trained translator weeks. This **saves you time and money**.
 
-    ## How does it work
+    {-brand} can load and edit your [Project Fluent](https://projectfluent.org/) localization files
+    and it offers a convenient editor for reviewing and editing translations for your translations side by side.
 
-    - Configure your OpenAI API key in the settings. Without this the AI translations won't work.
-    - Load your `.ftl` files in the files section by dragging and dropping them to the UI.
+
+
+    ## How does {-brand} work?
+
+    - Configure your OpenAI API key in the [{-settings}](/#page=Settings). Without a key the AI translations won't work.
+    - Load your `.ftl` files in the [{-manage-files}](/#page=Files) section by dragging and dropping them to the UI.
     - Or load the ftl files for Fluent AI if you just want to play around.
-    - For each file it will show you the number of missing translations and offer to translate the missing ones.
-    - You can also manually edit them with the editor to edit your translation strings or translate individual strings with OpenAI.
+    - For each file it will show you the number of missing translations and offer an AI assisted translation for these.
+    - You can also manually edit them with the [{-translation-editor}](/#page=Editor) to edit your translation strings or translate individual strings with OpenAI.
 
-    ## Limitations
+    ## What is project Fluent and why should you use it?
 
-    - Fluent AI currently does not validate the fluent syntax
-    - It runs in a browser so there is no direct file system access. However you can drag and drop files to the UI and download modified files from the UI.
-    - It is a bit opinionated about re-ordering all the translations, carefully examine diffs before committing changes to your localization files.
-    - OpenAI is good but not flawless and sometimes it just gets it wrong. Also, it may not have enough context to correctly translate everything.
-    - Whole you can edit translations for Fluent AI itself, it does not currently reload them in the UI. I may add this later.
+    Invented by Mozilla to support localizing products like Firefox, Thunderbird, etc. to hundreds of languages,
+    Project Fluent is designed with flexibility and usability in mind. Their translations dependd on
+    a large user community contributing translations. Therefore it is important that they make this as easy
+    as possible to do. Additionally, they needed the flexibility to deal with various grammatical variations
+    in languages for e.g. gender, tense, amount, etc.
+
+    So, project fluent is a simple and easy to use file format and syntax for defining translation files. It provides a few benefits
+    over other solutions in this space based on e.g. properties files or libraries like gettext:
+
+    - **Flexibility.** It supports conditinal logic and variables that you can use in your translations.
+    - **Ease of use.** It's simple and easy to use and edit. Any file with lines containing `key = translation` is a valid `ftl` file
+    - **Portability.** There are libraries that make supporting Fluent based localizations easy in both native, mobile, and web applications.
+
+    ## Limitations of {-brand}
+
+    - {-brand} currently does not validate the fluent syntax.
+    - It runs in a browser so there is no direct file system access. However you can drag and drop files to the UI and download modified files from the UI. Given enough interest, I may at some point create an Electron wrapper for {-brand}.
+    - It is a bit opinionated about re-ordering and cleaning up translations. It will remove translations identical to the base translation, for example. Carefully examine diffs before committing changes to your localization files.
+    - OpenAI is good but of course not flawless and sometimes it just gets it wrong. Also, it may not always have enough context to correctly translate everything. You should of course use professional translators to review translations. However, it does nail it rather often.
+    - While you can edit translations for Fluent AI itself, it does not currently reload them in the UI. I may add this later.
 
     ## Bugs and issues
 
@@ -87,6 +115,22 @@ zzdocs-about = # About Fluent AI
     If you need help ping me
     or use the [issue tracker](https://github.com/jillesvangurp/fluent-ai/issues).
 
+    ## Related projects
+
+    - [Fluent-Kotlin](https://github.com/formation-res/fluent-kotlin) - Multiplatform library that me and my colleagues developed for jvm/js that allows you to use ftl files in your Kotlin applications. This browser application uses it.
+
+    ## Spread the word
+
+    Writing software like this is a lot of work and it can often be thankless work. If Fluent AI is useful to you, let others know so they to can benefit.
+
+    - Tweet / toot / blog about it.
+    - Hit the star button on [Github](https://github.com/jillesvangurp/fluent-ai).
+    - Give me some feedback.
+
     ## Credits
 
-    Fluent AI was created by [Jilles van Gurp](https://jillesvangurp.com).
+    Fluent AI is created by [Jilles van Gurp](https://jillesvangurp.com). Currently it is free and open source.
+
+    - [www.jillesvangurp.com](https://www.jillesvangurp.com) - My website
+    - [@jillesvangurp@mastodon.world ](https://mastodon.world/deck/@jillesvangurp) - Mastodon
+    - [@jillesvangurp](https://twitter.com/jillesvangurp) - Twitter/X
