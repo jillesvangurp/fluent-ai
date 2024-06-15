@@ -168,7 +168,7 @@ fun List<FluentFile>.cleanupTranslations(masterLanguage: String): List<FluentFil
     return master(masterLanguage)?.let { master ->
         (filter { it.name != master.name }.map { file ->
             val cleaned = file.asMap().entries.filter {(id,chunk) ->
-                master[id]?.definition != chunk.definition && chunk.definition.isNotBlank()
+                chunk.definition.isNotBlank()
             }.map { it.value }
             FluentFile(file.name, cleaned.associateBy { it.id }.sortedContent())
         } + master).sortedBy { it.name }
