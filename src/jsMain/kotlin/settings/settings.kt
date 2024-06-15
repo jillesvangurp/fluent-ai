@@ -10,11 +10,9 @@ import components.selectComponent
 import components.twInputField
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.disabled
-import dev.fritz2.core.href
 import dev.fritz2.core.selected
 import dev.fritz2.core.storeOf
 import dev.fritz2.core.value
-import dev.fritz2.headless.components.radioGroup
 import icons.SvgIconSource
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
@@ -55,7 +53,6 @@ fun RenderContext.settingsScreen() {
 
     div("grow m-5 bg-white flex flex-col gap-2 p-5") {
         fadeInFadeoutTransition()
-        languageSelector()
 
         openAiKeyEditor()
         modelPicker()
