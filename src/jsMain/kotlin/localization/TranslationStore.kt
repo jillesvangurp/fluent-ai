@@ -30,6 +30,9 @@ fun HtmlTag<HTMLElement>.translate(translatable: Translatable,args: Map<String, 
 fun getTranslationString(translatable: Translatable,args: Map<String, Any>? = null) =
     translationStore.getString(translatable,args)
 
+fun getTranslationFlow(translatable: Translatable,args: Map<String, Any>? = null) =
+    translationStore[translatable, args]
+
 
 class TranslationStore(
     val settingsStore: SettingsStore,

@@ -5,6 +5,7 @@ import dev.fritz2.core.RenderContext
 import dev.fritz2.core.RootStore
 import dev.fritz2.remote.http
 import kotlinx.coroutines.Job
+import localization.getTranslationFlow
 import localization.getTranslationString
 import org.intellij.markdown.IElementType
 import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
@@ -53,10 +54,12 @@ fun RenderContext.markdownDiv(
     baseClass: String? = null,
     args: Map<String, Any>? = null
 ) {
-    val markdown = getTranslationString(translatable, args = args)
-    div(baseClass) {
-        // make sure we render lists with bullets, tailwind seems to not like this; so use css
 
-    }.domNode.innerHTML = renderMarkdown(markdown)
+    getTranslationFlow(translatable, args = args).render {markdown ->
+        div(baseClass) {
+            // make sure we render lists with bullets, tailwind seems to not like this; so use css
+
+        }.domNode.innerHTML = renderMarkdown(markdown)
+    }
 }
 
