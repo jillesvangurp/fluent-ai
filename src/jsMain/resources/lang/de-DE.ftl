@@ -63,7 +63,8 @@ translation-editor-new-translation-id = Übersetzungs-ID
 translation-editor-new-translation = Standardübersetzung
 translation-editor-translate-using-open-ai = Mit OpenAI übersetzen
 
-translation-service-progress = "Fertig mit der Übersetzung von {$total} IDs unter Verwendung von {$model} in {$duration} mit {$apicalls} API-Aufrufen"
+translation-service-progress = Übersetzt {$completed} IDs von {$total} mit {$model} unter Verwendung von {$apicalls} API-Aufrufen. Verstrichene Zeit {$duration}.
+translation-service-completed = Übersetzung von {$total} IDs mit {$model} in {$duration} unter Verwendung von {$apicalls} API-Aufrufen abgeschlossen
 
 zzdocs-about = # Über Fluent AI
 

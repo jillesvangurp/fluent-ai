@@ -65,6 +65,7 @@ translation-editor-new-translation-id-header = Maak een nieuwe vertalingsdefinit
 translation-editor-no-translation-id-selected = Selecteer aan de linkerkant een taal-id om de vertaling te bewerken.
 translation-editor-translate-using-open-ai = Vertalen met OpenAI
 
-translation-service-progress = Vertaling voltooid van {$total} id's met behulp van {$model} in {$duration} met behulp van {$apicalls} API-oproepen
+translation-service-progress = {$completed} vertaalde IDs van de {$total} met {$model} met {$apicalls} API-oproepen. Verstreken tijd {$duration}.
+translation-service-completed = {$total} id's vertaald met behulp van {$model} in {$duration} met {$apicalls} API-oproepen voltooid
 
 zzdocs-about = {-brand} helpt je **je applicaties te lokaliseren met behulp van AI**. Het gebruikt OpenAI om in enkele seconden te doen wat een getrainde vertaler weken zou kosten. Dit **bespaart je tijd en geld**.

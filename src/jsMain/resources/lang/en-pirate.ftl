@@ -62,7 +62,8 @@ translation-editor-no-translation-id-selected = Select a language id on the port
 translation-editor-number-of-keys = Total {$amount} Doubloons
 translation-editor-add-translation-id = Ahoy matey! Be craftin' a new translation id
 
-translation-service-progress = Finished translatin' {$total} ids usin' {$model} in {$duration} usin' {$apicalls} API calls
+translation-service-progress = Translated {$completed} ids out o' {$total} usin' {$model} usin' {$apicalls} API calls. Elapsed time {$duration}.
+translation-service-completed = Finished translatin' {$total} ids usin' {$model} in {$duration} usin' {$apicalls} API calls
 
 zzdocs-about = # Bout Fluent AI
 

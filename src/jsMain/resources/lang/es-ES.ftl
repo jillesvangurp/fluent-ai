@@ -64,7 +64,8 @@ translation-editor-no-files-cta = Necesita al menos un archivo de traducción pa
 translation-editor-translate-using-open-ai = Traducir usando OpenAI
 translation-editor-number-of-keys = Total {$amount}
 
-translation-service-progress = "Traducidos {$total} identificadores utilizando {$model} en {$duration} usando {$apicalls} llamadas a la API"
+translation-service-progress = Traducido {$completed} identificadores de {$total} utilizando {$model} usando {$apicalls} llamadas API. Tiempo transcurrido {$duration}.
+translation-service-completed = Se ha completado la traducción de {$total} identificadores utilizando {$model} en {$duration} mediante {$apicalls} llamadas a la API
 
 zzdocs-about = # Acerca de Fluent AI
 

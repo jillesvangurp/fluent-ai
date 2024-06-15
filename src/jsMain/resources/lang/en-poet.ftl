@@ -60,8 +60,6 @@ supported-models-gpt-35-turbo = An elder mind, yet wise and sufficient. Tokens i
 
 translation-editor-add-translation-id = Birth a new id of translation
 translation-editor-ai-translate = Translate
-
-
 translation-editor-configure-key = Set an OpenAI key in the sacred settings
 translation-editor-delete-this-id = Banish this translation id
 translation-editor-delete-this-id-confirmation = This banishment shall erase the id from every tome. Leave empty the page if thou dost wish to erase but one translation.
@@ -73,7 +71,8 @@ translation-editor-no-files-cta = One translation file at least, thou needst to 
 translation-editor-number-of-keys = Total {$amount}
 translation-editor-translate-using-open-ai = Let OpenAI be thy translator
 
-translation-service-progress = Concluded the translation of {$total} ids with {$model} within {$duration}, utilizing {$apicalls} API calls
+translation-service-progress = Completed {$completed} tasks of {$total} We harness the {$model} to the depths Making {$apicalls} API calls in breaths Elapsed time: {$duration}, no less
+translation-service-completed = Finished translating {$total} identities by {$model}'s grace within {$duration}'s flow, invoking {$apicalls} API calls
 
 zzdocs-about = # About Fluent AI
 

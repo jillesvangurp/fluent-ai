@@ -65,7 +65,8 @@ translation-editor-no-translation-id-selected = Sélectionnez un identifiant de 
 translation-editor-translate-using-open-ai = Traduire avec OpenAI
 translation-editor-number-of-keys = Total {$amount}
 
-translation-service-progress = J'ai fini de traduire {$total} IDs en utilisant {$model} en {$duration} en effectuant {$apicalls} appels API
+translation-service-progress = {$completed} ids traduits sur {$total} en utilisant {$model} en utilisant {$apicalls} appels API. Temps écoulé {$duration}.
+translation-service-completed = Traduction terminée de {$total} identifiants en utilisant {$model} en {$duration} avec {$apicalls} appels API
 
 zzdocs-about = # À propos de Fluent AI
 

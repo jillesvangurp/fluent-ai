@@ -69,7 +69,8 @@ translation-editor-no-files-cta = Ya need at least one translation file to mess 
 translation-editor-number-of-keys = Total {$amount}
 translation-editor-translate-using-open-ai = Translate usin' OpenAI
 
-translation-service-progress = Done got {$total} ids translated usin' {$model} in {$duration} usin' {$apicalls} API calls
+translation-service-progress = Done translated {$completed} ids outta {$total} usin' {$model} with {$apicalls} API calls. Time took {$duration}.
+translation-service-completed = Done translated {$total} ids usin' {$model} in {$duration} with {$apicalls} API calls
 
 zzdocs-about = # 'Bout Fluent AI
 
