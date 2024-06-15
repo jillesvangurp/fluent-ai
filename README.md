@@ -6,7 +6,7 @@ Open source editor for [project fluent](https://projectfluent.org/) localization
 
 ## Getting Started
 
-Open [Fluent AI](https://fluent-ai.jillesvangurp.com/) or run it locally (see below). 
+Open [Fluent AI](https://fluent-ai.jillesvangurp.com/) in your browser or run it locally (see below).
 
 ## Features
 
