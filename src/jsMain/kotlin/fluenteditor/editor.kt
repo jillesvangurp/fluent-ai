@@ -20,6 +20,7 @@ import dev.fritz2.core.storeOf
 import dev.fritz2.core.title
 import files.FluentFilesStore
 import icons.SvgIconSource
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import localization.TL
@@ -45,15 +46,20 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
     withKoin {
         val fluentFilesStore = get<FluentFilesStore>()
         val settingsStore = get<SettingsStore>()
-        settingsStore.data.render {settings->
-            fluentFilesStore.data.filterNotNull().render { files ->
-                val missingTranslations =
-                    files .firstOrNull { it.matches(settings.preferredTranslationLanguage) }
+
+
+        val keysData = fluentFilesStore.data.filterNotNull().map { files ->
+            files.flatMap { it.keys() }.distinct().sorted()
+        }
+        settingsStore.data.render { settings ->
+            val missingTranslationsData = fluentFilesStore.data.filterNotNull().map { files ->
+                files.firstOrNull { it.matches(settings.preferredTranslationLanguage) }
                     ?.let { preferred ->
                         files.missingTranslations(preferred)
-                }.orEmpty()
+                    }.orEmpty()
+            }
 
-                val keys = files.flatMap { it.keys() }.distinct().sorted()
+            keysData.distinctUntilChanged().render { keys ->
 
                 div("w-96 flex flex-col gap-2 p-5 bg-white shadow-lg m-2") {
                     secondaryButton(text = TL.Common.Add, iconSource = SvgIconSource.Plus) {
@@ -118,13 +124,16 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
                                                             }
                                                         }
                                                     }
-                                                    missingTranslations[translationId]?.let {missing ->
-                                                        if(missing>0) {
-                                                            span {
-                                                                +" missing $missing"
+                                                    missingTranslationsData.distinctUntilChanged()
+                                                        .render { missingTranslations ->
+                                                            missingTranslations[translationId]?.let { missing ->
+                                                                if (missing > 0) {
+                                                                    span {
+                                                                        +" missing $missing"
+                                                                    }
+                                                                }
                                                             }
                                                         }
-                                                    }
                                                 }
                                             }
                                         }
@@ -148,98 +157,100 @@ fun RenderContext.selectedTranslationEditor(
         val settingsStore = get<SettingsStore>()
         fluentFilesStore.data.filterNotNull().render { files ->
 
-            div("grow p-5 bg-white shadow-lg m-2") {
-                selectedIdStore.data.render { translationId ->
-                    if (translationId.isBlank()) {
-                        p("text-center") {
-                            translate(TL.FluentEditor.NoTranslationIdSelected)
-                        }
-
-                        createNewTranslationId()
-
-                    } else {
-                        h3 {
-                            +translationId
-                        }
-                        secondaryButton {
-                            translate(TL.FluentEditor.DeleteThisId)
-
-                            clicks handledBy {
-                                confirm(
-                                    description = TL.FluentEditor.DeleteThisIdConfirmation,
-                                    job = job,
-                                ) {
-                                    selectedIdStore.update("")
-                                    fluentFilesStore.deleteKey(translationId)
-                                }
+            div("grow p-5 bg-white shadow-lg m-2 overflow-y-auto") {
+                div("max-h-0") {
+                    selectedIdStore.data.render { translationId ->
+                        if (translationId.isBlank()) {
+                            p("text-center") {
+                                translate(TL.FluentEditor.NoTranslationIdSelected)
                             }
-                        }
-                        files.sortedBy { it.name }.map { file ->
-                            val translation = file[translationId]
-                            file to translation
-                        }.forEach { (file, chunk) ->
-                            div("w-full") {
-                                p {
-                                    +file.name
-                                }
-                                val translationEditor = storeOf(chunk?.definition.orEmpty())
 
-                                twFullWidthTextArea(translationEditor) {
-                                    twThreeLineTextareaTextfield {
+                            createNewTranslationId()
 
+                        } else {
+                            h3 {
+                                +translationId
+                            }
+                            secondaryButton {
+                                translate(TL.FluentEditor.DeleteThisId)
+
+                                clicks handledBy {
+                                    confirm(
+                                        description = TL.FluentEditor.DeleteThisIdConfirmation,
+                                        job = job,
+                                    ) {
+                                        selectedIdStore.update("")
+                                        fluentFilesStore.deleteKey(translationId)
                                     }
                                 }
+                            }
+                            files.sortedBy { it.name }.map { file ->
+                                val translation = file[translationId]
+                                file to translation
+                            }.forEach { (file, chunk) ->
+                                div("w-full") {
+                                    p {
+                                        +file.name
+                                    }
+                                    val translationEditor = storeOf(chunk?.definition.orEmpty())
 
-                                div("flex flex-row gap-3") {
-                                    translationEditor.data.render { t ->
-                                        secondaryButton(
-                                            text = TL.Common.Cancel,
-                                            iconSource = SvgIconSource.Cross,
-                                        ) {
-                                            disabled(t == file[translationId]?.definition.orEmpty())
+                                    twFullWidthTextArea(translationEditor) {
+                                        twThreeLineTextareaTextfield {
 
-                                            clicks.map {
-                                                file[translationId]?.definition.orEmpty()
-                                            } handledBy translationEditor.update
                                         }
-                                        secondaryButton(
-                                            text = TL.FluentEditor.AiTranslate,
-                                            iconSource = SvgIconSource.OpenAI,
-                                        ) {
-                                            val originalText = files.first {
-                                                it.matches(
-                                                    settingsStore.current.preferredTranslationLanguage,
-                                                )
-                                            }[translationId]?.definition.orEmpty()
-                                            val isDisabled = !translationService.enabled()
-                                            disabled(originalText.isBlank() || isDisabled)
-                                            if (isDisabled) {
-                                                title(getTranslationString(TL.FluentEditor.ConfigureKey))
-                                            } else {
-                                                title(getTranslationString(TL.FluentEditor.TranslateUsingOpenAi))
-                                            }
+                                    }
 
-                                            clicks handledBy {
-                                                translateWithOpenAI(
+                                    div("flex flex-row gap-3") {
+                                        translationEditor.data.render { t ->
+                                            secondaryButton(
+                                                text = TL.Common.Cancel,
+                                                iconSource = SvgIconSource.Cross,
+                                            ) {
+                                                disabled(t == file[translationId]?.definition.orEmpty())
+
+                                                clicks.map {
+                                                    file[translationId]?.definition.orEmpty()
+                                                } handledBy translationEditor.update
+                                            }
+                                            secondaryButton(
+                                                text = TL.FluentEditor.AiTranslate,
+                                                iconSource = SvgIconSource.OpenAI,
+                                            ) {
+                                                val originalText = files.first {
+                                                    it.matches(
+                                                        settingsStore.current.preferredTranslationLanguage,
+                                                    )
+                                                }[translationId]?.definition.orEmpty()
+                                                val isDisabled = !translationService.enabled()
+                                                disabled(originalText.isBlank() || isDisabled)
+                                                if (isDisabled) {
+                                                    title(getTranslationString(TL.FluentEditor.ConfigureKey))
+                                                } else {
+                                                    title(getTranslationString(TL.FluentEditor.TranslateUsingOpenAi))
+                                                }
+
+                                                clicks handledBy {
+                                                    translateWithOpenAI(
                                                         translationId,
                                                         originalText,
                                                         file,
                                                         translationEditor,
-                                                )
+                                                    )
+                                                }
                                             }
-                                        }
-                                        primaryButton(
-                                            text = TL.Common.Save,
-                                            iconSource = SvgIconSource.Check,
-                                        ) {
-                                            val original = file[translationId]
-                                            disabled(t == original?.definition.orEmpty())
+                                            primaryButton(
+                                                text = TL.Common.Save,
+                                                iconSource = SvgIconSource.Check,
+                                            ) {
+                                                val original = file[translationId]
+                                                disabled(t == original?.definition.orEmpty())
 
-                                            clicks handledBy {
-                                                val newFile =
-                                                    file.put(translationId, t, chunk?.comment)
-                                                fluentFilesStore.addOrReplace(newFile)
-                                                translationEditor.update(newFile[translationId]?.definition.orEmpty())
+                                                clicks handledBy {
+                                                    val newFile =
+                                                        file.put(translationId, t, chunk?.comment)
+                                                    fluentFilesStore.addOrReplace(newFile)
+                                                    translationEditor.update(newFile[translationId]?.definition.orEmpty())
+                                                }
                                             }
                                         }
                                     }
@@ -323,10 +334,10 @@ private fun RenderContext.createNewTranslationId() {
                         newIdStore.data.render { newId ->
                             newTranslationStore.data.render { newTranslation ->
                                 disabled(
-                                        files.isNullOrEmpty()
-                                                || newTranslation.isBlank()
-                                                || newId.isBlank()
-                                                || files.flatMap { it.keys() }.contains(newId),
+                                    files.isNullOrEmpty()
+                                        || newTranslation.isBlank()
+                                        || newId.isBlank()
+                                        || files.flatMap { it.keys() }.contains(newId),
                                 )
                             }
                         }
