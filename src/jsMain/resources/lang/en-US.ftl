@@ -51,8 +51,12 @@ pages-files = { -manage-files }
 pages-settings = { -settings }
 pages-about = { -about }
 
+settings-edit-open-ai-key = Configure OpenAI API Key
 settings-open-ai-key = Set your OpenAI API Key (needed for translations)
 settings-translation-language = Configure source language for AI translations. Note, the language is matched against your ftl file name with some normalization. Defaults to en-US.
+
+supported-models-gpt-4-o = Most capable model, large context window. More costly than older models.
+supported-models-gpt-35-turbo = Older model but still adequate for translations. Lower token cost.
 
 translation-editor-add-translation-id = Create new translation id
 translation-editor-ai-translate = Translate using gpt-4o

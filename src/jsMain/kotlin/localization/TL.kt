@@ -3,7 +3,7 @@ package localization
 import com.tryformation.localization.Translatable
 
 object TL {
-    enum class Busy: Translatable {
+    enum class Busy : Translatable {
         InitialTitle,
         InitialMessage,
         Success,
@@ -31,7 +31,7 @@ object TL {
         override val prefix = "common"
     }
 
-    enum class ConfirmDialog: Translatable {
+    enum class ConfirmDialog : Translatable {
         DefaultQuestion,
         DefaultDescription,
         Yes,
@@ -41,7 +41,7 @@ object TL {
         override val prefix = "confirmation-dialog"
     }
 
-    enum class Cookies: Translatable {
+    enum class Cookies : Translatable {
         Disclaimer,
         Header,
         Welcome,
@@ -51,7 +51,7 @@ object TL {
         override val prefix = "cookies"
     }
 
-    enum class Docs: Translatable {
+    enum class Docs : Translatable {
         About
         ;
 
@@ -105,6 +105,7 @@ object TL {
     }
 
     enum class Settings : Translatable {
+        EditOpenAiKey,
         OpenAiKey,
         TranslationLanguage,
         ;

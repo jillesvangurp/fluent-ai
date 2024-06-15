@@ -48,7 +48,6 @@ fun RenderContext.idsListComponent(selectedIdStore: Store<String>) {
         val fluentFilesStore = get<FluentFilesStore>()
         val settingsStore = get<SettingsStore>()
 
-
         val keysData = fluentFilesStore.data.filterNotNull().map { files ->
             files.flatMap { it.keys() }.distinct().sorted()
         }

@@ -12,6 +12,8 @@ import com.jillesvangurp.fluentai.parseFluent
 import com.jillesvangurp.fluentai.sortedContent
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -25,10 +27,14 @@ val translationServiceModule = module {
     singleOf(::TranslationService)
 }
 
+private val translationScope = CoroutineScope(CoroutineName("translation-service"))
+
 class TranslationService(settingsStore: SettingsStore) {
     private var _openAI: OpenAI? = null
+    private var model = "gpt-4o"
+
     init {
-        GlobalScope.launch {
+        translationScope.launch {
             settingsStore.data.onEach {
                 _openAI = it?.openAIKey?.let { key ->
                     OpenAI(
@@ -36,6 +42,8 @@ class TranslationService(settingsStore: SettingsStore) {
                         timeout = Timeout(socket = 60.seconds),
                     )
                 }
+                model = it?.model ?: "gpt-4o"
+                console.log("reconfigure translation service; using $model")
             }.collect()
         }
     }
@@ -44,9 +52,9 @@ class TranslationService(settingsStore: SettingsStore) {
     fun enabled() = _openAI != null
 
     suspend fun translate(existingText: String, target: String): String? {
-
+        console.log("using $model")
         val ccr = ChatCompletionRequest(
-            model = ModelId("gpt-4o"),
+            model = ModelId(model),
             messages = listOf(
                 ChatMessage(
                     role = ChatRole.System,
@@ -120,7 +128,7 @@ $existingText
         val content = FluentFile("", source.associateBy { it.id }.sortedContent()).content
 
         val ccr = ChatCompletionRequest(
-            model = ModelId("gpt-4o"),
+            model = ModelId(model),
             messages = listOf(
                 ChatMessage(
                     role = ChatRole.System,
