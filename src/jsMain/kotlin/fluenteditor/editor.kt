@@ -230,11 +230,11 @@ fun RenderContext.selectedTranslationEditor(
                                             text = TL.FluentEditor.AiTranslate,
                                             iconSource = SvgIconSource.OpenAI,
                                         ) {
-                                            val originalText = files.first {
+                                            val originalText = (files.firstOrNull() {
                                                 it.matches(
                                                     settingsStore.current.preferredTranslationLanguage,
                                                 )
-                                            }[translationId]?.definition.orEmpty()
+                                            }?:files.first())[translationId]?.definition.orEmpty()
                                             val isDisabled = !translationService.enabled()
                                             disabled(originalText.isBlank() || isDisabled)
                                             if (isDisabled) {
@@ -272,7 +272,6 @@ fun RenderContext.selectedTranslationEditor(
                                                 translationEditor.update(newFile[translationId]?.definition.orEmpty())
                                             }
                                         }
-
                                     }
                                 }
                             }
