@@ -71,6 +71,9 @@ translation-editor-no-files-cta = You need at least one translation file to edit
 translation-editor-number-of-keys = Total {$amount}
 translation-editor-translate-using-open-ai = Translate using OpenAI
 
+translation-service-progress = "Translating {$current} out of {$total} using {$model}. Completed {$completed} translations using {$apicalls} API calls. Elapsed time: {$duration}"
+translation-service-progress = "Finished translating {$total} ids using {$model} in {$duration} using {$apicalls} API calls"
+
 zzdocs-about = # About Fluent AI
 
     {-brand} helps you **localize your applications using AI**. It uses OpenAI to do in seconds

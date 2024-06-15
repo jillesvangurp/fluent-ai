@@ -112,4 +112,12 @@ object TL {
 
         override val prefix = "settings"
     }
+
+    enum class TranslationLogic : Translatable {
+        Completed,
+        Progress,
+        ;
+
+        override val prefix = "translation-service"
+    }
 }

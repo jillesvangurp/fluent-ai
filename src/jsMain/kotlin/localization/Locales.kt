@@ -14,6 +14,7 @@ enum class Locales(
     FR_FR("fr", "FR", arrayOf("fr", "fr-BE")),
     NL_NL("nl", "NL", arrayOf("nl", "nl-BE")),
     DE_DE("de", "DE", arrayOf("de")),
+    ES_ES("es", "ES", arrayOf("es")),
     ;
 
     val title = "${languageCode}-${countryCode}"

@@ -5,6 +5,7 @@ import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.cleanupTranslations
 import com.jillesvangurp.fluentai.master
 import com.jillesvangurp.fluentai.sortedContent
+import components.ProgressStore
 import components.confirm
 import components.downloadButton
 import components.fadeInFadeoutTransition
@@ -336,10 +337,11 @@ fun RenderContext.translateMissingButton(file: FluentFile) {
                         ) {
                             if(master != null) {
                                 runWithBusy(
-                                    {
-                                        translationService.batchTranslate(master, file)
+                                    { progressStore ->
+                                        translationService.batchTranslate(master, file, progressStore = progressStore)
                                     },
                                     translationArgs = mapOf("language" to file.name),
+                                    progressStore = ProgressStore()
                                 ) { newFile ->
                                     fluentFilesStore.addOrReplace(newFile)
                                     currentFluentFileStore.update(newFile)

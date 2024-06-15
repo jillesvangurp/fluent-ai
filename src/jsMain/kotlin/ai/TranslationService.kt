@@ -10,15 +10,19 @@ import com.jillesvangurp.fluentai.FluentChunk
 import com.jillesvangurp.fluentai.FluentFile
 import com.jillesvangurp.fluentai.parseFluent
 import com.jillesvangurp.fluentai.sortedContent
+import components.Progress
+import components.ProgressStore
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import localization.TL
+import localization.getTranslationString
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import settings.SettingsStore
@@ -90,7 +94,8 @@ $existingText
         sourceFile: FluentFile,
         targetFile: FluentFile,
         skipExistingTranslations: Boolean = true,
-        chunkSize: Int = 50,
+        chunkSize: Int = 15,
+        progressStore: ProgressStore?,
     ): FluentFile {
         val existingTranslations = targetFile.asMap()
         val toTranslate = sourceFile.chunks.mapNotNull { t ->
@@ -107,20 +112,45 @@ $existingText
                 t
             }
         }
-        val translation = toTranslate.chunked(chunkSize).flatMap {
-            translateChunks(it, targetFile.name).also {
+        val start = Clock.System.now()
+        var stepCount=1
+        var apiCalls=0
+        val translation = toTranslate.chunked(chunkSize).flatMap { chunk ->
+            val progressText = getTranslationString(TL.TranslationLogic.Progress, mapOf(
+                "current" to chunk.size,
+                "total" to toTranslate.size,
+                "model" to model,
+                "completed" to stepCount,
+                "apicalls" to apiCalls++,
+                "duration" to (Clock.System.now() - start).toIsoString()
+            ))
+            progressStore?.update?.invoke(Progress(progressText, stepCount, toTranslate.size))
+            translateChunks(chunk, targetFile.name).also {
                 // don't overload OpenAI with a lot of requests
                 delay(500.milliseconds)
+            }.also { translated ->
+                stepCount+=chunk.size
             }
         }
+        val progressText = getTranslationString(TL.TranslationLogic.Completed, mapOf(
+            "total" to toTranslate.size,
+            "model" to model,
+            "completed" to stepCount,
+            "apicalls" to apiCalls,
+            "duration" to (Clock.System.now() - start).toIsoString()
+        ))
+
+        progressStore?.update?.invoke(Progress(progressText, stepCount, toTranslate.size))
 
         val translationMap = translation.associateBy { it.id }.toMutableMap()
-        targetFile.chunks.forEach {
+        val chunks = targetFile.chunks
+        chunks.forEach {
             // add existing translations back
             if(!translationMap.containsKey(it.id)) {
                 translationMap[it.id] = it
             }
         }
+        delay(1.seconds)
         return FluentFile(targetFile.name, translationMap.sortedContent())
     }
 
