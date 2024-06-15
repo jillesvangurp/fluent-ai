@@ -1,17 +1,9 @@
 -about = 'Bout
--brand = Fluent AI
--manage-files = Manage Fluent Files
--settings = Settings
--translation-editor = Translation Editor
 
 busy-failure = Arrr! Blimey!
 busy-success = Done translatin' t' {$language}
-
-busy-initial-title = Translating
 busy-initial-message = Usin' OpenAI to translate t' {$language}
 
-common-app-name = { -brand }
-common-show = Show {$content}
 common-save = Save thar
 common-delete = Scuttle
 common-download = Plunder
@@ -21,6 +13,7 @@ common-clear = Swab
 common-confirm = Aye
 common-filter-placeholder = Filter th' list
 common-add = Add ye scallywag
+common-show = Show {$content}, matey
 
 confirmation-dialog-yes = Aye
 confirmation-dialog-no = Nay
@@ -45,17 +38,13 @@ file-loader-translate-missing = Be addin' missin' with OpenAI
 
 language-select-select-language = Pick a tongue
 
-pages-editor = { -translation-editor }
-pages-files = { -manage-files }
-pages-settings = { -settings }
-pages-about = { -about }
-
 settings-open-ai-key = Set yer OpenAI API Key (needed fer translatin')
 settings-translation-language = Set ye source lingo for yer AI translations, matey. Be warned, the lingo be matched against yer ftl file name with some normalizin'. Defaults to en-US.
+settings-edit-open-ai-key = Set yer OpenAI API Key
 
-translation-editor-add-translation-id = Create new translation id
-translation-editor-no-files-cta = Ye need at least one translation file t' edit. Go to [{ -manage-files }](/#page=Files) and create or add some translation files.
-translation-editor-number-of-keys = Total {$amount}
+supported-models-gpt-35-turbo = Older model but still fine fer translations. Lower treasure cost.
+supported-models-gpt-4-o = Most capable model, large context window. More costly than older models, arrr.
+
 translation-editor-translate-using-open-ai = Translate usin' OpenAI
 translation-editor-ai-translate = Translate usin' GPT-4
 translation-editor-configure-key = Set sail an OpenAI API key in the settin's
@@ -64,7 +53,11 @@ translation-editor-delete-this-id-confirmation = This will be deletin' the trans
 translation-editor-new-translation = Arrr translation
 translation-editor-new-translation-id = Ahoy matey! Ye be lookin' for some English Pirate translations, eh? Here we be:
 translation-editor-new-translation-id-header = Arr, be creatin' a new translation definition
+translation-editor-no-files-cta = Ye need at least one translation file t' edit. Go to [{ -manage-files }](/#page=Files) and create or add some translation files.
 translation-editor-no-translation-id-selected = Select a language id on the port side to be editing the translation.
+translation-editor-number-of-keys = Total {$amount} Doubloons
+
+translation-service-progress = Finished translatin' {$total} ids usin' {$model} in {$duration} usin' {$apicalls} API calls
 
 zzdocs-about = # 'Bout Fluent AI
 

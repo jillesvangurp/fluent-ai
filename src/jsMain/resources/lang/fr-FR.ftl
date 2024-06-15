@@ -1,5 +1,4 @@
 -about = À propos
--brand = Fluent AI
 -manage-files = Gérer les fichiers Fluent
 -settings = Paramètres
 -translation-editor = Éditeur de traduction
@@ -9,7 +8,6 @@ busy-initial-title = Traduction
 busy-initial-message = Utilisation de OpenAI pour traduire en {$language}
 busy-success = Terminé la traduction en {$language}
 
-common-app-name = { -brand }
 common-hide = Cacher {$content}
 common-show = Montrer {$content}
 common-add = Ajouter
@@ -46,17 +44,15 @@ file-loader-translate-missing-confirmation = Ajouter {$number_translations} trad
 
 language-select-select-language = Sélectionnez la langue de l'interface utilisateur
 
-pages-editor = { -translation-editor }
-pages-files = { -manage-files }
-pages-settings = { -settings }
-pages-about = { -about }
-
 settings-open-ai-key = Définissez votre clé API OpenAI (nécessaire pour les traductions)
 settings-translation-language = Configurez la langue source pour les traductions par IA. Notez que la langue est comparée au nom de votre fichier ftl avec une certaine normalisation. Par défaut, en-US.
+settings-edit-open-ai-key = Configurez la clé API OpenAI
+
+supported-models-gpt-35-turbo = Un modèle plus ancien mais toujours adéquat pour les traductions. Coût en jetons inférieur.
+supported-models-gpt-4-o = Modèle le plus performant, fenêtre de contexte plus grande. Plus coûteux que les modèles plus anciens.
 
 translation-editor-add-translation-id = Créer un nouvel identifiant de traduction
 translation-editor-no-files-cta = Vous avez besoin d'au moins un fichier de traduction pour éditer. Allez à [{ -manage-files }](/#page=Files) et créez ou ajoutez des fichiers de traduction.
-translation-editor-number-of-keys = Total {$amount}
 translation-editor-ai-translate = Translater avec gpt-4o
 translation-editor-configure-key = Configurez une clé API OpenAI dans les paramètres
 translation-editor-delete-this-id = Supprimer cette identité de traduction
@@ -66,6 +62,9 @@ translation-editor-new-translation-id = ID de traduction
 translation-editor-new-translation-id-header = Créer une nouvelle définition de traduction
 translation-editor-no-translation-id-selected = Sélectionnez un identifiant de langue à gauche pour modifier la traduction.
 translation-editor-translate-using-open-ai = Traduire avec OpenAI
+translation-editor-number-of-keys = Total {$amount}
+
+translation-service-progress = J'ai fini de traduire {$total} IDs en utilisant {$model} en {$duration} en effectuant {$apicalls} appels API
 
 zzdocs-about = # À propos de Fluent AI
 

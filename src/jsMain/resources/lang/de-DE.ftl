@@ -1,5 +1,4 @@
 -about = Über
--brand = Fluent AI
 -manage-files = Fluent-Dateien verwalten
 -settings = Einstellungen
 -translation-editor = Übersetzungseditor
@@ -9,8 +8,6 @@ busy-initial-title = Übersetzen
 busy-initial-message = Verwenden von OpenAI zum Übersetzen nach {$language}
 busy-success = Übersetzung nach {$language} abgeschlossen
 
-common-app-name = { -brand }
-common-confirm = OK
 common-add = Hinzufügen
 common-cancel = Abbrechen
 common-clear = Löschen
@@ -44,13 +41,12 @@ file-loader-translate-missing-confirmation = {$number_translations} fehlende Üb
 
 language-select-select-language = UI-Sprache auswählen
 
-pages-editor = { -translation-editor }
-pages-files = { -manage-files }
-pages-settings = { -settings }
-pages-about = { -about }
-
 settings-open-ai-key = Ihren OpenAI-API-Schlüssel einstellen (notwendig für Übersetzungen)
 settings-translation-language = Quellsprache für AI-Übersetzungen konfigurieren. Hinweis: Die Sprache wird anhand des Namens Ihrer FTL-Datei mit etwas Normalisierung abgeglichen. Standard ist en-US.
+settings-edit-open-ai-key = Konfiguriere OpenAI API-Schlüssel
+
+supported-models-gpt-35-turbo = Älteres Modell, aber immer noch ausreichend für Übersetzungen. Geringere Tokenkosten.
+supported-models-gpt-4-o = Das leistungsfähigste Modell, großes Kontextfenster. Teurer als ältere Modelle.
 
 translation-editor-add-translation-id = Neue Übersetzungs-ID erstellen
 translation-editor-no-files-cta = Du benötigst mindestens eine Übersetzungsdatei zum Bearbeiten. Gehe zu [{ -manage-files }](/#page=Files) und erstelle oder füge einige Übersetzungsdateien hinzu.
@@ -64,6 +60,8 @@ translation-editor-new-translation-id-header = Neue Übersetzungsdefinition erst
 translation-editor-new-translation-id = Übersetzungs-ID
 translation-editor-new-translation = Standardübersetzung
 translation-editor-translate-using-open-ai = Mit OpenAI übersetzen
+
+translation-service-progress = "Fertig mit der Übersetzung von {$total} IDs unter Verwendung von {$model} in {$duration} mit {$apicalls} API-Aufrufen"
 
 zzdocs-about = # Über Fluent AI
 

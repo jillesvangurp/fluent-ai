@@ -1,19 +1,16 @@
 -about = Acerca de
--brand = Fluent AI
 -manage-files = Gestionar archivos Fluent
 -settings = Ajustes
 -translation-editor = Editor de traducción
 
-busy-failure = Error
 busy-initial-title = Traduciendo
 busy-initial-message = Usando OpenAI para traducir a {$language}
+
 busy-success = Traducción a {$language} completada
 
-common-app-name = { -brand }
 common-add = Añadir
 common-cancel = Cancelar
 common-clear = Limpiar
-common-confirm = OK
 common-filter-placeholder = Filtrar la lista
 common-save = Guardar
 common-delete = Eliminar
@@ -22,9 +19,9 @@ common-hide = Ocultar {$content}
 common-show = Mostrar {$content}
 
 confirmation-dialog-yes = Sí
-confirmation-dialog-no = No
 confirmation-dialog-default-question = ¿Estás seguro?
 confirmation-dialog-default-description = Si haces clic en sí, la acción se ejecutará.
+confirmation-dialog-no = No
 
 cookies-disclaimer = Este sitio web utiliza el almacenamiento local del navegador para almacenar contenido json
         que creas en la aplicación. Esta información nunca se comparte en otro lugar.
@@ -46,11 +43,6 @@ file-loader-translate-missing-confirmation = Añadir {$number_translations} trad
 
 language-select-select-language = Selecciona el idioma de la interfaz
 
-pages-editor = { -translation-editor }
-pages-files = { -manage-files }
-pages-settings = { -settings }
-pages-about = { -about }
-
 settings-edit-open-ai-key = Configurar la clave de API de OpenAI
 settings-open-ai-key = Establecer tu clave de API de OpenAI (necesaria para traducciones)
 settings-translation-language = Configurar idioma de origen para traducciones de IA. Tenga en cuenta que el idioma se compara con el nombre de su archivo ftl con alguna normalización. Por defecto es en-US.
@@ -68,8 +60,8 @@ translation-editor-new-translation-id-header = Crear una nueva definición de tr
 translation-editor-new-translation-id = ID de traducción
 translation-editor-new-translation = Traducción por defecto
 translation-editor-no-files-cta = Necesita al menos un archivo de traducción para editar. Vaya a [{ -manage-files }](/#page=Files) y cree o añada algunos archivos de traducción.
-translation-editor-number-of-keys = Total {$amount}
 translation-editor-translate-using-open-ai = Traducir usando OpenAI
+translation-editor-number-of-keys = Total {$amount}
 
 translation-service-progress = "Traducidos {$total} identificadores utilizando {$model} en {$duration} usando {$apicalls} llamadas a la API"
 

@@ -1,5 +1,4 @@
 -about = Over
--brand = Fluent AI
 -manage-files = Beheer Fluent-bestanden
 -settings = Instellingen
 -translation-editor = Vertalingen editor
@@ -9,8 +8,6 @@ busy-initial-title = Bezig met vertalen
 busy-initial-message = Aan het vertalen naar {$language} met OpenAI
 busy-success = Klaar met vertalen naar {$language}
 
-common-app-name = { -brand }
-common-confirm = OK
 common-delete = Verwijderen
 common-download = Downloaden
 common-hide = Verberg {$content}
@@ -46,13 +43,12 @@ file-loader-translate-missing-confirmation = Voeg {$number_translations} ontbrek
 
 language-select-select-language = Selecteer een taal
 
-pages-editor = { -translation-editor }
-pages-files = { -manage-files }
-pages-settings = { -settings }
-pages-about = { -about }
-
 settings-open-ai-key = Stel uw OpenAI API-sleutel in (nodig voor vertalingen)
 settings-translation-language = Configureer de brontaal voor AI-vertalingen. Let op, de taal wordt vergeleken met de naam van je ftl-bestand met enige normalisatie. Standaard ingesteld op en-US.
+settings-edit-open-ai-key = OpenAI API-sleutel configureren
+
+supported-models-gpt-35-turbo = Ouder model, maar nog steeds geschikt voor vertalingen. Lagere token kosten.
+supported-models-gpt-4-o = Meest capabele model, groot contextvenster. Duurder dan oudere modellen.
 
 translation-editor-add-translation-id = Maak nieuw vertalings-ID
 translation-editor-no-files-cta = Je hebt minstens één vertalingsbestand nodig om te bewerken. Ga naar [{ -manage-files }](/#page=Files) en maak of voeg vertalingsbestanden toe.
@@ -66,6 +62,8 @@ translation-editor-new-translation-id = Vertaling ID
 translation-editor-new-translation-id-header = Maak een nieuwe vertalingsdefinitie
 translation-editor-no-translation-id-selected = Selecteer aan de linkerkant een taal-id om de vertaling te bewerken.
 translation-editor-translate-using-open-ai = Vertalen met OpenAI
+
+translation-service-progress = Vertaling voltooid van {$total} id's met behulp van {$model} in {$duration} met behulp van {$apicalls} API-oproepen
 
 zzdocs-about = # Over Fluent AI
 
