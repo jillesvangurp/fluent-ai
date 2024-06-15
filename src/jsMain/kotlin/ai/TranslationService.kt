@@ -63,7 +63,7 @@ class TranslationService(settingsStore: SettingsStore) {
                 ChatMessage(
                     role = ChatRole.System,
                     content = """
-                            You are a professional UI translator. Provide accurate translations for the texts that you are provided with.
+                            You are a professional UI translator. Provide accurate and complete translations for the texts that you are provided with.
                             
                             The texts are project fluent format and you are to preserve the variable names and other fluent syntax. 
                             
@@ -71,7 +71,7 @@ class TranslationService(settingsStore: SettingsStore) {
                             
                             The target language can be inferred from the locale name in the .ftl file name.
                             
-                            Respond in plain text without the markdown ```
+                            Respond in plain text, preserve any markdown formatting but do not surround with ```
                             """.trimIndent(),
                 ),
                 ChatMessage(
@@ -169,7 +169,9 @@ $existingText
                                                         
                             Infer the target language from the provided locale or .ftl file name.
                             
-                            Respond in plain text without the markdown ```, the output should be a valid fluent file
+                            Respond in plain text, preserve any markdown formatting but do not surround with ```
+
+                            The output should be a valid project fluent file
                             """.trimIndent(),
                 ),
                 ChatMessage(

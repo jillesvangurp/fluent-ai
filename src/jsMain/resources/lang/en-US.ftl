@@ -108,10 +108,10 @@ zzdocs-about = # About Fluent AI
 
     - {-brand} currently does not validate the fluent syntax.
     - It runs in a browser so there is no direct file system access. However you can drag and drop files to the UI and download modified files from the UI. Given enough interest, I may at some point create an Electron wrapper for {-brand}.
-    - It is a bit opinionated about re-ordering and cleaning up translations. It will remove translations identical to the base translation, for example. Carefully examine diffs before committing changes to your localization files.
+    - It is a bit opinionated about re-ordering and cleaning up translations. Carefully examine diffs before committing changes to your localization files.
     - OpenAI is good but of course not flawless and sometimes it just gets it wrong. Also, it may not always have enough context to correctly translate everything. You should of course use professional translators to review translations. However, it does nail it rather often.
     - While you can edit translations for Fluent AI itself, it does not currently reload them in the UI. I may add this later.
-    - The model and AI provider are currently hardwired. I'm well aware of other solitions in this space and may support additional models; including potentially even locally running ones later. However, OpenAI currently seems best in class and is cheap enough.
+    - Currently only OpenAI is supported. If there's interest, I may add more models later.
     - Translating large files can take quite a bit of time.
 
     ## Bugs and issues

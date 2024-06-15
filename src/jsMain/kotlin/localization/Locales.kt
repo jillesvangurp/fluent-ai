@@ -11,6 +11,8 @@ enum class Locales(
 ) : Locale {
     EN_US("en", "US", arrayOf("en-GB", "en")),
     EN_PIRATE("en", "pirate", arrayOf("en-PR","en-GB", "en")),
+    EN_POET("en", "poet", arrayOf()),
+    EN_REDNECK("en", "redneck", arrayOf()),
     FR_FR("fr", "FR", arrayOf("fr", "fr-BE")),
     NL_NL("nl", "NL", arrayOf("nl", "nl-BE")),
     DE_DE("de", "DE", arrayOf("de")),

@@ -1,4 +1,5 @@
 -about = Über
+-brand = Fluent AI
 -manage-files = Fluent-Dateien verwalten
 -settings = Einstellungen
 -translation-editor = Übersetzungseditor
@@ -17,6 +18,7 @@ common-delete = Löschen
 common-download = Herunterladen
 common-hide = {$content} verbergen
 common-show = {$content} anzeigen
+common-confirm = OK
 
 confirmation-dialog-yes = Ja
 confirmation-dialog-no = Nein
@@ -65,60 +67,60 @@ translation-service-progress = "Fertig mit der Übersetzung von {$total} IDs unt
 
 zzdocs-about = # Über Fluent AI
 
-    {-brand} hilft dir dabei, **deine Anwendungen mit KI zu lokalisieren**. Es nutzt OpenAI, um in Sekunden das zu erledigen, was sonst Wochen von einem geschulten Übersetzer dauern würde. Dies **spart dir Zeit und Geld**.
+    {-brand} hilft Ihnen dabei, **Ihre Anwendungen mithilfe von KI zu lokalisieren**. Es verwendet OpenAI, um in wenigen Sekunden das zu erledigen, wofür ein ausgebildeter Übersetzer Wochen brauchen würde. Das **spart Ihnen Zeit und Geld**.
 
-    {-brand} kann deine [Project Fluent](https://projectfluent.org/) Lokalisierungsdateien laden und bearbeiten und bietet einen praktischen Editor zum Überprüfen und Bearbeiten von Übersetzungen nebeneinander.
+    {-brand} kann Ihre [Project Fluent](https://projectfluent.org/) Lokalisierungsdateien laden und bearbeiten und bietet einen praktischen Editor, mit dem Sie Ihre Übersetzungen Seite an Seite überprüfen und bearbeiten können.
 
     ## Wie benutze ich {-brand}?
 
-    - Konfiguriere deinen OpenAI API-Schlüssel in den [{-settings}](/#page=Settings). Ohne einen Schlüssel funktionieren die KI-Übersetzungen nicht.
-    - Lade deine `.ftl`-Dateien im Abschnitt [{ -manage-files }](/#page=Files) hoch, indem du sie in die Benutzeroberfläche ziehst.
-    - Oder lade die ftl-Dateien für Fluent AI, wenn du nur herumspielen möchtest. Fluent AI ist natürlich lokalisiert und das Spielen mit seinen ftl-Dateien ist eine großartige Möglichkeit, loszulegen.
-    - Für jede Datei wird dir die Anzahl der fehlenden Übersetzungen angezeigt und eine KI-gestützte Übersetzung für diese angeboten.
-    - Du kannst sie auch manuell mit dem [{-translation-editor}](/#page=Editor) bearbeiten, um deine Übersetzungsstrings zu bearbeiten oder einzelne Strings mit OpenAI zu übersetzen.
+    - Konfigurieren Sie Ihren OpenAI API-Schlüssel unter [{-settings}](/#page=Settings). Ohne einen Schlüssel funktionieren die KI-Übersetzungen nicht.
+    - Laden Sie Ihre `.ftl`-Dateien im Abschnitt [{-manage-files}](/#page=Files), indem Sie sie in die Benutzeroberfläche ziehen und dort ablegen.
+    - Oder laden Sie die. ftl-Dateien für Fluent AI, wenn Sie nur herumspielen möchten. Fluent AI ist natürlich lokalisiert, und das Herumspielen mit seinen ftl-Dateien ist ein großartiger Startpunkt.
+    - Für jede Datei zeigt Ihnen die Anwendung die Anzahl fehlender Übersetzungen und bietet eine KI-unterstützte Übersetzung für diese an.
+    - Sie können diese auch manuell mit dem [{-translation-editor}](/#page=Editor) bearbeiten, um Ihre Übersetzungsstrings zu bearbeiten oder einzelne Strings mit OpenAI zu übersetzen.
 
-    ## Was ist Project Fluent und warum solltest du es verwenden?
+    ## Was ist Project Fluent und warum sollten Sie es verwenden?
 
-    Erfunden von Mozilla, um Produkte wie Firefox, Thunderbird usw. in Hunderte von Sprachen zu lokalisieren, wurde Project Fluent mit Flexibilität und Benutzerfreundlichkeit im Kopf entwickelt. Ihre Übersetzungen hängen von einer großen Benutzercommunity ab, die Übersetzungen beisteuert. Sie wollten dies daher so einfach wie möglich machen. Zusätzlich brauchten sie die Flexibilität, um mit verschiedenen grammatikalischen Variationen in Sprachen umzugehen, z.B. Geschlecht, Zeit, Menge, usw.
+    Mozilla hat es entwickelt, um die Lokalisierung von Produkten wie Firefox, Thunderbird usw. in Hunderte von Sprachen zu unterstützen. Project Fluent wurde mit Blick auf Flexibilität und Benutzerfreundlichkeit entworfen. Ihre Übersetzungen hängen von einer großen Benutzer-Community ab, die Beiträge liefert. Daher wollten sie dies so einfach wie möglich gestalten. Zusätzlich benötigten sie die Flexibilität, um mit verschiedenen grammatischen Variationen in Sprachen wie z.B. Geschlecht, Zeitform, Menge usw. umgehen zu können.
 
-    Das Ergebnis, Project Fluent, ist ein einfaches und benutzerfreundliches Dateiformat und Syntax zur Definition von Übersetzungsdateien. Es bietet einige Vorteile gegenüber anderen Lösungen in diesem Bereich, die z.B. auf Eigenschaftendateien oder Bibliotheken wie gettext basieren:
+    Das Ergebnis, Project Fluent, ist ein einfaches und benutzerfreundliches Dateiformat und Syntax zur Definition von Übersetzungsdateien. Es bietet einige Vorteile gegenüber anderen Lösungen in diesem Bereich, wie z.B. properties-Dateien oder Bibliotheken wie gettext:
 
-    - **Flexibilität.** Es unterstützt bedingte Logik und Variablen, die du in deinen Übersetzungen verwenden kannst.
-    - **Benutzerfreundlichkeit.** Es ist einfach und benutzerfreundlich zu verwenden und zu bearbeiten. Jede Datei mit Zeilen, die `Schlüssel = Übersetzung` enthalten, ist eine gültige `ftl`-Datei.
-    - **Portabilität.** Es gibt Bibliotheken, die die Unterstützung von Fluent-basierten Lokalisierungen in nativen, mobilen und Webanwendungen erleichtern.
+    - **Flexibilität.** Es unterstützt bedingte Logik und Variablen, die Sie in Ihren Übersetzungen verwenden können.
+    - **Benutzerfreundlichkeit.** Es ist einfach und leicht zu verwenden und zu bearbeiten. Jede Datei mit Zeilen, die `key = translation` enthalten, ist eine gültige `ftl`-Datei.
+    - **Portabilität.** Es gibt Bibliotheken, die das Unterstützen von Fluent-basierten Lokalisierungen in nativen, mobilen und Webanwendungen erleichtern.
 
     ## Einschränkungen von {-brand}
 
-    - {-brand} validiert derzeit nicht die Fluent-Syntax.
-    - Es läuft in einem Browser, daher gibt es keinen direkten Dateisystemzugriff. Du kannst jedoch Dateien in die Benutzeroberfläche ziehen und die modifizierten Dateien von der Benutzeroberfläche herunterladen. Bei genügend Interesse könnte ich irgendwann einen Electron-Wrapper für {-brand} erstellen.
-    - Es ist ein wenig meinungsstark, was die Neuordnung und Bereinigung von Übersetzungen betrifft. Es wird z.B. Übersetzungen entfernen, die mit der Basisübersetzung identisch sind. Überprüfe Änderungen sorgfältig, bevor du sie in deine Lokalisierungsdateien übernimmst.
-    - OpenAI ist gut, aber natürlich nicht fehlerlos und manchmal liegt es einfach falsch. Es hat möglicherweise nicht immer genug Kontext, um alles richtig zu übersetzen. Du solltest professionelle Übersetzer zur Überprüfung der Übersetzungen hinzuziehen. Dennoch trifft es oft ins Schwarze.
-    - Während du Übersetzungen für Fluent AI selbst bearbeiten kannst, lädt es sie derzeit nicht in der Benutzeroberfläche neu. Dies könnte ich später hinzufügen.
-    - Das Modell und der KI-Anbieter sind derzeit fest verdrahtet. Ich bin mir der anderen Lösungen in diesem Bereich bewusst und könnte künftig zusätzliche Modelle unterstützen, einschließlich möglicherweise auch lokal laufender Modelle. Derzeit scheint OpenAI jedoch am besten in seiner Klasse zu sein und ist kostengünstig.
+    - {-brand} überprüft derzeit nicht die Fluent-Syntax.
+    - Es läuft in einem Browser, daher gibt es keinen direkten Zugriff auf das Dateisystem. Sie können jedoch Dateien in die Benutzeroberfläche ziehen und dort ablegen sowie geänderte Dateien aus der Benutzeroberfläche herunterladen. Bei genügend Interesse könnte ich möglicherweise einen Electron-Wrapper für {-brand} erstellen.
+    - Es ist etwas anspruchsvoll in Bezug auf das Neuordnen und Bereinigen von Übersetzungen. Untersuchen Sie die Unterschiede sorgfältig, bevor Sie Änderungen an Ihren Lokalisierungsdateien übernehmen.
+    - OpenAI ist gut, aber natürlich nicht fehlerfrei und manchmal liegt es einfach falsch. Zudem hat es möglicherweise nicht immer genug Kontext, um alles korrekt zu übersetzen. Sie sollten natürlich professionelle Übersetzer zur Überprüfung der Übersetzungen einsetzen. Allerdings trifft es oft den Nagel auf den Kopf.
+    - Obwohl Sie Übersetzungen für Fluent AI selbst bearbeiten können, werden diese derzeit nicht in der Benutzeroberfläche neu geladen. Dies könnte ich später hinzufügen.
+    - Derzeit wird nur OpenAI unterstützt. Bei Interesse könnte ich später weitere Modelle hinzufügen.
     - Das Übersetzen großer Dateien kann ziemlich viel Zeit in Anspruch nehmen.
 
-    ## Bugs und Probleme
+    ## Fehler und Probleme
 
     Dieses Projekt ist kostenlos und Open Source und wird unter der MIT-Lizenz vertrieben.
     Das Hauptprojekt ist auf [Github](https://github.com/jillesvangurp/fluent-ai) verfügbar.
-    Wenn du Hilfe benötigst, kontaktiere mich oder nutze den [Issue Tracker](https://github.com/jillesvangurp/fluent-ai/issues).
+    Wenn Sie Hilfe benötigen, können Sie mich kontaktieren oder den [Issue Tracker](https://github.com/jillesvangurp/fluent-ai/issues) verwenden.
 
     ## Verwandte Projekte
 
-    - [Fluent-Kotlin](https://github.com/formation-res/fluent-kotlin) - Eine Multiplattform-Bibliothek, die ich und meine Kollegen für jvm/js entwickelt haben und die es ermöglicht, ftl-Dateien in deinen Kotlin-Anwendungen zu verwenden. Diese Browseranwendung nutzt sie.
+    - [Fluent-Kotlin](https://github.com/formation-res/fluent-kotlin) - Multiplattform-Bibliothek, die ich und meine Kollegen für JVM/JS entwickelt haben und die es Ihnen erlaubt, ftl-Dateien in Ihren Kotlin-Anwendungen zu verwenden. Diese Browser-Anwendung nutzt diese Bibliothek.
 
-    ## Erzähl es weiter
+    ## Weitersagen
 
-    Software wie diese zu schreiben, ist viel Arbeit und oft eine undankbare Arbeit. Wenn dir Fluent AI nützlich ist, lass es andere wissen, damit sie auch davon profitieren können.
+    Software wie diese zu schreiben, ist viel Arbeit und kann oft undankbare Arbeit sein. Wenn Fluent AI für Sie nützlich ist, lassen Sie es andere wissen, damit auch sie davon profitieren können.
 
-    - Tweet / toot / blogge darüber.
-    - Klicke auf den Stern-Button auf [Github](https://github.com/jillesvangurp/fluent-ai).
-    - Gib mir ein Feedback.
+    - Twittern/bloggen Sie darüber.
+    - Klicken Sie auf den Stern-Button auf [Github](https://github.com/jillesvangurp/fluent-ai).
+    - Geben Sie mir Feedback.
 
     ## Credits
 
     Fluent AI wurde von [Jilles van Gurp](https://jillesvangurp.com) erstellt. Derzeit ist es kostenlos und Open Source.
 
     - [www.jillesvangurp.com](https://www.jillesvangurp.com) - Meine Website
-    - [@jillesvangurp@mastodon.world ](https://mastodon.world/deck/@jillesvangurp) - Mastodon
+    - [@jillesvangurp@mastodon.world](https://mastodon.world/deck/@jillesvangurp) - Mastodon
     - [@jillesvangurp](https://twitter.com/jillesvangurp) - Twitter/X

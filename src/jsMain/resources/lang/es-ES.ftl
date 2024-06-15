@@ -1,4 +1,5 @@
 -about = Acerca de
+-brand = Fluent AI
 -manage-files = Gestionar archivos Fluent
 -settings = Ajustes
 -translation-editor = Editor de traducción
@@ -67,67 +68,67 @@ translation-service-progress = "Traducidos {$total} identificadores utilizando {
 
 zzdocs-about = # Acerca de Fluent AI
 
-    {-brand} te ayuda a **localizar tus aplicaciones utilizando IA**. Utiliza OpenAI para hacer en segundos
-    lo que de otro modo tomaría semanas a un traductor entrenado. Esto te **ahorra tiempo y dinero**.
+    {-brand} te ayuda a **localizar tus aplicaciones usando IA**. Utiliza OpenAI para hacer en segundos
+    lo que de otro modo llevaría semanas a un traductor cualificado. Esto **te ahorra tiempo y dinero**.
 
-    {-brand} puede cargar y editar tus archivos de localización de [Project Fluent](https://projectfluent.org/)
-    y ofrece un editor conveniente para revisar y editar traducciones para tus traducciones lado a lado.
+    {-brand} puede cargar y editar tus archivos de localización [Project Fluent](https://projectfluent.org/)
+    y ofrece un editor conveniente para revisar y editar traducciones en paralelo.
 
     ## ¿Cómo utilizo {-brand}?
 
-    - Configura tu clave de API de OpenAI en [{-settings}](/#page=Settings). Sin una clave, las traducciones de IA no funcionarán.
-    - Carga tus archivos `.ftl` en la sección de [{-manage-files}](/#page=Files) arrastrándolos y soltándolos en la interfaz de usuario.
-    - O carga los archivos ftl para Fluent AI si solo quieres experimentar. Por supuesto, Fluent AI está localizado y jugar con sus archivos ftl es una excelente manera de empezar.
+    - Configura tu clave API de OpenAI en la sección de [{-settings}](/#page=Settings). Sin una clave, las traducciones de IA no funcionarán.
+    - Carga tus archivos `.ftl` en la sección [{-manage-files}](/#page=Files) arrastrándolos y soltándolos en la interfaz de usuario.
+    - O carga los archivos ftl para Fluent AI si solo quieres experimentar. Fluent AI, por supuesto, está localizado y jugar con sus archivos ftl es una excelente manera de comenzar.
     - Para cada archivo, te mostrará el número de traducciones faltantes y ofrecerá una traducción asistida por IA para estas.
     - También puedes editarlas manualmente con el [{-translation-editor}](/#page=Editor) para editar tus cadenas de traducción o traducir cadenas individuales con OpenAI.
 
-    ## ¿Qué es project Fluent y por qué deberías usarlo?
+    ## ¿Qué es Project Fluent y por qué deberías utilizarlo?
 
-    Inventado por Mozilla para soportar la localización de productos como Firefox, Thunderbird, etc. a cientos de idiomas,
-    Project Fluent está diseñado con flexibilidad y usabilidad en mente. Sus traducciones dependen de
-    una gran comunidad de usuarios que contribuyen con traducciones. Por lo tanto, querían facilitar esto
-    tanto como sea posible. Además, necesitaban la flexibilidad para tratar con varias variaciones gramaticales
+    Inventado por Mozilla para apoyar la localización de productos como Firefox, Thunderbird, etc. a cientos de idiomas,
+    Project Fluent está diseñado con flexibilidad y usabilidad en mente. Sus traducciones dependen
+    de una gran comunidad de usuarios contribuyendo con traducciones. Por lo tanto, querían hacer esto lo más fácil
+    posible. Adicionalmente, necesitaban la flexibilidad para manejar varias variaciones gramaticales
     en los idiomas, por ejemplo, género, tiempo, cantidad, etc.
 
-    El resultado, project Fluent, es un formato de archivo y sintaxis simple y fácil de usar para definir archivos de traducción. Proporciona varios beneficios
-    sobre otras soluciones en este espacio basadas en, por ejemplo, archivos de propiedades o bibliotecas como gettext:
+    El resultado, project fluent, es un formato de archivo y una sintaxis simples y fáciles de usar para definir archivos de traducción. Proporciona algunos beneficios
+    sobre otras soluciones en este espacio basadas en archivos de propiedades o bibliotecas como gettext:
 
-    - **Flexibilidad.** Acepta lógica condicional y variables que puedes utilizar en tus traducciones.
-    - **Facilidad de uso.** Es simple y fácil de usar y editar. Cualquier archivo con líneas que contengan `clave = traducción` es un archivo `ftl` válido.
-    - **Portabilidad.** Hay bibliotecas que facilitan el soporte de localizaciones basadas en Fluent en aplicaciones nativas, móviles y web.
+    - **Flexibilidad.** Soporta lógica condicional y variables que puedes usar en tus traducciones.
+    - **Facilidad de uso.** Es simple y fácil de usar y editar. Cualquier archivo con líneas que contengan `key = translation` es un archivo `ftl` válido.
+    - **Portabilidad.** Hay bibliotecas que hacen que el soporte para localizaciones basadas en Fluent sea fácil en aplicaciones nativas, móviles y web.
 
     ## Limitaciones de {-brand}
 
-    - {-brand} actualmente no valida la sintaxis de Fluent.
-    - Funciona en un navegador, por lo que no hay acceso directo al sistema de archivos. Sin embargo, puedes arrastrar y soltar archivos en la interfaz de usuario y descargar archivos modificados desde la interfaz de usuario. Si hay suficiente interés, es posible que en algún momento cree un contenedor Electrón para {-brand}.
-    - Es un poco dogmático acerca de reordenar y limpiar traducciones. Eliminará traducciones idénticas a la traducción base, por ejemplo. Examina cuidadosamente las diferencias antes de confirmar los cambios en tus archivos de localización.
-    - OpenAI es bueno pero, por supuesto, no es infalible y a veces se equivoca. Además, a veces puede no tener suficiente contexto para traducir correctamente todo. Deberías, por supuesto, usar traductores profesionales para revisar las traducciones. Sin embargo, a menudo lo hace bastante bien.
-    - Si bien puedes editar traducciones para el propio Fluent AI, actualmente no las recarga en la interfaz de usuario. Puede que añada esto más adelante.
-    - El modelo y el proveedor de IA están actualmente cableados. Soy consciente de otras soluciones en este espacio y podría admitir modelos adicionales; incluso potencialmente locales en ejecución más adelante. Sin embargo, en la actualidad, OpenAI parece ser el mejor en su clase y es lo suficientemente económico.
+    - {-brand} actualmente no valida la sintaxis de fluent.
+    - Funciona en un navegador, por lo que no hay acceso directo al sistema de archivos. Sin embargo, puedes arrastrar y soltar archivos en la interfaz de usuario y descargar archivos modificados desde la interfaz de usuario. Si hay suficiente interés, podría crear una envoltura de Electron para {-brand} en algún momento.
+    - Es un poco estricto sobre el reordenamiento y la limpieza de traducciones. Examina cuidadosamente las diferencias antes de confirmar los cambios en tus archivos de localización.
+    - OpenAI es bueno, pero por supuesto no es perfecto y a veces se equivoca. Además, puede que no siempre tenga suficiente contexto para traducir todo correctamente. Deberías, por supuesto, usar traductores profesionales para revisar las traducciones. Sin embargo, acierta bastantes veces.
+    - Aunque puedes editar las traducciones para Fluent AI mismo, actualmente no las recarga en la interfaz de usuario. Podría agregar esto más adelante.
+    - Actualmente solo se soporta OpenAI. Si hay interés, podría agregar más modelos más adelante.
     - Traducir archivos grandes puede llevar bastante tiempo.
 
-    ## Bugs y problemas
+    ## Errores e incidencias
 
-    Este proyecto es gratuito y de código abierto, distribuido bajo la licencia MIT.
+    Este proyecto es gratuito y de código abierto y se distribuye bajo la licencia MIT.
     El proyecto principal está disponible en [Github](https://github.com/jillesvangurp/fluent-ai).
-    Si necesitas ayuda, avísame
-    o utiliza el [rastreador de problemas](https://github.com/jillesvangurp/fluent-ai/issues).
+    Si necesitas ayuda, contáctame
+    o usa el [tracker de incidencias](https://github.com/jillesvangurp/fluent-ai/issues).
 
     ## Proyectos relacionados
 
-    - [Fluent-Kotlin](https://github.com/formation-res/fluent-kotlin) - Biblioteca multipropósito que mis colegas y yo desarrollamos para jvm/js que te permite usar archivos ftl en tus aplicaciones Kotlin. Esta aplicación de navegador lo utiliza.
+    - [Fluent-Kotlin](https://github.com/formation-res/fluent-kotlin) - Biblioteca multiplataforma que mis colegas y yo desarrollamos para jvm/js que permite usar archivos ftl en tus aplicaciones Kotlin. Esta aplicación del navegador la usa.
 
-    ## Corre la voz
+    ## Difundir la palabra
 
-    Escribir software como este es mucho trabajo y a menudo puede ser un trabajo ingrato. Si Fluent AI te resulta útil, házselo saber a otros para que también puedan beneficiarse.
+    Escribir software como este requiere mucho trabajo y a menudo puede ser un trabajo ingrato. Si Fluent AI te resulta útil, házselo saber a otros para que también puedan beneficiarse.
 
-    - Tuitea / tootea / bloguea sobre ello.
+    - Twitea, publica o escribe en un blog sobre ello.
     - Haz clic en el botón de estrella en [Github](https://github.com/jillesvangurp/fluent-ai).
-    - Dame algún feedback.
+    - Dame tu opinión.
 
     ## Créditos
 
-    Fluent AI ha sido creado por [Jilles van Gurp](https://jillesvangurp.com). Actualmente es gratuito y de código abierto.
+    Fluent AI es creado por [Jilles van Gurp](https://jillesvangurp.com). Actualmente es gratuito y de código abierto.
 
     - [www.jillesvangurp.com](https://www.jillesvangurp.com) - Mi sitio web
     - [@jillesvangurp@mastodon.world ](https://mastodon.world/deck/@jillesvangurp) - Mastodon
