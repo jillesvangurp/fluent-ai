@@ -71,7 +71,8 @@ translation-editor-no-files-cta = You need at least one translation file to edit
 translation-editor-number-of-keys = Total {$amount}
 translation-editor-translate-using-open-ai = Translate using OpenAI
 
-translation-service-progress = Finished translating {$total} ids using {$model} in {$duration} using {$apicalls} API calls
+translation-service-progress = Translated {$completed} ids out of {$total} using {$model} using {$apicalls} API calls. Elapsed time {$duration}.
+translation-service-Completed = Finished translating {$total} ids using {$model} in {$duration} using {$apicalls} API calls
 
 zzdocs-about = # About Fluent AI
 

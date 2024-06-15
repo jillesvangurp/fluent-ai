@@ -124,7 +124,7 @@ $existingText
                 "model" to model,
                 "completed" to stepCount,
                 "apicalls" to apiCalls++,
-                "duration" to (Clock.System.now() - start).toIsoString()
+                "duration" to (Clock.System.now() - start).toString()
             ))
             progressStore?.update?.invoke(Progress(progressText, stepCount, toTranslate.size))
             translateChunks(chunk, targetFile.name).also {
