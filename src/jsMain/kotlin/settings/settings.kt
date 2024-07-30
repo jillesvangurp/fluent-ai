@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 import localization.Locales
 import localization.TL
-import localization.languageSelector
 import localization.translate
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

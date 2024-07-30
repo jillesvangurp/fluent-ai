@@ -7,7 +7,7 @@ private val fluentDefinitionRegex =
 
 data class FluentChunk( val comment: String?, val id: String, val definition: String) {
     override fun toString(): String {
-        return "$comment\n$id = $definition\n"
+        return "${comment?.let { "$comment\n" } ?:""}$id = $definition\n"
     }
 }
 

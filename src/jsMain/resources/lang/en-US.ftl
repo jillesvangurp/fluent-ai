@@ -41,6 +41,11 @@ file-loader-load-own-ftls-confirmation = his will remove any current files and e
 file-loader-add-new = Create or add ftl files
 file-loader-create-new-file = Create new ftl file
 file-loader-no-files-yet-cta = You don't have any ftl files yet. Create a new one or drag existing ones to the app.
+file-loader-remove-identical-translations = Remove identical translations
+file-loader-remove-identical-translations-disclaimer =
+    This will remove all translations that are identical to your default translations. Check your settings to make sure this is what you exepct it to be. Anything not in the default translations will be removed as well.
+
+    Use this to clean up your translations.
 file-loader-translate-missing = Add missing with OpenAI
 file-loader-translate-missing-confirmation = Add missing {$number_translations} missing translations with OpenAI. Note. a large amount of translations may take some time and will of course cost you some tokens.
 

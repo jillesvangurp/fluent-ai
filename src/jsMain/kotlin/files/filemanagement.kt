@@ -22,7 +22,6 @@ import dev.fritz2.core.readOnly
 import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.textArea
 import icons.SvgIconSource
-import io.ktor.util.encodeBase64
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.browser.document
 import kotlinx.coroutines.Job
@@ -41,6 +40,7 @@ import org.w3c.files.FileReader
 import org.w3c.files.get
 import settings.SettingsStore
 import settings.preferredTranslationLanguage
+import com.jillesvangurp.utils.encodeBase64
 import utils.handlerScope
 import withKoin
 
@@ -80,6 +80,33 @@ fun RenderContext.fileManager() {
                             fluentFilesStore.clear()
                             fluentFilesStore.loadOwnFtls()
                             currentFileStore.update(null)
+                        }
+                    }
+                }
+                secondaryButton(
+                    text = TL.FileLoader.RemoveIdenticalTranslations,
+                    iconSource = SvgIconSource.Delete,
+                ) {
+                    clicks handledBy {
+                        confirm(description = TL.FileLoader.RemoveIdenticalTranslationsDisclaimer, job = job) {
+                            val defaultTranslation = fluentFilesStore.getDefaultTranslation()
+                            if(defaultTranslation!=null) {
+                                val updated = fluentFilesStore.current?.map {currentFile ->
+                                    if(currentFile.name == defaultTranslation.name) {
+                                        defaultTranslation
+                                    } else {
+                                        val remainingChunks = currentFile.chunks.filter { translation ->
+                                            val ogTranslation = defaultTranslation[translation.id]
+                                            ogTranslation != null && ogTranslation.definition != translation.definition
+                                        }
+                                        currentFile.copy(
+                                            content = remainingChunks.sortedBy { it.id }.joinToString("")
+                                        )
+                                    }
+                                }
+
+                                fluentFilesStore.persistAndUpdate(updated.orEmpty())
+                            }
                         }
                     }
                 }

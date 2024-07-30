@@ -5,6 +5,8 @@ import components.LocalStoringStore
 import kotlinx.serialization.builtins.ListSerializer
 import localization.Locales
 import settings.SettingsStore
+import settings.preferredTranslationLanguage
+import withKoin
 
 class FluentFilesStore : LocalStoringStore<List<FluentFile>>(emptyList(),"fluentfiles",
     ListSerializer(FluentFile.serializer())
@@ -28,5 +30,16 @@ class FluentFilesStore : LocalStoringStore<List<FluentFile>>(emptyList(),"fluent
 
     fun clear() {
         persistAndUpdate(emptyList())
+    }
+
+    fun getDefaultTranslation(): FluentFile? {
+        withKoin {
+            val settingsStore = get<SettingsStore>()
+            return current?.firstOrNull() {
+                it.matches(
+                    settingsStore.current.preferredTranslationLanguage,
+                )
+            }
+        }
     }
 }

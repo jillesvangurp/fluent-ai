@@ -10,6 +10,7 @@ import dev.fritz2.headless.foundation.setInitialFocus
 import kotlinx.coroutines.Job
 import localization.TL
 import localization.translate
+import markdown.markdownDiv
 import org.w3c.dom.HTMLDivElement
 import withKoin
 
@@ -56,9 +57,7 @@ suspend fun confirm(
                             }
                         }
                         div("mt-2") {
-                            p {
-                                translate(description, translationArgs)
-                            }
+                            markdownDiv(description, args = translationArgs)
                             flexRowCentered {
                                 secondaryButton {
                                     translate(TL.ConfirmDialog.No, translationArgs)

@@ -246,11 +246,8 @@ fun RenderContext.selectedTranslationEditor(
                                             text = TL.FluentEditor.AiTranslate,
                                             iconSource = SvgIconSource.OpenAI,
                                         ) {
-                                            val originalText = (files.firstOrNull() {
-                                                it.matches(
-                                                    settingsStore.current.preferredTranslationLanguage,
-                                                )
-                                            } ?: files.first())[translationId]?.definition.orEmpty()
+                                            val originalText = fluentFilesStore.getDefaultTranslation()
+                                                ?.get(translationId)?.definition.orEmpty()
                                             val isDisabled = !translationService.enabled()
                                             disabled(originalText.isBlank() || isDisabled)
                                             if (isDisabled) {

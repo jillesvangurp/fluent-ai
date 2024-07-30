@@ -66,6 +66,8 @@ object TL {
         DeleteFileConfirmation,
         DragAndDrop,
         LoadOwnFtls,
+        RemoveIdenticalTranslations,
+        RemoveIdenticalTranslationsDisclaimer,
         LoadOwnFtlsConfirmation,
         AddNew,
         DownloadAll,
