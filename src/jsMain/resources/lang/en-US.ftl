@@ -61,6 +61,7 @@ settings-open-ai-key = Set your OpenAI API Key (needed for translations)
 settings-translation-language = Configure source language for AI translations. Note, the language is matched against your ftl file name with some normalization. Defaults to en-US.
 
 supported-models-gpt-4-o = Most capable model, large context window. More costly than older models.
+supported-models-gpt-4-o-mini = Better and cheaper than gpt 3.5, large context window similar to gpt=4o. This is a good default.
 supported-models-gpt-35-turbo = Older model but still adequate for translations. Lower token cost.
 
 translation-editor-add-translation-id = Create new translation id

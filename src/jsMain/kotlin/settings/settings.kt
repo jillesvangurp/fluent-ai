@@ -107,7 +107,8 @@ private fun RenderContext.openAiKeyEditor(
 }
 
 enum class SupportedModels(val id: String, val title: String, val preferred: Boolean=false): Translatable {
-    GPT_4_O("gpt-4o", "GPT 4o", preferred = true),
+    GPT_4_O("gpt-4o", "GPT 4o"),
+    GPT_4_O_MINI("gpt-4o-mini", "GPT 4o Mini", preferred = true),
     GPT_35_TURBO("gpt-3.5-turbo", "GPT 3.5 Turbo"),
     ;
 
