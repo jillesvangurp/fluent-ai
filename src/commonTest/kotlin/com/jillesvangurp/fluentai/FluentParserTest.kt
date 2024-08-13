@@ -1,5 +1,7 @@
 package com.jillesvangurp.fluentai
 
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldEndWith
 import kotlin.test.Test
 
 class FluentParserTest {
@@ -23,6 +25,25 @@ class FluentParserTest {
         
         # it continues
         foo = bar
+        # card secondary menu
+        cardsecondarymenu-duplicate = Duplizieren
+        cardsecondarymenu-duplicate-this = { ${'$'}case ->
+           *[masculine] Dupliziere diesen {${'$'}objectType}
+            [feminine] Dupliziere diese {${'$'}objectType}
+            [other] Dupliziere dieses {${'$'}objectType}
+        }
+        cardsecondarymenu-details = Informationen
+        cardsecondarymenu-show-details = { ${'$'}case ->
+            *[masculine] Details zu diesem {${'$'}objectType}
+             [feminine] Datails zu dieser {${'$'}objectType}
+             [other] Details zu diesem {${'$'}objectType}
+        }
+        cardsecondarymenu-share = Teilen
+        cardsecondarymenu-share-this = { ${'$'}case ->
+           *[masculine] Teile diesen {${'$'}objectType}
+            [feminine] Teile diese {${'$'}objectType}
+            [other] Teile dieses {${'$'}objectType}
+        }
         
         # trailing comment should be omitted
     """.trimIndent()
@@ -41,5 +62,39 @@ id: ${chunk.id}
 definition: ${chunk.definition}
 """.trimIndent())
         }
+
+        val chunkMap = chunks.associateBy { it.id }
+        val definition = chunkMap["general-you"]?.definition!!.trim('\n')
+        definition.shouldEndWith("}")
+
+
+    }
+
+    @Test
+    fun shouldParseChunkUsingRegex() {
+        val sample = """
+cardsecondarymenu-duplicate-this = { ${'$'}case ->
+   *[masculine] Dupliziere diesen {${'$'}objectType}
+    [feminine] Dupliziere diese {${'$'}objectType}
+    [other] Dupliziere dieses {${'$'}objectType}
+}
+cardsecondarymenu-share-this = { ${'$'}case ->
+   *[masculine] Teile diesen {${'$'}objectType}
+    [feminine] Teile diese {${'$'}objectType}
+    [other] Teile dieses {${'$'}objectType}
+}
+
+# trailing comment should be omitted
+            
+        """
+
+        val chunk = sample.parseFluent().first()
+
+        chunk.definition shouldBe """{ ${'$'}case ->
+   *[masculine] Dupliziere diesen {${'$'}objectType}
+    [feminine] Dupliziere diese {${'$'}objectType}
+    [other] Dupliziere dieses {${'$'}objectType}
+}
+"""
     }
 }

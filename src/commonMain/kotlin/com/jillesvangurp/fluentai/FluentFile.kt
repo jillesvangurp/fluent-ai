@@ -2,12 +2,12 @@ package com.jillesvangurp.fluentai
 
 import kotlinx.serialization.Serializable
 
-private val fluentDefinitionRegex =
+val fluentDefinitionRegex =
     Regex("""^\s*([a-zA-Z0-9_-]+)\s*=\s*(.*(\n[^#]\s+.*)*)""", RegexOption.MULTILINE)
 
-data class FluentChunk( val comment: String?, val id: String, val definition: String) {
+data class FluentChunk(val comment: String?, val id: String, val definition: String) {
     override fun toString(): String {
-        return "${comment?.let { "$comment\n" } ?:""}$id = $definition\n"
+        return "${comment?.let { "$comment\n" } ?: ""}$id = $definition\n"
     }
 }
 
@@ -25,7 +25,7 @@ data class FluentFile(val name: String, val content: String) {
     fun put(key: String, newValue: String, comment: String? = null): FluentFile {
         val map = asMap().toMutableMap()
 
-        map[key] = FluentChunk(comment.orEmpty(),key,newValue)
+        map[key] = FluentChunk(comment.orEmpty(), key, newValue)
 
         return FluentFile(name, map.sortedContent())
     }
@@ -48,9 +48,9 @@ data class FluentFile(val name: String, val content: String) {
     }
 }
 
-fun Map<String,FluentChunk>.sortedContent(): String {
+fun Map<String, FluentChunk>.sortedContent(): String {
     val grouped = groupByLargestPrefix()
-    val newContent = grouped.entries.sortedBy { it.key }.map { (_,group) ->
+    val newContent = grouped.entries.sortedBy { it.key }.map { (_, group) ->
         group.values.map {
             "${it.comment.orEmpty()}${it.id} = ${it.definition}"
         }.joinToString("\n")
@@ -114,48 +114,91 @@ fun Iterable<String>.groupIdsByLargestPrefix(): MutableMap<String, MutableList<S
 }
 
 fun String.parseFluent(): List<FluentChunk> {
-    val chunks = mutableListOf<String>()
-    val chunkLines = mutableListOf<String>()
-    var inDefinition = true
-    lines().forEach {line ->
-        if(inDefinition && line.startsWith("#")) {
-            // end of current definition
-            if(chunkLines.isNotEmpty()) {
-                chunks.add(chunkLines.joinToString("\n"))
-                chunkLines.clear()
-            }
-            inDefinition = false
-        }
-        if(line.matches(Regex("^\\s*([a-zA-Z0-9_-]+)\\s*=.*"))) {
-            if(inDefinition) {
-                chunks.add(chunkLines.joinToString("\n"))
-                chunkLines.clear()
-            }
-            inDefinition = true
-        }
-        chunkLines.add(line)
-    }
-    if(chunkLines.isNotEmpty()) {
-        chunks.add(chunkLines.joinToString("\n"))
-    }
 
-    return chunks.mapNotNull { chunk ->
-        fluentDefinitionRegex.find(chunk)?.let {match ->
-            match.groups[1]?.let {idMatch ->
+    val all = mutableListOf<String>()
+
+    val currentChunk = StringBuilder()
+    var inDefinition = false
+    lines().filter { it.isNotEmpty() }.forEach { line ->
+        when {
+            line.startsWith("#") -> {
+                if(currentChunk.isNotEmpty() && inDefinition) {
+                    all.add(currentChunk.toString())
+                    currentChunk.clear()
+                }
+                inDefinition = false
+            }
+
+            line.matches(Regex("^\\s*([a-zA-Z0-9_-]+)\\s*=.*")) && currentChunk.isNotEmpty() && inDefinition -> {
+                all.add(currentChunk.toString())
+                currentChunk.clear()
+                inDefinition = true
+            }
+            else -> {
+                inDefinition = true
+            }
+
+        }
+        currentChunk.append(line)
+        currentChunk.append('\n')
+    }
+    all.add(currentChunk.toString())
+
+//    val comment = mutableListOf<String>()
+//    val current = mutableListOf<String>()
+//    lines().forEach { line ->
+//
+//        if(line.matches(Regex("^\\s*([a-zA-Z0-9_-]+)\\s*=.*"))) {
+//            if(current.isNotEmpty() || comment.isNotEmpty()) {
+//                all.add(
+//                    (comment.takeIf { it.isNotEmpty() }?.let { comment.joinToString("\n") + "\n" } ?: "") +
+//                    current.joinToString("\n")
+//                )
+//            }
+//            current.clear()
+//            comment.clear()
+//        }
+//        if(line.startsWith("#")) {
+//            if(current.isNotEmpty()) {
+//                all.add(
+//                    (comment.takeIf { it.isNotEmpty() }?.let { comment.joinToString("\n") + "\n" } ?: "") +
+//                        current.joinToString("\n")
+//                )
+//                current.clear()
+//                comment.clear()
+//            } else {
+//                comment.add(line)
+//            }
+//        } else {
+//            current.add(line)
+//        }
+//    }
+//    if(current.isNotEmpty()) {
+//        all.add(
+//            (comment.takeIf { it.isNotEmpty() }?.let { comment.joinToString("\n") + "\n" } ?: "") +
+//                current.joinToString("\n")
+//        )
+//    }
+
+    return all.mapNotNull { chunk ->
+        println("<<<$chunk>>>")
+        fluentDefinitionRegex.find(chunk)?.let { match ->
+            match.groups[1]?.let { idMatch ->
                 val start = match.range.first
-                val comment = chunk.substring(0,start).takeIf { it.isNotBlank() }
+                val c = chunk.substring(0, start).takeIf { it.isNotBlank() }
                 val id = idMatch.value
                 val definition = match.groups[2]?.value
-                FluentChunk(comment=comment,id=id,definition=definition.orEmpty())
+                FluentChunk(comment = c, id = id, definition = definition.orEmpty())
             }
         }
     }
 }
 
+
 fun List<FluentFile>.missingTranslations(preferred: FluentFile): Map<String, Int> {
     val others = filter { it.name != preferred.name }
     return preferred.keys().map { key ->
-        val source = preferred[key]?: error("key should have definition")
+        val source = preferred[key] ?: error("key should have definition")
         key to others.mapNotNull {
             it[key]?.takeIf { it.definition != source.definition }
         }.size.let { others.size - it }
@@ -167,10 +210,10 @@ fun List<FluentFile>.master(masterLanguage: String) = firstOrNull { it.matches(m
 fun List<FluentFile>.cleanupTranslations(masterLanguage: String): List<FluentFile> {
     return master(masterLanguage)?.let { master ->
         (filter { it.name != master.name }.map { file ->
-            val cleaned = file.asMap().entries.filter {(id,chunk) ->
+            val cleaned = file.asMap().entries.filter { (id, chunk) ->
                 chunk.definition.isNotBlank()
             }.map { it.value }
             FluentFile(file.name, cleaned.associateBy { it.id }.sortedContent())
         } + master).sortedBy { it.name }
-    }?: this
+    } ?: this
 }

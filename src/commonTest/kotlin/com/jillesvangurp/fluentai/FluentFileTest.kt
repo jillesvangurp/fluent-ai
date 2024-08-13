@@ -80,7 +80,11 @@ foo = Updated value
 
         """.trimIndent()
         val fluentFile = FluentFile("example.ftl", sample)
+        fluentFile["-brand"]?.comment shouldBe "# Deutsch\n"
         fluentFile["-brand"]?.definition shouldBe "FORMATION"
+        fluentFile["general-back"]?.comment shouldBe "# general\n"
+        fluentFile["general-back"]?.definition shouldBe "ZURÜCK"
+        fluentFile["general-cancel"]?.definition shouldBe "ABBRECHEN"
 
     }
 
