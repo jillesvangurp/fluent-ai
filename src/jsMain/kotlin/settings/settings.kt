@@ -12,7 +12,10 @@ import dev.fritz2.core.RenderContext
 import dev.fritz2.core.disabled
 import dev.fritz2.core.selected
 import dev.fritz2.core.storeOf
+import dev.fritz2.core.translate
 import dev.fritz2.core.value
+import files.CurrentFluentFileStore
+import files.FluentFilesStore
 import icons.SvgIconSource
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
@@ -158,6 +161,28 @@ private fun RenderContext.translationLanguageEditor() {
                     storeOf(settings?.translationSourceLanguage.orEmpty())
 
                 twInputField(translationLanugageStore, TL.Settings.TranslationLanguage, "en-US")
+                settingsStore.data.render { currentSettings ->
+                    withKoin {
+                        val ffs = get<FluentFilesStore>()
+                        val defaultTranslation = ffs.getDefaultTranslation()
+                        if(defaultTranslation == null) {
+                            p {
+                                b {
+                                    translate(
+                                        TL.Settings.NoTranslationFileFoundForDefaultLanguage,
+                                        mapOf(
+                                            "defaultLang" to settings.preferredTranslationLanguage
+                                        )
+                                    )
+                                }
+
+                            }
+                        }
+                    }
+                }
+                settingsStore.data.render {
+                    it?.preferredTranslationLanguage
+                }
 
                 translationLanugageStore.data.render { newValue ->
 

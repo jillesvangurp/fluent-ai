@@ -33,6 +33,7 @@ cookies-header = Cookies & permissions
 cookies-welcome = Welcome to {-brand}
 
 file-loader-clear-confirmation = This will remove any current files and edits. Make sure you have downloaded anything you care about.
+file-loader-download-all = Download all translations
 file-loader-delete-file-confirmation = This will remove { $file }.
 file-loader-files-header = Your Fluent Files
 file-loader-drag-and-drop = Drag ftl files here to load them
@@ -44,9 +45,9 @@ file-loader-no-files-yet-cta = You don't have any ftl files yet. Create a new on
 file-loader-remove-identical-translations = Remove identical translations
 file-loader-remove-identical-translations-disclaimer =
     This will remove all translations that are identical to your default translations. Check your settings to make sure this is what you exepct it to be. Anything not in the default translations will be removed as well.
-
     Use this to clean up your translations.
 file-loader-translate-missing = Add missing with OpenAI
+file-loader-missing-default-translation=No default translation found. Add one or adjust this in the settings. A default is needed as a source for AI translations.
 file-loader-translate-missing-confirmation = Add missing {$number_translations} missing translations with OpenAI. Note. a large amount of translations may take some time and will of course cost you some tokens.
 
 language-select-select-language = Select UI language
@@ -59,6 +60,7 @@ pages-about = { -about }
 settings-edit-open-ai-key = Configure OpenAI API Key
 settings-open-ai-key = Set your OpenAI API Key (needed for translations)
 settings-translation-language = Configure source language for AI translations. Note, the language is matched against your ftl file name with some normalization. Defaults to en-US.
+settings-no-translation-file-found-for-default-language = No translation file found for {$defaultLang}.
 
 supported-models-gpt-4-o = Most capable model, large context window. More costly than older models.
 supported-models-gpt-4-o-mini = Better and cheaper than gpt 3.5, large context window similar to gpt=4o. This is a good default.

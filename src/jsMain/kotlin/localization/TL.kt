@@ -75,6 +75,7 @@ object TL {
         NoFilesYetCta,
         TranslateMissing,
         TranslateMissingConfirmation,
+        MissingDefaultTranslation,
         ;
 
         override val prefix = "file-loader"
@@ -110,6 +111,7 @@ object TL {
         EditOpenAiKey,
         OpenAiKey,
         TranslationLanguage,
+        NoTranslationFileFoundForDefaultLanguage,
         ;
 
         override val prefix = "settings"

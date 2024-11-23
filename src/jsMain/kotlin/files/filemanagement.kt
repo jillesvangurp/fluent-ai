@@ -251,8 +251,14 @@ fun RenderContext.listFiles() {
         div("flex flex-row gap-2 grow") {
             div("flex flex-col gap-2 w-96 bg-white shadow-lg m-2 p-5") {
                 fluentFilesStore.data.render { files ->
+                    val hasNoDefaultTranslation = fluentFilesStore.getDefaultTranslation() == null
                     h3 {
                         translate(TL.FileLoader.FilesHeader)
+                    }
+                    if(hasNoDefaultTranslation) {
+                        p {
+                            translate(TL.FileLoader.MissingDefaultTranslation)
+                        }
                     }
                     if (files.isNullOrEmpty()) {
                         div("grow h-full") {
@@ -347,6 +353,11 @@ fun RenderContext.translateMissingButton(file: FluentFile) {
         settingsStore.data.render { settings ->
             fluentFilesStore.data.filterNotNull().render { files ->
                 val master = files.master(settings.preferredTranslationLanguage)
+                if(master == null) {
+                    p {
+                        +"Default lang not found: ${settings.preferredTranslationLanguage}"
+                    }
+                }
                 primaryButton(
                         text = TL.FileLoader.TranslateMissing,
                         iconSource = SvgIconSource.OpenAI,
